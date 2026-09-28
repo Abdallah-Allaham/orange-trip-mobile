@@ -31,19 +31,18 @@ class OrangeButton extends StatelessWidget {
     final effectiveHeight = height ?? 54.h;
 
     if (isOutlined) {
-      return SizedBox(
-        height: effectiveHeight,
-        child: OutlinedButton(
-          onPressed: isLoading ? null : onPressed,
-          style: OutlinedButton.styleFrom(
-            side: const BorderSide(color: OrangeColors.primaryOrange, width: 1.5),
-            shape: RoundedRectangleBorder(
-              borderRadius: AppRadius.buttonRadius,
-            ),
-            backgroundColor: Colors.transparent,
+      return OutlinedButton(
+        onPressed: isLoading ? null : onPressed,
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: OrangeColors.primaryOrange, width: 1.5),
+          shape: RoundedRectangleBorder(
+            borderRadius: AppRadius.buttonRadius,
           ),
-          child: _buildChild(context, OrangeColors.primaryOrange),
+          backgroundColor: Colors.transparent,
+          minimumSize: Size(double.infinity, effectiveHeight),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
         ),
+        child: _buildChild(context, OrangeColors.primaryOrange),
       );
     }
 
@@ -58,20 +57,19 @@ class OrangeButton extends StatelessWidget {
       textColor = OrangeColors.white;
     }
 
-    return SizedBox(
-      height: effectiveHeight,
-      child: ElevatedButton(
-        onPressed: isLoading ? null : onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: bgColor,
-          foregroundColor: textColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: AppRadius.buttonRadius,
-          ),
-          elevation: 0,
+    return ElevatedButton(
+      onPressed: isLoading ? null : onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: bgColor,
+        foregroundColor: textColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: AppRadius.buttonRadius,
         ),
-        child: _buildChild(context, textColor),
+        elevation: 0,
+        minimumSize: Size(double.infinity, effectiveHeight),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
       ),
+      child: _buildChild(context, textColor),
     );
   }
 
@@ -90,10 +88,9 @@ class OrangeButton extends StatelessWidget {
     final textWidget = Text(
       text,
       style: GoogleFonts.cairo(
-        fontSize: 16.sp,
+        fontSize: 15.sp,
         fontWeight: FontWeight.w700,
         color: textColor,
-        height: 1.2,
       ),
     );
 
@@ -103,7 +100,7 @@ class OrangeButton extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 18.sp, color: textColor),
-          SizedBox(width: 10.w),
+          SizedBox(width: 8.w),
           textWidget,
         ],
       );

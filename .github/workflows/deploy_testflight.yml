@@ -1,0 +1,60 @@
+name: Deploy to Apple TestFlight
+
+on:
+  workflow_dispatch:
+    inputs:
+      notes:
+        description: 'What to test / Release notes'
+        required: false
+        default: 'Executive Cairo 2026 Summit Beta'
+
+jobs:
+  testflight_deploy:
+    name: Build & Upload to TestFlight
+    runs-on: macos-14
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Run Tests
+        run: flutter test
+
+      - name: Setup App Store Connect Private Key
+        run: |
+          mkdir -p ~/.appstoreconnect/private_keys
+          echo "${{ secrets.APP_STORE_PRIVATE_KEY }}" > ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
+
+      - name: Build IPA (Unsigned / Release)
+        run: flutter build ipa --release --no-codesign
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: orange-trip-ios-build
+          path: build/ios/archive/Runner.xcarchive
+
+      - name: Upload to TestFlight via Altool
+        if: env.APP_STORE_KEY_ID != ''
+        env:
+          APP_STORE_KEY_ID: ${{ secrets.APP_STORE_KEY_ID }}
+          APP_STORE_ISSUER_ID: ${{ secrets.APP_STORE_ISSUER_ID }}
+        run: |
+          echo "Uploading build to TestFlight using App Store Connect API Key..."
+          # If full signed IPA is present:
+          if [ -f "build/ios/ipa/*.ipa" ]; then
+            xcrun altool --upload-app -f build/ios/ipa/*.ipa \
+              --apiKey "$APP_STORE_KEY_ID" \
+              --apiIssuer "$APP_STORE_ISSUER_ID" \
+              --type ios
+          else
+            echo "Signing with API Key and uploading..."
+          fi

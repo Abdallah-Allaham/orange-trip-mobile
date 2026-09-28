@@ -27,20 +27,26 @@ class FlightBriefCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Icon(Icons.flight_takeoff, color: OrangeColors.primaryOrange, size: 18.sp),
-                  SizedBox(width: 8.w),
-                  Text(
-                    '${flight.airline} · ${flight.flightNumberOutbound}',
-                    style: GoogleFonts.cairo(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w700,
-                      color: OrangeColors.black,
+              Expanded(
+                child: Row(
+                  children: [
+                    Icon(Icons.flight_takeoff, color: OrangeColors.primaryOrange, size: 18.sp),
+                    SizedBox(width: 8.w),
+                    Expanded(
+                      child: Text(
+                        '${flight.airline} · ${flight.flightNumberOutbound}',
+                        style: GoogleFonts.cairo(
+                          fontSize: 13.5.sp,
+                          fontWeight: FontWeight.w700,
+                          color: OrangeColors.black,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+              SizedBox(width: 8.w),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
                 decoration: BoxDecoration(
