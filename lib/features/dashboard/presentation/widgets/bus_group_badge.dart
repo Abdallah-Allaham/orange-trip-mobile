@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/colors.dart';
 
 enum BadgeType { bus, group }
@@ -22,16 +23,16 @@ class BusGroupBadge extends StatelessWidget {
     final label = isBus
         ? (isArabic ? 'الحافلة المخصصة' : 'Assigned Bus')
         : (isArabic ? 'المجموعة التنفيذية' : 'Assigned Group');
-    final icon = isBus ? Icons.directions_bus : Icons.groups;
-    final accentColor = isBus ? OrangeColors.brandOrange : OrangeColors.coreWhite;
+    final icon = isBus ? Icons.directions_bus_outlined : Icons.groups_outlined;
+    final accentColor = isBus ? OrangeColors.primaryOrange : OrangeColors.white;
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
       decoration: BoxDecoration(
-        color: OrangeColors.coreBlack,
-        borderRadius: BorderRadius.circular(4.r),
+        color: OrangeColors.black,
+        borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
-          color: isBus ? OrangeColors.brandOrange.withValues(alpha: 0.5) : OrangeColors.darkGrey,
+          color: isBus ? OrangeColors.primaryOrange.withValues(alpha: 0.4) : OrangeColors.darkSecondaryText,
           width: 1,
         ),
       ),
@@ -40,29 +41,29 @@ class BusGroupBadge extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: 15.sp,
+            size: 16.sp,
             color: accentColor,
           ),
-          SizedBox(width: 6.w),
+          SizedBox(width: 8.w),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 label,
-                style: TextStyle(
-                  color: OrangeColors.mediumGrey,
-                  fontSize: 9.sp,
+                style: GoogleFonts.cairo(
+                  color: OrangeColors.secondaryText,
+                  fontSize: 10.sp,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.2,
                 ),
               ),
               Text(
                 value.isNotEmpty ? value : (isBus ? 'Bus 1' : 'Group Alpha'),
-                style: TextStyle(
+                style: GoogleFonts.cairo(
                   color: accentColor,
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w800,
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w700,
                   letterSpacing: 0.1,
                 ),
               ),

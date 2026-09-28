@@ -71,15 +71,18 @@ class AuthGate extends StatelessWidget {
 
         if (state is AuthLoading && state is! Unauthenticated) {
           return Scaffold(
-            backgroundColor: OrangeColors.coreBlack,
+            backgroundColor: OrangeColors.background,
             body: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    'assets/images/orange_logo.png',
-                    width: 56.w,
-                    height: 56.w,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(14.r),
+                    child: Image.asset(
+                      'assets/images/orange_logo.png',
+                      width: 56.w,
+                      height: 56.w,
+                    ),
                   ),
                   SizedBox(height: 24.h),
                   const CircularProgressIndicator(

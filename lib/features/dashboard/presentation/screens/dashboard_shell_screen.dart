@@ -2,9 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/localization/app_strings.dart';
+import '../../../../core/theme/app_design_system.dart';
 import '../../../auth/domain/entities/user_entity.dart';
 import '../../../auth/presentation/cubit/auth_cubit.dart';
 import '../../../auth/presentation/widgets/orange_button.dart';
@@ -55,47 +57,49 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
     final strings = AppStrings(context.locale.languageCode);
 
     return Scaffold(
-      backgroundColor: OrangeColors.lightGrey,
+      backgroundColor: OrangeColors.background,
       appBar: AppBar(
-        backgroundColor: OrangeColors.coreWhite,
+        backgroundColor: OrangeColors.white,
         elevation: 0,
+        scrolledUnderElevation: 0,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
           child: Container(
-            color: OrangeColors.borderGrey,
+            color: OrangeColors.lightBorder,
             height: 1,
           ),
         ),
-        iconTheme: const IconThemeData(color: OrangeColors.coreBlack),
+        iconTheme: const IconThemeData(color: OrangeColors.black),
         title: Row(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(2.r),
+              borderRadius: BorderRadius.circular(8.r),
               child: Image.asset(
                 'assets/images/orange_logo.png',
-                width: 24.w,
-                height: 24.w,
+                width: 28.w,
+                height: 28.w,
                 fit: BoxFit.contain,
               ),
             ),
-            SizedBox(width: 10.w),
+            SizedBox(width: 12.w),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   strings.appTitle,
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w900,
-                    color: OrangeColors.coreBlack,
+                  style: GoogleFonts.cairo(
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w700,
+                    color: OrangeColors.black,
+                    height: 1.2,
                   ),
                 ),
                 Text(
                   widget.user.fullName,
-                  style: TextStyle(
-                    fontSize: 11.sp,
-                    color: OrangeColors.mediumGrey,
-                    fontWeight: FontWeight.w600,
+                  style: GoogleFonts.cairo(
+                    fontSize: 12.sp,
+                    color: OrangeColors.secondaryText,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
@@ -104,7 +108,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.logout, color: OrangeColors.coreBlack, size: 20.sp),
+            icon: Icon(Icons.logout, color: OrangeColors.black, size: 20.sp),
             tooltip: strings.logout,
             onPressed: () {
               context.read<AuthCubit>().logout();
@@ -113,39 +117,111 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
         ],
       ),
       body: _buildCurrentTab(strings, isAr),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentTabIndex,
-        onTap: (index) => setState(() => _currentTabIndex = index),
-        selectedItemColor: OrangeColors.brandOrange,
-        unselectedItemColor: OrangeColors.mediumGrey,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: OrangeColors.coreWhite,
-        elevation: 8,
-        selectedLabelStyle: TextStyle(fontWeight: FontWeight.w800, fontSize: 11.sp),
-        unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 11.sp),
-        items: [
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.dashboard_outlined),
-            activeIcon: const Icon(Icons.dashboard),
-            label: strings.dashboard,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.flight_outlined),
-            activeIcon: const Icon(Icons.flight),
-            label: strings.travel,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.calendar_month_outlined),
-            activeIcon: const Icon(Icons.calendar_month),
-            label: strings.itinerary,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.person_outline),
-            activeIcon: const Icon(Icons.person),
-            label: strings.profile,
-          ),
-        ],
+      bottomNavigationBar: _buildModernBottomNav(strings),
+    );
+  }
+
+  // =========================================================================
+  // MODERN MINIMAL BOTTOM NAVIGATION BAR
+  // Specification:
+  // INACTIVE ITEM: Gray icon (#8F8F8F), Gray label (#8F8F8F).
+  // ACTIVE ITEM: Orange rounded container (#FF7900), White icon (#FFFFFF), Black label (#000000).
+  // =========================================================================
+  Widget _buildModernBottomNav(AppStrings strings) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: OrangeColors.white,
+        border: Border(
+          top: BorderSide(color: OrangeColors.lightBorder, width: 1.0),
+        ),
       ),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+      child: SafeArea(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildNavItem(
+              index: 0,
+              icon: Icons.dashboard_outlined,
+              activeIcon: Icons.dashboard,
+              label: strings.dashboard,
+            ),
+            _buildNavItem(
+              index: 1,
+              icon: Icons.flight_outlined,
+              activeIcon: Icons.flight,
+              label: strings.travel,
+            ),
+            _buildNavItem(
+              index: 2,
+              icon: Icons.calendar_month_outlined,
+              activeIcon: Icons.calendar_month,
+              label: strings.itinerary,
+            ),
+            _buildNavItem(
+              index: 3,
+              icon: Icons.person_outline,
+              activeIcon: Icons.person,
+              label: strings.profile,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavItem({
+    required int index,
+    required IconData icon,
+    required IconData activeIcon,
+    required String label,
+  }) {
+    final isSelected = _currentTabIndex == index;
+
+    return Expanded(
+      child: InkWell(
+        onTap: () => setState(() => _currentTabIndex = index),
+        borderRadius: BorderRadius.circular(16.r),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (isSelected)
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+                decoration: BoxDecoration(
+                  color: OrangeColors.primaryOrange,
+                  borderRadius: BorderRadius.circular(16.r),
+                ),
+                child: Icon(
+                  activeIcon,
+                  size: 20.sp,
+                  color: OrangeColors.white,
+                ),
+              )
+            else
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 4.h),
+                child: Icon(
+                  icon,
+                  size: 22.sp,
+                  color: OrangeColors.secondaryText,
+                ),
+              ),
+            SizedBox(height: 3.h),
+            Text(
+              label,
+              style: GoogleFonts.cairo(
+                fontSize: 11.sp,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                color: isSelected ? OrangeColors.black : OrangeColors.secondaryText,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
     );
   }
 
@@ -175,22 +251,25 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/images/orange_logo.png',
-                  width: 44.w,
-                  height: 44.w,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12.r),
+                  child: Image.asset(
+                    'assets/images/orange_logo.png',
+                    width: 48.w,
+                    height: 48.w,
+                  ),
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 20.h),
                 const CircularProgressIndicator(
-                  color: OrangeColors.brandOrange,
+                  color: OrangeColors.primaryOrange,
                   strokeWidth: 2.5,
                 ),
-                SizedBox(height: 12.h),
+                SizedBox(height: 14.h),
                 Text(
                   isAr ? 'جاري تحميل لوحة القيادة اللوجستية...' : 'Loading Executive Dashboard...',
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    color: OrangeColors.darkGrey,
+                  style: GoogleFonts.cairo(
+                    fontSize: 13.sp,
+                    color: OrangeColors.darkSecondaryText,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -206,29 +285,23 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.cloud_off, size: 48.sp, color: OrangeColors.brandOrange),
-                  SizedBox(height: 12.h),
+                  Icon(Icons.cloud_off, size: 48.sp, color: OrangeColors.primaryOrange),
+                  SizedBox(height: 14.h),
                   Text(
                     isAr ? 'تعذر جلب بيانات السفر والجدول الزمني' : 'Failed to load trip logistics',
-                    style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800),
+                    style: GoogleFonts.cairo(fontSize: 15.sp, fontWeight: FontWeight.w700),
                   ),
                   SizedBox(height: 6.h),
                   Text(
                     state.message,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12.sp, color: OrangeColors.mediumGrey),
+                    style: GoogleFonts.cairo(fontSize: 13.sp, color: OrangeColors.secondaryText),
                   ),
-                  SizedBox(height: 16.h),
-                  ElevatedButton(
+                  SizedBox(height: 20.h),
+                  OrangeButton(
+                    text: isAr ? 'إعادة المحاولة' : 'Retry',
+                    height: 48.h,
                     onPressed: () => context.read<DashboardCubit>().loadDashboard(),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: OrangeColors.brandOrange,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.r)),
-                    ),
-                    child: Text(
-                      isAr ? 'إعادة المحاولة' : 'Retry',
-                      style: const TextStyle(color: OrangeColors.coreWhite, fontWeight: FontWeight.bold),
-                    ),
                   ),
                 ],
               ),
@@ -240,18 +313,18 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
           final data = state.data;
 
           return RefreshIndicator(
-            color: OrangeColors.brandOrange,
-            backgroundColor: OrangeColors.coreWhite,
+            color: OrangeColors.primaryOrange,
+            backgroundColor: OrangeColors.white,
             onRefresh: () async {
               await context.read<DashboardCubit>().refreshDashboard();
             },
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // 1. Hero Trip Countdown Card
+                  // 1. Hero Trip Countdown Card (Primary Card: #FFF3E8, 24r)
                   TripCountdownHero(
                     fullName: data.fullName.isNotEmpty ? data.fullName : widget.user.fullName,
                     role: data.role.isNotEmpty ? data.role : widget.user.role,
@@ -260,7 +333,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                     countdownDuration: state.tripCountdown,
                     isArabic: isAr,
                   ),
-                  SizedBox(height: 12.h),
+                  SizedBox(height: 16.h),
 
                   // 2. Broadcast Announcements List (all announcements)
                   if (data.announcements.isNotEmpty) ...[
@@ -274,15 +347,17 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                             SnackBar(
                               content: Text(
                                 isAr ? 'تم تأكيد الاطلاع على التنبيه الإداري' : 'Announcement acknowledged successfully',
-                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                style: GoogleFonts.cairo(fontWeight: FontWeight.w600, color: OrangeColors.white),
                               ),
                               backgroundColor: OrangeColors.success,
+                              behavior: SnackBarBehavior.floating,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
                               duration: const Duration(seconds: 2),
                             ),
                           );
                         },
                       ),
-                      SizedBox(height: 10.h),
+                      SizedBox(height: 14.h),
                     ],
                   ],
 
@@ -293,21 +368,21 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                     isArabic: isAr,
                     onDetailsTap: () => setState(() => _currentTabIndex = 2),
                   ),
-                  SizedBox(height: 12.h),
+                  SizedBox(height: 16.h),
 
                   // 4. Flight Logistics Brief Card (RJ 501 & Return RJ 506)
                   FlightBriefCard(
                     flight: data.flight,
                     isArabic: isAr,
                   ),
-                  SizedBox(height: 12.h),
+                  SizedBox(height: 16.h),
 
                   // 5. Hotel Logistics Brief Card (The St. Regis Cairo + Wi-Fi)
                   HotelBriefCard(
                     hotel: data.hotel,
                     isArabic: isAr,
                   ),
-                  SizedBox(height: 12.h),
+                  SizedBox(height: 16.h),
 
                   // 6. Quick Executive Services Grid
                   ExecutiveServicesGrid(
@@ -319,11 +394,11 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                       });
                     },
                   ),
-                  SizedBox(height: 14.h),
+                  SizedBox(height: 16.h),
 
                   // 7. 24/7 Operations Desk Hotline Banner
                   _buildHotlineBanner(isAr),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 20.h),
                 ],
               ),
             ),
@@ -337,11 +412,10 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
 
   Widget _buildHotlineBanner(bool isAr) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
       decoration: BoxDecoration(
-        color: OrangeColors.coreBlack,
-        borderRadius: BorderRadius.circular(4.r),
-        border: Border.all(color: OrangeColors.darkGrey),
+        color: OrangeColors.black,
+        borderRadius: BorderRadius.circular(20.r),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -350,32 +424,32 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
             child: Row(
               children: [
                 Container(
-                  padding: EdgeInsets.all(6.w),
+                  padding: EdgeInsets.all(8.w),
                   decoration: BoxDecoration(
-                    color: OrangeColors.brandOrange,
-                    borderRadius: BorderRadius.circular(2.r),
+                    color: OrangeColors.primaryOrange,
+                    borderRadius: BorderRadius.circular(14.r),
                   ),
-                  child: Icon(Icons.support_agent, color: OrangeColors.coreBlack, size: 16.sp),
+                  child: Icon(Icons.support_agent, color: OrangeColors.white, size: 20.sp),
                 ),
-                SizedBox(width: 10.w),
+                SizedBox(width: 12.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        isAr ? 'مكتب العمليات والطوارئ 24/7' : '24/7 Operations Help Desk',
-                        style: TextStyle(
-                          fontSize: 11.sp,
-                          fontWeight: FontWeight.w800,
-                          color: OrangeColors.coreWhite,
+                        isAr ? 'مكتب العمليات والطوارئ 24/7' : '24/7 Operations Desk',
+                        style: GoogleFonts.cairo(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w700,
+                          color: OrangeColors.white,
                         ),
                       ),
                       Text(
-                        '+962 7 7700 0001 (Orange Jordan)',
-                        style: TextStyle(
-                          fontSize: 10.sp,
-                          color: OrangeColors.borderGrey,
-                          fontWeight: FontWeight.w600,
+                        '+962 7 7700 0001',
+                        style: GoogleFonts.cairo(
+                          fontSize: 11.sp,
+                          color: OrangeColors.secondaryText,
+                          fontWeight: FontWeight.w500,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -387,20 +461,19 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
           ),
           InkWell(
             onTap: () => _showEmergencyDialog(isAr),
-            borderRadius: BorderRadius.circular(2.r),
+            borderRadius: BorderRadius.circular(16.r),
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
               decoration: BoxDecoration(
-                color: OrangeColors.brandOrange.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(2.r),
-                border: Border.all(color: OrangeColors.brandOrange.withValues(alpha: 0.4)),
+                color: OrangeColors.primaryOrange,
+                borderRadius: BorderRadius.circular(16.r),
               ),
               child: Text(
                 isAr ? 'اتصال مباشر' : 'Direct Call',
-                style: TextStyle(
-                  fontSize: 10.sp,
-                  fontWeight: FontWeight.w800,
-                  color: OrangeColors.brandOrange,
+                style: GoogleFonts.cairo(
+                  fontSize: 11.sp,
+                  fontWeight: FontWeight.w700,
+                  color: OrangeColors.white,
                 ),
               ),
             ),
@@ -414,50 +487,75 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+        borderRadius: AppRadius.bottomSheetRadius,
       ),
       builder: (ctx) {
         return Padding(
-          padding: EdgeInsets.all(20.w),
+          padding: EdgeInsets.all(24.w),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Row(
                 children: [
-                  Icon(Icons.emergency, color: OrangeColors.brandOrange, size: 24.sp),
-                  SizedBox(width: 8.w),
+                  Container(
+                    padding: EdgeInsets.all(8.w),
+                    decoration: BoxDecoration(
+                      color: OrangeColors.warmCream,
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    child: Icon(Icons.emergency, color: OrangeColors.primaryOrange, size: 22.sp),
+                  ),
+                  SizedBox(width: 12.w),
                   Text(
-                    isAr ? 'أرقام الطوارئ وغرفة العمليات 24/7' : '24/7 Operations & Emergency Contacts',
-                    style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w900),
+                    isAr ? 'أرقام الطوارئ وغرفة العمليات 24/7' : '24/7 Emergency Contacts',
+                    style: GoogleFonts.cairo(fontSize: 16.sp, fontWeight: FontWeight.w700),
                   ),
                 ],
               ),
-              Divider(height: 24.h),
+              Divider(height: 28.h, color: OrangeColors.lightBorder),
               ListTile(
                 contentPadding: EdgeInsets.zero,
-                leading: const CircleAvatar(
-                  backgroundColor: OrangeColors.lightGrey,
-                  child: Icon(Icons.phone, color: OrangeColors.brandOrange),
+                leading: CircleAvatar(
+                  backgroundColor: OrangeColors.warmCream,
+                  child: const Icon(Icons.phone, color: OrangeColors.primaryOrange),
                 ),
-                title: Text(isAr ? 'غرفة عمليات أورنج الأردن' : 'Orange Jordan Ops Room', style: const TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: const Text('+962 7 7700 0001'),
+                title: Text(
+                  isAr ? 'غرفة عمليات أورنج الأردن' : 'Orange Jordan Ops Room',
+                  style: GoogleFonts.cairo(fontWeight: FontWeight.w700, fontSize: 13.sp),
+                ),
+                subtitle: Text('+962 7 7700 0001', style: GoogleFonts.cairo(color: OrangeColors.secondaryText, fontSize: 12.sp)),
                 trailing: TextButton(
-                  onPressed: () => Navigator.pop(ctx),
-                  child: Text(isAr ? 'اتصال' : 'Call', style: const TextStyle(color: OrangeColors.brandOrange, fontWeight: FontWeight.bold)),
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    launchPhoneCall('+962777000001');
+                  },
+                  child: Text(
+                    isAr ? 'اتصال' : 'Call',
+                    style: GoogleFonts.cairo(color: OrangeColors.primaryOrange, fontWeight: FontWeight.w700),
+                  ),
                 ),
               ),
               ListTile(
                 contentPadding: EdgeInsets.zero,
-                leading: const CircleAvatar(
-                  backgroundColor: OrangeColors.lightGrey,
-                  child: Icon(Icons.hotel, color: OrangeColors.brandOrange),
+                leading: CircleAvatar(
+                  backgroundColor: OrangeColors.warmCream,
+                  child: const Icon(Icons.hotel, color: OrangeColors.primaryOrange),
                 ),
-                title: Text(isAr ? 'استقبال فندق سانت ريجيس' : 'The St. Regis Reception', style: const TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: const Text('+20 2 2597 9000 (أو اطلب 0 من الغرفة)'),
+                title: Text(
+                  isAr ? 'استقبال فندق سانت ريجيس' : 'The St. Regis Reception',
+                  style: GoogleFonts.cairo(fontWeight: FontWeight.w700, fontSize: 13.sp),
+                ),
+                subtitle: Text('+20 2 2597 9000', style: GoogleFonts.cairo(color: OrangeColors.secondaryText, fontSize: 12.sp)),
                 trailing: TextButton(
-                  onPressed: () => Navigator.pop(ctx),
-                  child: Text(isAr ? 'اتصال' : 'Call', style: const TextStyle(color: OrangeColors.brandOrange, fontWeight: FontWeight.bold)),
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    launchPhoneCall('+20225979000');
+                  },
+                  child: Text(
+                    isAr ? 'اتصال' : 'Call',
+                    style: GoogleFonts.cairo(color: OrangeColors.primaryOrange, fontWeight: FontWeight.w700),
+                  ),
                 ),
               ),
               SizedBox(height: 12.h),
@@ -481,23 +579,23 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
         final assignedBus = data?.assignedBus ?? widget.user.assignedBus;
 
         return SingleChildScrollView(
-          padding: EdgeInsets.all(14.w),
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
                 isAr ? 'ترتيبات السفر والتنقلات والإقامة' : 'Executive Travel & Ground Logistics',
-                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w900, color: OrangeColors.coreBlack),
+                style: GoogleFonts.cairo(fontSize: 18.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
               ),
-              SizedBox(height: 12.h),
+              SizedBox(height: 14.h),
 
               // Sub-Tabs Segmented Bar (Flights, VIP Buses, Hotel & Wi-Fi)
               Container(
-                padding: EdgeInsets.all(3.w),
+                padding: EdgeInsets.all(4.w),
                 decoration: BoxDecoration(
-                  color: OrangeColors.coreWhite,
-                  borderRadius: BorderRadius.circular(4.r),
-                  border: Border.all(color: OrangeColors.borderGrey),
+                  color: OrangeColors.white,
+                  borderRadius: BorderRadius.circular(20.r),
+                  border: Border.all(color: OrangeColors.lightBorder),
                 ),
                 child: Row(
                   children: [
@@ -516,13 +614,13 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   ],
                 ),
               ),
-              SizedBox(height: 14.h),
+              SizedBox(height: 16.h),
 
               // SUB-TAB 0: FLIGHTS
               if (_travelSubTabIndex == 0) ...[
                 if (flight != null) ...[
                   FlightBriefCard(flight: flight, isArabic: isAr),
-                  SizedBox(height: 12.h),
+                  SizedBox(height: 14.h),
                 ],
                 _buildReturnFlightCard(flight, isAr),
               ],
@@ -553,20 +651,20 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
     return Expanded(
       child: InkWell(
         onTap: () => setState(() => _travelSubTabIndex = index),
-        borderRadius: BorderRadius.circular(3.r),
+        borderRadius: BorderRadius.circular(16.r),
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 8.h),
+          padding: EdgeInsets.symmetric(vertical: 10.h),
           decoration: BoxDecoration(
-            color: isSelected ? OrangeColors.brandOrange : Colors.transparent,
-            borderRadius: BorderRadius.circular(3.r),
+            color: isSelected ? OrangeColors.primaryOrange : Colors.transparent,
+            borderRadius: BorderRadius.circular(16.r),
           ),
           child: Center(
             child: Text(
               label,
-              style: TextStyle(
-                fontSize: 11.sp,
-                fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
-                color: isSelected ? OrangeColors.coreBlack : OrangeColors.darkGrey,
+              style: GoogleFonts.cairo(
+                fontSize: 11.5.sp,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                color: isSelected ? OrangeColors.white : OrangeColors.darkSecondaryText,
               ),
               overflow: TextOverflow.ellipsis,
             ),
@@ -578,69 +676,71 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
 
   Widget _buildReturnFlightCard(dynamic flight, bool isAr) {
     return Container(
-      padding: EdgeInsets.all(14.w),
-      decoration: BoxDecoration(
-        color: OrangeColors.coreWhite,
-        borderRadius: BorderRadius.circular(4.r),
-        border: Border.all(color: OrangeColors.borderGrey),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 2,
-            offset: Offset(0, 1),
-          ),
-        ],
-      ),
+      padding: AppSpacing.cardPaddingCompact,
+      decoration: AppCards.secondary(borderRadius: AppRadius.cardRadius),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Royal Jordanian · RJ 506',
-                style: TextStyle(
-                  fontSize: 13.sp,
-                  fontWeight: FontWeight.w800,
-                  color: OrangeColors.coreBlack,
+              Expanded(
+                child: Row(
+                  children: [
+                    Icon(Icons.flight_land, color: OrangeColors.primaryOrange, size: 18.sp),
+                    SizedBox(width: 8.w),
+                    Expanded(
+                      child: Text(
+                        'Royal Jordanian · RJ 506',
+                        style: GoogleFonts.cairo(
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w700,
+                          color: OrangeColors.black,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
               ),
+              SizedBox(width: 6.w),
               Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                    padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 3.h),
                     decoration: BoxDecoration(
-                      color: OrangeColors.brandOrange,
-                      borderRadius: BorderRadius.circular(2.r),
+                      color: OrangeColors.warmCream,
+                      borderRadius: BorderRadius.circular(10.r),
                     ),
                     child: Text(
                       isAr ? 'رحلة العودة' : 'RETURN',
-                      style: TextStyle(
-                        fontSize: 9.sp,
-                        fontWeight: FontWeight.w900,
-                        color: OrangeColors.coreBlack,
+                      style: GoogleFonts.cairo(
+                        fontSize: 10.sp,
+                        fontWeight: FontWeight.w700,
+                        color: OrangeColors.primaryOrange,
                       ),
                     ),
                   ),
-                  SizedBox(width: 8.w),
+                  SizedBox(width: 6.w),
                   Text(
                     '5 Nov 2026',
-                    style: TextStyle(
+                    style: GoogleFonts.cairo(
                       fontSize: 11.sp,
-                      fontWeight: FontWeight.w700,
-                      color: OrangeColors.mediumGrey,
+                      fontWeight: FontWeight.w600,
+                      color: OrangeColors.secondaryText,
                     ),
                   ),
                 ],
               ),
             ],
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: 14.h),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
             decoration: BoxDecoration(
-              color: OrangeColors.lightGrey,
-              borderRadius: BorderRadius.circular(3.r),
+              color: OrangeColors.background,
+              borderRadius: BorderRadius.circular(18.r),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -650,27 +750,28 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   children: [
                     Text(
                       'CAI',
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w900,
-                        color: OrangeColors.coreBlack,
+                      style: GoogleFonts.cairo(
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w800,
+                        color: OrangeColors.black,
+                        height: 1.1,
                       ),
                     ),
                     SizedBox(height: 2.h),
                     Text(
                       '07:00 PM',
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w800,
-                        color: OrangeColors.brandOrange,
+                      style: GoogleFonts.cairo(
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w700,
+                        color: OrangeColors.primaryOrange,
                       ),
                     ),
                     Text(
                       'Cairo',
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        color: OrangeColors.mediumGrey,
-                        fontWeight: FontWeight.w600,
+                      style: GoogleFonts.cairo(
+                        fontSize: 11.sp,
+                        color: OrangeColors.secondaryText,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],
@@ -679,16 +780,16 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   children: [
                     Icon(
                       isAr ? Icons.arrow_back : Icons.arrow_forward,
-                      color: OrangeColors.brandOrange,
-                      size: 16.sp,
+                      color: OrangeColors.primaryOrange,
+                      size: 18.sp,
                     ),
                     SizedBox(height: 2.h),
                     Text(
                       isAr ? '2 س 15 د' : '2h 15m',
-                      style: TextStyle(
-                        fontSize: 9.5.sp,
-                        color: OrangeColors.mediumGrey,
-                        fontWeight: FontWeight.w700,
+                      style: GoogleFonts.cairo(
+                        fontSize: 10.sp,
+                        color: OrangeColors.secondaryText,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
@@ -698,27 +799,28 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   children: [
                     Text(
                       'AMM',
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w900,
-                        color: OrangeColors.coreBlack,
+                      style: GoogleFonts.cairo(
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w800,
+                        color: OrangeColors.black,
+                        height: 1.1,
                       ),
                     ),
                     SizedBox(height: 2.h),
                     Text(
                       '09:15 PM',
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w800,
-                        color: OrangeColors.brandOrange,
+                      style: GoogleFonts.cairo(
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w700,
+                        color: OrangeColors.primaryOrange,
                       ),
                     ),
                     Text(
                       'Amman',
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        color: OrangeColors.mediumGrey,
-                        fontWeight: FontWeight.w600,
+                      style: GoogleFonts.cairo(
+                        fontSize: 11.sp,
+                        color: OrangeColors.secondaryText,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],
@@ -736,40 +838,39 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: buses.map((bus) {
         return Container(
-          margin: EdgeInsets.only(bottom: 12.h),
-          decoration: BoxDecoration(
-            color: OrangeColors.coreWhite,
-            borderRadius: BorderRadius.circular(4.r),
-            border: Border.all(color: OrangeColors.borderGrey),
-            boxShadow: const [
-              BoxShadow(color: Colors.black12, blurRadius: 2, offset: Offset(0, 1)),
-            ],
-          ),
+          margin: EdgeInsets.only(bottom: 14.h),
+          decoration: AppCards.secondary(borderRadius: AppRadius.cardRadius),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                 decoration: BoxDecoration(
-                  color: OrangeColors.lightGrey,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(3.r)),
+                  color: OrangeColors.warmCream,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      isAr ? bus.busNameAr : bus.busNameEn,
-                      style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w900, color: OrangeColors.coreBlack),
+                    Row(
+                      children: [
+                        Icon(Icons.directions_bus_outlined, size: 18.sp, color: OrangeColors.primaryOrange),
+                        SizedBox(width: 8.w),
+                        Text(
+                          isAr ? bus.busNameAr : bus.busNameEn,
+                          style: GoogleFonts.cairo(fontSize: 14.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
+                        ),
+                      ],
                     ),
                     Text(
                       bus.busNumber,
-                      style: TextStyle(fontSize: 11.sp, color: OrangeColors.darkGrey, fontWeight: FontWeight.w700),
+                      style: GoogleFonts.cairo(fontSize: 12.sp, color: OrangeColors.primaryOrange, fontWeight: FontWeight.w700),
                     ),
                   ],
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(12.w),
+                padding: EdgeInsets.all(16.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -777,39 +878,39 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                       children: [
                         Text(
                           isAr ? 'نقطة التجمع: ' : 'Gathering Point: ',
-                          style: TextStyle(fontSize: 11.sp, color: OrangeColors.mediumGrey, fontWeight: FontWeight.w600),
+                          style: GoogleFonts.cairo(fontSize: 12.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
                         ),
                         Expanded(
                           child: Text(
                             isAr ? bus.gatheringPointAr : bus.gatheringPointEn,
-                            style: TextStyle(fontSize: 11.5.sp, fontWeight: FontWeight.w800, color: OrangeColors.coreBlack),
+                            style: GoogleFonts.cairo(fontSize: 12.5.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 6.h),
+                    SizedBox(height: 8.h),
                     Row(
                       children: [
                         Text(
                           isAr ? 'التجمع: ' : 'Gathering: ',
-                          style: TextStyle(fontSize: 11.sp, color: OrangeColors.mediumGrey, fontWeight: FontWeight.w600),
+                          style: GoogleFonts.cairo(fontSize: 12.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
                         ),
                         Text(
                           bus.gatheringTime,
-                          style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w800, color: OrangeColors.coreBlack),
+                          style: GoogleFonts.cairo(fontSize: 12.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
                         ),
-                        SizedBox(width: 12.w),
+                        SizedBox(width: 16.w),
                         Text(
                           isAr ? 'الانطلاق: ' : 'Departure: ',
-                          style: TextStyle(fontSize: 11.sp, color: OrangeColors.mediumGrey, fontWeight: FontWeight.w600),
+                          style: GoogleFonts.cairo(fontSize: 12.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
                         ),
                         Text(
                           bus.departureTime,
-                          style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w800, color: OrangeColors.brandOrange),
+                          style: GoogleFonts.cairo(fontSize: 12.sp, fontWeight: FontWeight.w700, color: OrangeColors.primaryOrange),
                         ),
                       ],
                     ),
-                    Divider(height: 16.h, color: OrangeColors.borderGrey),
+                    Divider(height: 24.h, color: OrangeColors.lightBorder),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -819,19 +920,20 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                             children: [
                               Text(
                                 '${isAr ? "مشرف الحافلة:" : "Coordinator:"} ${bus.coordinatorName}',
-                                style: TextStyle(fontSize: 10.5.sp, fontWeight: FontWeight.w800),
+                                style: GoogleFonts.cairo(fontSize: 11.5.sp, fontWeight: FontWeight.w700),
                               ),
-                              SizedBox(height: 3.h),
+                              SizedBox(height: 4.h),
                               InkWell(
                                 onTap: () => launchPhoneCall(bus.coordinatorPhone),
+                                borderRadius: BorderRadius.circular(10.r),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Icon(Icons.phone_in_talk, size: 12.sp, color: OrangeColors.brandOrange),
-                                    SizedBox(width: 4.w),
+                                    Icon(Icons.phone_in_talk, size: 14.sp, color: OrangeColors.primaryOrange),
+                                    SizedBox(width: 6.w),
                                     Text(
                                       bus.coordinatorPhone,
-                                      style: TextStyle(fontSize: 11.sp, color: OrangeColors.brandOrange, fontWeight: FontWeight.w800),
+                                      style: GoogleFonts.cairo(fontSize: 12.sp, color: OrangeColors.primaryOrange, fontWeight: FontWeight.w700),
                                     ),
                                   ],
                                 ),
@@ -845,19 +947,20 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                             children: [
                               Text(
                                 '${isAr ? "السائق:" : "Driver:"} ${bus.driverName}',
-                                style: TextStyle(fontSize: 10.5.sp, color: OrangeColors.darkGrey, fontWeight: FontWeight.w600),
+                                style: GoogleFonts.cairo(fontSize: 11.5.sp, color: OrangeColors.darkSecondaryText, fontWeight: FontWeight.w500),
                               ),
-                              SizedBox(height: 3.h),
+                              SizedBox(height: 4.h),
                               InkWell(
                                 onTap: () => launchPhoneCall(bus.driverPhone),
+                                borderRadius: BorderRadius.circular(10.r),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Icon(Icons.phone_in_talk, size: 12.sp, color: OrangeColors.darkGrey),
-                                    SizedBox(width: 4.w),
+                                    Icon(Icons.phone_in_talk, size: 14.sp, color: OrangeColors.secondaryText),
+                                    SizedBox(width: 6.w),
                                     Text(
                                       bus.driverPhone,
-                                      style: TextStyle(fontSize: 11.sp, color: OrangeColors.darkGrey, fontWeight: FontWeight.w800),
+                                      style: GoogleFonts.cairo(fontSize: 12.sp, color: OrangeColors.darkSecondaryText, fontWeight: FontWeight.w600),
                                     ),
                                   ],
                                 ),
@@ -900,75 +1003,79 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
         ];
 
         return ListView(
-          padding: EdgeInsets.all(14.w),
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
           children: [
             Text(
               isAr ? 'برنامج الرحلة والفعاليات الرسمية' : 'Official Trip Agenda & Timeline',
-              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w900, color: OrangeColors.coreBlack),
+              style: GoogleFonts.cairo(fontSize: 18.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
             ),
-            SizedBox(height: 12.h),
+            SizedBox(height: 14.h),
 
-            // Day Selector Chips (Horizontal Scrollable)
+            // Day Selector Chips (Section 13: Selected = #FF7900 + White text, Unselected = White + Black text)
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: dayFilters.map((df) {
                   final isSelected = _selectedItineraryDay == df['key'];
                   return Padding(
-                    padding: EdgeInsetsDirectional.only(end: 8.w),
-                    child: ChoiceChip(
-                      selected: isSelected,
-                      label: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            df['label']!,
-                            style: TextStyle(
-                              fontSize: 11.sp,
-                              fontWeight: isSelected ? FontWeight.w900 : FontWeight.w700,
-                              color: isSelected ? OrangeColors.coreWhite : OrangeColors.darkGrey,
-                            ),
-                          ),
-                          Text(
-                            df['sub']!,
-                            style: TextStyle(
-                              fontSize: 9.sp,
-                              color: isSelected ? OrangeColors.coreWhite : OrangeColors.mediumGrey,
-                            ),
-                          ),
-                        ],
-                      ),
-                      selectedColor: OrangeColors.brandOrange,
-                      backgroundColor: OrangeColors.coreWhite,
-                      side: BorderSide(
-                        color: isSelected ? OrangeColors.brandOrange : OrangeColors.borderGrey,
-                      ),
-                      onSelected: (selected) {
-                        if (selected) {
-                          setState(() {
-                            _selectedItineraryDay = df['key']!;
-                          });
-                        }
+                    padding: EdgeInsetsDirectional.only(end: 10.w),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _selectedItineraryDay = df['key']!;
+                        });
                       },
+                      borderRadius: BorderRadius.circular(18.r),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
+                        decoration: BoxDecoration(
+                          color: isSelected ? OrangeColors.primaryOrange : OrangeColors.white,
+                          borderRadius: BorderRadius.circular(18.r),
+                          border: Border.all(
+                            color: isSelected ? OrangeColors.primaryOrange : OrangeColors.lightBorder,
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              df['label']!,
+                              style: GoogleFonts.cairo(
+                                fontSize: 12.sp,
+                                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
+                                color: isSelected ? OrangeColors.white : OrangeColors.black,
+                              ),
+                            ),
+                            Text(
+                              df['sub']!,
+                              style: GoogleFonts.cairo(
+                                fontSize: 10.sp,
+                                color: isSelected ? OrangeColors.white.withValues(alpha: 0.85) : OrangeColors.secondaryText,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   );
                 }).toList(),
               ),
             ),
-            SizedBox(height: 14.h),
+            SizedBox(height: 16.h),
 
             // Filtered Itinerary Timeline Items
             if (filteredItems.isEmpty) ...[
               Center(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 30.h),
+                  padding: EdgeInsets.symmetric(vertical: 40.h),
                   child: Column(
                     children: [
-                      Icon(Icons.event_busy, size: 36.sp, color: OrangeColors.mediumGrey),
-                      SizedBox(height: 8.h),
+                      Icon(Icons.event_busy, size: 40.sp, color: OrangeColors.secondaryText),
+                      SizedBox(height: 12.h),
                       Text(
                         isAr ? 'لا توجد أنشطة مجدولة لهذا اليوم' : 'No scheduled activities for this day',
-                        style: TextStyle(color: OrangeColors.darkGrey, fontSize: 12.sp),
+                        style: GoogleFonts.cairo(color: OrangeColors.secondaryText, fontSize: 13.sp),
                       ),
                     ],
                   ),
@@ -985,16 +1092,9 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
 
   Widget _buildItineraryCard(ItineraryItemEntity item, bool isAr) {
     return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
-      padding: EdgeInsets.all(12.w),
-      decoration: BoxDecoration(
-        color: OrangeColors.coreWhite,
-        borderRadius: BorderRadius.circular(4.r),
-        border: Border.all(color: OrangeColors.borderGrey),
-        boxShadow: const [
-          BoxShadow(color: Colors.black12, blurRadius: 2, offset: Offset(0, 1)),
-        ],
-      ),
+      margin: EdgeInsets.only(bottom: 14.h),
+      padding: EdgeInsets.all(16.w),
+      decoration: AppCards.secondary(borderRadius: BorderRadius.circular(22.r)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1002,75 +1102,81 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFF5EB),
-                  borderRadius: BorderRadius.circular(2.r),
-                  border: Border.all(color: OrangeColors.brandOrange.withValues(alpha: 0.3)),
+                  color: OrangeColors.warmCream,
+                  borderRadius: BorderRadius.circular(10.r),
                 ),
                 child: Text(
                   '${item.date.split("-").sublist(1).reversed.join("/")} · ${item.startTime} - ${item.endTime}',
-                  style: TextStyle(
-                    color: OrangeColors.accessibleOrange,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 10.5.sp,
+                  style: GoogleFonts.cairo(
+                    color: OrangeColors.primaryOrange,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 11.sp,
                   ),
                 ),
               ),
+              SizedBox(width: 8.w),
               if (item.dressCodeEn.isNotEmpty)
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
-                  decoration: BoxDecoration(
-                    color: OrangeColors.lightGrey,
-                    borderRadius: BorderRadius.circular(2.r),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.checkroom, size: 10.sp, color: OrangeColors.mediumGrey),
-                      SizedBox(width: 3.w),
-                      Text(
-                        isAr ? item.dressCodeAr : item.dressCodeEn,
-                        style: TextStyle(fontSize: 9.5.sp, fontWeight: FontWeight.w700, color: OrangeColors.darkGrey),
-                      ),
-                    ],
+                Flexible(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                    decoration: BoxDecoration(
+                      color: OrangeColors.lightGray,
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.checkroom_outlined, size: 12.sp, color: OrangeColors.secondaryText),
+                        SizedBox(width: 4.w),
+                        Flexible(
+                          child: Text(
+                            isAr ? item.dressCodeAr : item.dressCodeEn,
+                            style: GoogleFonts.cairo(fontSize: 10.sp, fontWeight: FontWeight.w600, color: OrangeColors.darkSecondaryText),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
             ],
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: 10.h),
           Text(
             isAr ? item.titleAr : item.titleEn,
-            style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13.sp, color: OrangeColors.coreBlack),
+            style: GoogleFonts.cairo(fontWeight: FontWeight.w700, fontSize: 14.sp, color: OrangeColors.black),
           ),
           SizedBox(height: 4.h),
           Text(
             isAr ? item.descriptionAr : item.descriptionEn,
-            style: TextStyle(fontSize: 11.sp, color: OrangeColors.darkGrey, height: 1.3),
+            style: GoogleFonts.cairo(fontSize: 12.sp, color: OrangeColors.darkSecondaryText, height: 1.4),
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: 10.h),
           Row(
             children: [
-              Icon(Icons.place_outlined, size: 13.sp, color: OrangeColors.brandOrange),
-              SizedBox(width: 4.w),
+              Icon(Icons.place_outlined, size: 15.sp, color: OrangeColors.primaryOrange),
+              SizedBox(width: 6.w),
               Expanded(
                 child: Text(
                   isAr ? item.locationAr : item.locationEn,
-                  style: TextStyle(fontSize: 10.5.sp, color: OrangeColors.mediumGrey, fontWeight: FontWeight.w600),
+                  style: GoogleFonts.cairo(fontSize: 11.5.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
                 ),
               ),
             ],
           ),
           if (item.gatheringPointEn.isNotEmpty) ...[
-            SizedBox(height: 4.h),
+            SizedBox(height: 6.h),
             Row(
               children: [
-                Icon(Icons.group_outlined, size: 13.sp, color: OrangeColors.accessibleOrange),
-                SizedBox(width: 4.w),
+                Icon(Icons.group_outlined, size: 15.sp, color: OrangeColors.darkOrange),
+                SizedBox(width: 6.w),
                 Expanded(
                   child: Text(
                     '${isAr ? "نقطة التجمع:" : "Gathering:"} ${isAr ? item.gatheringPointAr : item.gatheringPointEn}',
-                    style: TextStyle(fontSize: 10.sp, color: OrangeColors.darkGrey, fontWeight: FontWeight.w700),
+                    style: GoogleFonts.cairo(fontSize: 11.5.sp, color: OrangeColors.darkSecondaryText, fontWeight: FontWeight.w600),
                   ),
                 ),
               ],
@@ -1082,7 +1188,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
   }
 
   // =========================================================================
-  // TAB 4: PROFILE & BIOMETRICS (NO VERIFIED BADGE, BIOMETRICS TOGGLE)
+  // TAB 4: PROFILE & BIOMETRICS (Section 15: Warm Cream Card, Orange Circle Avatar, White Initials)
   // =========================================================================
   Widget _buildProfileTab(AppStrings strings, bool isAr) {
     return BlocBuilder<DashboardCubit, DashboardState>(
@@ -1092,48 +1198,51 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
         final isBiometricsEnabled = data?.isBiometricsEnabled ?? false;
 
         return SingleChildScrollView(
-          padding: EdgeInsets.all(14.w),
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // 1. Profile Header Card (Avatar + Name + Email) - Strictly NO verified badge or role subtitle
+              // 1. Profile Header Card (Section 15: Background: #FFF3E8, Radius: 24px, Avatar: Orange circle + White initials)
               Container(
-                padding: EdgeInsets.all(14.w),
-                decoration: BoxDecoration(
-                  color: OrangeColors.coreWhite,
-                  borderRadius: BorderRadius.circular(4.r),
-                  border: Border.all(color: OrangeColors.borderGrey),
-                  boxShadow: const [
-                    BoxShadow(color: Colors.black12, blurRadius: 2, offset: Offset(0, 1)),
-                  ],
+                padding: EdgeInsets.all(22.w),
+                decoration: AppCards.primary(
+                  borderRadius: AppRadius.cardRadius,
                 ),
                 child: Row(
                   children: [
                     CircleAvatar(
-                      radius: 26.r,
-                      backgroundColor: OrangeColors.coreBlack,
+                      radius: 28.r,
+                      backgroundColor: OrangeColors.primaryOrange,
                       child: Text(
-                        fullName.isNotEmpty ? fullName[0] : 'U',
-                        style: TextStyle(
-                          color: OrangeColors.brandOrange,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 20.sp,
+                        fullName.isNotEmpty ? fullName[0].toUpperCase() : 'U',
+                        style: GoogleFonts.cairo(
+                          color: OrangeColors.white,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 22.sp,
                         ),
                       ),
                     ),
-                    SizedBox(width: 14.w),
+                    SizedBox(width: 16.w),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             fullName,
-                            style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w900, color: OrangeColors.coreBlack),
+                            style: GoogleFonts.cairo(
+                              fontSize: 17.sp,
+                              fontWeight: FontWeight.w700,
+                              color: OrangeColors.black,
+                            ),
                           ),
                           SizedBox(height: 2.h),
                           Text(
                             widget.user.email,
-                            style: TextStyle(fontSize: 11.5.sp, color: OrangeColors.mediumGrey, fontWeight: FontWeight.w600),
+                            style: GoogleFonts.cairo(
+                              fontSize: 12.5.sp,
+                              color: OrangeColors.secondaryText,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ],
                       ),
@@ -1141,24 +1250,20 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   ],
                 ),
               ),
-              SizedBox(height: 12.h),
+              SizedBox(height: 16.h),
 
               // 2. Language Selection Card (English / العربية)
               Container(
-                padding: EdgeInsets.all(14.w),
-                decoration: BoxDecoration(
-                  color: OrangeColors.coreWhite,
-                  borderRadius: BorderRadius.circular(4.r),
-                  border: Border.all(color: OrangeColors.borderGrey),
-                ),
+                padding: EdgeInsets.all(18.w),
+                decoration: AppCards.secondary(borderRadius: BorderRadius.circular(20.r)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       isAr ? 'لغة التطبيق' : 'Application Language',
-                      style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w800, color: OrangeColors.darkGrey),
+                      style: GoogleFonts.cairo(fontSize: 13.sp, fontWeight: FontWeight.w700, color: OrangeColors.darkSecondaryText),
                     ),
-                    SizedBox(height: 10.h),
+                    SizedBox(height: 12.h),
                     Row(
                       children: [
                         Expanded(
@@ -1167,51 +1272,53 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                               if (context.locale.languageCode != 'en') {
                                 await context.setLocale(const Locale('en'));
                                 await sl<SecureStorageService>().setLanguage('en');
+                                if (mounted) setState(() {});
                               }
                             },
-                            borderRadius: BorderRadius.circular(3.r),
+                            borderRadius: BorderRadius.circular(16.r),
                             child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 8.h),
+                              padding: EdgeInsets.symmetric(vertical: 10.h),
                               decoration: BoxDecoration(
-                                color: !isAr ? OrangeColors.brandOrange : OrangeColors.lightGrey,
-                                borderRadius: BorderRadius.circular(3.r),
+                                color: !isAr ? OrangeColors.primaryOrange : OrangeColors.lightGray,
+                                borderRadius: BorderRadius.circular(16.r),
                               ),
                               child: Center(
                                 child: Text(
                                   'English',
-                                  style: TextStyle(
-                                    fontSize: 11.5.sp,
-                                    fontWeight: !isAr ? FontWeight.w900 : FontWeight.w600,
-                                    color: !isAr ? OrangeColors.coreBlack : OrangeColors.darkGrey,
+                                  style: GoogleFonts.cairo(
+                                    fontSize: 12.sp,
+                                    fontWeight: !isAr ? FontWeight.w700 : FontWeight.w500,
+                                    color: !isAr ? OrangeColors.white : OrangeColors.darkSecondaryText,
                                   ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(width: 10.w),
+                        SizedBox(width: 12.w),
                         Expanded(
                           child: InkWell(
                             onTap: () async {
                               if (context.locale.languageCode != 'ar') {
                                 await context.setLocale(const Locale('ar'));
                                 await sl<SecureStorageService>().setLanguage('ar');
+                                if (mounted) setState(() {});
                               }
                             },
-                            borderRadius: BorderRadius.circular(3.r),
+                            borderRadius: BorderRadius.circular(16.r),
                             child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 8.h),
+                              padding: EdgeInsets.symmetric(vertical: 10.h),
                               decoration: BoxDecoration(
-                                color: isAr ? OrangeColors.brandOrange : OrangeColors.lightGrey,
-                                borderRadius: BorderRadius.circular(3.r),
+                                color: isAr ? OrangeColors.primaryOrange : OrangeColors.lightGray,
+                                borderRadius: BorderRadius.circular(16.r),
                               ),
                               child: Center(
                                 child: Text(
                                   'العربية',
-                                  style: TextStyle(
-                                    fontSize: 11.5.sp,
-                                    fontWeight: isAr ? FontWeight.w900 : FontWeight.w600,
-                                    color: isAr ? OrangeColors.coreBlack : OrangeColors.darkGrey,
+                                  style: GoogleFonts.cairo(
+                                    fontSize: 12.sp,
+                                    fontWeight: isAr ? FontWeight.w700 : FontWeight.w500,
+                                    color: isAr ? OrangeColors.white : OrangeColors.darkSecondaryText,
                                   ),
                                 ),
                               ),
@@ -1223,33 +1330,28 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   ],
                 ),
               ),
-              SizedBox(height: 12.h),
+              SizedBox(height: 14.h),
 
-              // 3. Biometrics Authentication Switch Card (Face ID / Fingerprint)
+              // 3. Biometrics Authentication Switch Card (Section 19: Inactive: Light bg, dark knob. Active: Orange track, white knob)
               Container(
-                decoration: BoxDecoration(
-                  color: OrangeColors.coreWhite,
-                  borderRadius: BorderRadius.circular(4.r),
-                  border: Border.all(color: OrangeColors.borderGrey),
-                ),
+                decoration: AppCards.secondary(borderRadius: BorderRadius.circular(20.r)),
                 child: SwitchListTile(
                   value: isBiometricsEnabled,
-                  activeThumbColor: OrangeColors.brandOrange,
                   title: Text(
-                    isAr ? 'تسجيل الدخول بالبصمة أو التعرف على الوجه' : 'Biometric Quick Unlock',
-                    style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w900),
+                    isAr ? 'تسجيل الدخول بالبصمة أو Face ID' : 'Biometric Quick Unlock',
+                    style: GoogleFonts.cairo(fontSize: 13.sp, fontWeight: FontWeight.w700),
                   ),
                   subtitle: Text(
-                    isAr ? 'الدخول السريع والآمن دون الحاجة لكتابة كلمة المرور' : 'Unlock instantly using fingerprint or face recognition',
-                    style: TextStyle(fontSize: 10.sp, color: OrangeColors.mediumGrey),
+                    isAr ? 'الدخول السريع والآمن دون الحاجة لكتابة كلمة المرور' : 'Unlock instantly using fingerprint or Face ID',
+                    style: GoogleFonts.cairo(fontSize: 11.sp, color: OrangeColors.secondaryText),
                   ),
                   secondary: Container(
-                    padding: EdgeInsets.all(6.w),
+                    padding: EdgeInsets.all(8.w),
                     decoration: BoxDecoration(
-                      color: OrangeColors.lightGrey,
-                      borderRadius: BorderRadius.circular(3.r),
+                      color: OrangeColors.warmCream,
+                      borderRadius: BorderRadius.circular(14.r),
                     ),
-                    child: Icon(Icons.fingerprint, color: OrangeColors.brandOrange, size: 20.sp),
+                    child: Icon(Icons.fingerprint, color: OrangeColors.primaryOrange, size: 22.sp),
                   ),
                   onChanged: (enabled) {
                     context.read<DashboardCubit>().toggleBiometrics(enabled);
@@ -1259,80 +1361,76 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                           enabled
                               ? (isAr ? 'تم تفعيل البصمة لتسجيل الدخول السريع' : 'Biometrics enabled')
                               : (isAr ? 'تم إلغاء تفعيل البصمة' : 'Biometrics disabled'),
+                          style: GoogleFonts.cairo(fontWeight: FontWeight.w600, color: OrangeColors.white),
                         ),
-                        backgroundColor: OrangeColors.coreBlack,
+                        backgroundColor: OrangeColors.black,
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
                         duration: const Duration(seconds: 2),
                       ),
                     );
                   },
                 ),
               ),
-              SizedBox(height: 12.h),
+              SizedBox(height: 14.h),
 
               // 4. Change Password Card
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
-                decoration: BoxDecoration(
-                  color: OrangeColors.coreWhite,
-                  borderRadius: BorderRadius.circular(4.r),
-                  border: Border.all(color: OrangeColors.borderGrey),
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 12.h),
+                decoration: AppCards.secondary(borderRadius: BorderRadius.circular(20.r)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       isAr ? 'كلمة المرور والأمان' : 'Password & Security',
-                      style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w800, color: OrangeColors.darkGrey),
+                      style: GoogleFonts.cairo(fontSize: 13.sp, fontWeight: FontWeight.w700, color: OrangeColors.darkSecondaryText),
                     ),
                     TextButton(
                       onPressed: () => _showChangePasswordDialog(isAr),
                       child: Text(
                         isAr ? 'تغيير كلمة المرور' : 'Change Password',
-                        style: TextStyle(fontSize: 11.5.sp, fontWeight: FontWeight.w800, color: OrangeColors.brandOrange),
+                        style: GoogleFonts.cairo(fontSize: 12.5.sp, fontWeight: FontWeight.w700, color: OrangeColors.primaryOrange),
                       ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 12.h),
+              SizedBox(height: 14.h),
 
               // 5. Emergency Contact Info Card (Direct Clickable Dialing)
               Container(
-                padding: EdgeInsets.all(14.w),
-                decoration: BoxDecoration(
-                  color: OrangeColors.coreWhite,
-                  borderRadius: BorderRadius.circular(4.r),
-                  border: Border.all(color: OrangeColors.borderGrey),
-                ),
+                padding: EdgeInsets.all(18.w),
+                decoration: AppCards.secondary(borderRadius: BorderRadius.circular(20.r)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       isAr ? 'جهة الاتصال في حالات الطوارئ' : 'Emergency Contact Person',
-                      style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w800, color: OrangeColors.darkGrey),
+                      style: GoogleFonts.cairo(fontSize: 13.sp, fontWeight: FontWeight.w700, color: OrangeColors.darkSecondaryText),
                     ),
-                    Divider(height: 16.h),
+                    Divider(height: 20.h, color: OrangeColors.lightBorder),
                     _buildProfileRow(isAr ? 'الاسم' : 'Name', 'Noor Al-Mansoor'),
-                    Divider(height: 14.h),
+                    Divider(height: 16.h, color: OrangeColors.lightBorder),
                     _buildProfileRow(isAr ? 'صلة القرابة' : 'Relationship', isAr ? 'الزوجة' : 'Spouse'),
-                    Divider(height: 14.h),
+                    Divider(height: 16.h, color: OrangeColors.lightBorder),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           isAr ? 'رقم الهاتف' : 'Phone',
-                          style: TextStyle(color: OrangeColors.mediumGrey, fontSize: 11.5.sp, fontWeight: FontWeight.w600),
+                          style: GoogleFonts.cairo(color: OrangeColors.secondaryText, fontSize: 12.sp, fontWeight: FontWeight.w500),
                         ),
                         InkWell(
                           onTap: () => launchPhoneCall('+962779998888'),
+                          borderRadius: BorderRadius.circular(10.r),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.phone_in_talk, size: 12.sp, color: OrangeColors.brandOrange),
-                              SizedBox(width: 4.w),
+                              Icon(Icons.phone_in_talk, size: 14.sp, color: OrangeColors.primaryOrange),
+                              SizedBox(width: 6.w),
                               Text(
                                 '+962 7 7999 8888',
-                                style: TextStyle(color: OrangeColors.brandOrange, fontSize: 12.sp, fontWeight: FontWeight.w900),
+                                style: GoogleFonts.cairo(color: OrangeColors.primaryOrange, fontSize: 13.sp, fontWeight: FontWeight.w700),
                               ),
                             ],
                           ),
@@ -1342,9 +1440,9 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   ],
                 ),
               ),
-              SizedBox(height: 16.h),
+              SizedBox(height: 20.h),
 
-              // 6. Sign Out Button
+              // 6. Sign Out Button (Section 7: Secondary Button)
               OrangeButton(
                 text: strings.logout,
                 isOutlined: true,
@@ -1353,7 +1451,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   context.read<AuthCubit>().logout();
                 },
               ),
-              SizedBox(height: 16.h),
+              SizedBox(height: 20.h),
             ],
           ),
         );
@@ -1369,9 +1467,10 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.dialogRadius),
         title: Text(
           isAr ? 'تغيير كلمة المرور' : 'Change Password',
-          style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w900),
+          style: GoogleFonts.cairo(fontSize: 16.sp, fontWeight: FontWeight.w700),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -1381,25 +1480,25 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
               obscureText: true,
               decoration: InputDecoration(
                 labelText: isAr ? 'كلمة المرور الحالية' : 'Current Password',
-                labelStyle: TextStyle(fontSize: 11.sp),
+                labelStyle: GoogleFonts.cairo(fontSize: 12.sp),
               ),
             ),
-            SizedBox(height: 8.h),
+            SizedBox(height: 12.h),
             TextField(
               controller: newPwController,
               obscureText: true,
               decoration: InputDecoration(
                 labelText: isAr ? 'كلمة المرور الجديدة' : 'New Password',
-                labelStyle: TextStyle(fontSize: 11.sp),
+                labelStyle: GoogleFonts.cairo(fontSize: 12.sp),
               ),
             ),
-            SizedBox(height: 8.h),
+            SizedBox(height: 12.h),
             TextField(
               controller: confirmPwController,
               obscureText: true,
               decoration: InputDecoration(
                 labelText: isAr ? 'تأكيد كلمة المرور' : 'Confirm Password',
-                labelStyle: TextStyle(fontSize: 11.sp),
+                labelStyle: GoogleFonts.cairo(fontSize: 12.sp),
               ),
             ),
           ],
@@ -1407,22 +1506,30 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text(isAr ? 'إلغاء' : 'Cancel'),
+            child: Text(isAr ? 'إلغاء' : 'Cancel', style: GoogleFonts.cairo(color: OrangeColors.secondaryText, fontWeight: FontWeight.w600)),
           ),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: OrangeColors.brandOrange),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: OrangeColors.primaryOrange,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+            ),
             onPressed: () {
               Navigator.pop(ctx);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(isAr ? 'تم تحديث كلمة المرور بنجاح' : 'Password updated successfully'),
-                  backgroundColor: OrangeColors.brandOrange,
+                  content: Text(
+                    isAr ? 'تم تحديث كلمة المرور بنجاح' : 'Password updated successfully',
+                    style: GoogleFonts.cairo(fontWeight: FontWeight.w600, color: OrangeColors.white),
+                  ),
+                  backgroundColor: OrangeColors.success,
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
                 ),
               );
             },
             child: Text(
               isAr ? 'تحديث' : 'Update',
-              style: const TextStyle(color: OrangeColors.coreBlack, fontWeight: FontWeight.w900),
+              style: GoogleFonts.cairo(color: OrangeColors.white, fontWeight: FontWeight.w700),
             ),
           ),
         ],
@@ -1436,11 +1543,11 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
       children: [
         Text(
           title,
-          style: TextStyle(color: OrangeColors.mediumGrey, fontSize: 11.5.sp, fontWeight: FontWeight.w600),
+          style: GoogleFonts.cairo(color: OrangeColors.secondaryText, fontSize: 12.sp, fontWeight: FontWeight.w500),
         ),
         Text(
           value,
-          style: TextStyle(color: OrangeColors.coreBlack, fontSize: 12.sp, fontWeight: FontWeight.w800),
+          style: GoogleFonts.cairo(color: OrangeColors.black, fontSize: 13.sp, fontWeight: FontWeight.w700),
         ),
       ],
     );

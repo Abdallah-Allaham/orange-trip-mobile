@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/colors.dart';
+import '../../../../core/theme/app_design_system.dart';
 
 class TripCountdownHero extends StatelessWidget {
   final String fullName;
@@ -28,23 +30,14 @@ class TripCountdownHero extends StatelessWidget {
     final seconds = countdownDuration.inSeconds.remainder(60);
 
     return Container(
-      padding: EdgeInsets.all(14.w),
-      decoration: BoxDecoration(
-        color: OrangeColors.coreWhite,
-        borderRadius: BorderRadius.circular(4.r),
-        border: Border.all(color: OrangeColors.borderGrey),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 3,
-            offset: Offset(0, 1),
-          ),
-        ],
+      padding: EdgeInsets.all(22.w),
+      decoration: AppCards.primary(
+        borderRadius: AppRadius.cardRadius,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Header: Welcome & VIP Badges
+          // Header: Welcome Greeting & Status Dot
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -62,70 +55,94 @@ class TripCountdownHero extends StatelessWidget {
                             shape: BoxShape.circle,
                           ),
                         ),
-                        SizedBox(width: 6.w),
-                        Expanded(
-                          child: Text(
-                            isArabic ? 'مرحباً، $fullName' : 'Welcome, $fullName',
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w900,
-                              color: OrangeColors.coreBlack,
-                            ),
-                            overflow: TextOverflow.ellipsis,
+                        SizedBox(width: 8.w),
+                        Text(
+                          isArabic ? 'مرحباً،' : 'Welcome,',
+                          style: GoogleFonts.cairo(
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w600,
+                            color: OrangeColors.secondaryText,
                           ),
                         ),
                       ],
                     ),
+                    SizedBox(height: 2.h),
+                    Text(
+                      fullName,
+                      style: GoogleFonts.cairo(
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w700,
+                        color: OrangeColors.black,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ],
+                ),
+              ),
+              // Executive Delegation Badge
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                decoration: BoxDecoration(
+                  color: OrangeColors.white,
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: Border.all(color: OrangeColors.lightBorder),
+                ),
+                child: Text(
+                  isArabic ? 'وفد الإدارة العليا' : 'Executive Board',
+                  style: GoogleFonts.cairo(
+                    fontSize: 10.5.sp,
+                    fontWeight: FontWeight.w700,
+                    color: OrangeColors.primaryOrange,
+                  ),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 12.h),
+          SizedBox(height: 16.h),
 
-          // Trip Title & Dates
+          // Destination & Dates Row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
                   Icon(
-                    Icons.location_city,
-                    color: OrangeColors.brandOrange,
-                    size: 16.sp,
+                    Icons.location_on_outlined,
+                    color: OrangeColors.primaryOrange,
+                    size: 18.sp,
                   ),
                   SizedBox(width: 6.w),
                   Text(
-                    isArabic ? 'رحلة القاهرة 2026' : 'Cairo, Egypt 2026',
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w800,
-                      color: OrangeColors.coreBlack,
+                    isArabic ? 'القاهرة، مصر 2026' : 'Cairo, Egypt 2026',
+                    style: GoogleFonts.cairo(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w700,
+                      color: OrangeColors.black,
                     ),
                   ),
                 ],
               ),
               Text(
                 '2 Nov – 5 Nov 2026',
-                style: TextStyle(
-                  fontSize: 11.sp,
-                  fontWeight: FontWeight.w700,
-                  color: OrangeColors.darkGrey,
+                style: GoogleFonts.cairo(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w600,
+                  color: OrangeColors.secondaryText,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: 14.h),
 
-          // 4-Block Countdown Timer
+          // 4-Block Countdown Timer (Minimal Soft Rounded Blocks)
           Row(
             children: [
               _buildTimeBlock(days.toString(), isArabic ? 'يوم' : 'Days', false),
-              SizedBox(width: 6.w),
+              SizedBox(width: 8.w),
               _buildTimeBlock(hours.toString().padLeft(2, '0'), isArabic ? 'ساعة' : 'Hours', false),
-              SizedBox(width: 6.w),
+              SizedBox(width: 8.w),
               _buildTimeBlock(minutes.toString().padLeft(2, '0'), isArabic ? 'دقيقة' : 'Min', false),
-              SizedBox(width: 6.w),
+              SizedBox(width: 8.w),
               _buildTimeBlock(seconds.toString().padLeft(2, '0'), isArabic ? 'ثانية' : 'Sec', true),
             ],
           ),
@@ -137,12 +154,12 @@ class TripCountdownHero extends StatelessWidget {
   Widget _buildTimeBlock(String value, String label, bool isAccent) {
     return Expanded(
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 8.h),
+        padding: EdgeInsets.symmetric(vertical: 10.h),
         decoration: BoxDecoration(
-          color: isAccent ? const Color(0xFFFFF5EB) : OrangeColors.lightGrey,
-          borderRadius: BorderRadius.circular(3.r),
+          color: OrangeColors.white,
+          borderRadius: BorderRadius.circular(16.r),
           border: Border.all(
-            color: isAccent ? OrangeColors.brandOrange.withValues(alpha: 0.5) : OrangeColors.borderGrey,
+            color: isAccent ? OrangeColors.primaryOrange.withValues(alpha: 0.35) : OrangeColors.lightBorder,
             width: 1,
           ),
         ),
@@ -150,21 +167,20 @@ class TripCountdownHero extends StatelessWidget {
           children: [
             Text(
               value,
-              style: TextStyle(
-                fontFamily: 'monospace',
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w900,
-                color: isAccent ? OrangeColors.brandOrange : OrangeColors.coreBlack,
+              style: GoogleFonts.cairo(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w800,
+                color: isAccent ? OrangeColors.primaryOrange : OrangeColors.black,
                 height: 1.1,
               ),
             ),
             SizedBox(height: 2.h),
             Text(
               label,
-              style: TextStyle(
-                fontSize: 9.sp,
-                fontWeight: FontWeight.w700,
-                color: isAccent ? OrangeColors.accessibleOrange : OrangeColors.mediumGrey,
+              style: GoogleFonts.cairo(
+                fontSize: 10.sp,
+                fontWeight: FontWeight.w600,
+                color: isAccent ? OrangeColors.primaryOrange : OrangeColors.secondaryText,
               ),
             ),
           ],

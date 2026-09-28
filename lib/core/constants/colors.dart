@@ -1,25 +1,39 @@
 import 'package:flutter/material.dart';
 
-/// Official Orange Boosted Design System Colors
-/// Strict corporate palette: Black, White, and Orange.
+/// Premium Enterprise Design System Color Palette
+/// Designed specifically for Orange Trip Cairo 2026.
+/// MINIMAL + ORANGE + BLACK + WHITE + SOFT GRAYS + WARM CREAM
 class OrangeColors {
-  // Core Triad
-  static const Color brandOrange = Color(0xFFFF7900); // Primary Brand Orange (CTAs & Highlights)
-  static const Color accessibleOrange = Color(0xFFF16E00); // WCAG AA Compliant Orange on White
-  static const Color coreBlack = Color(0xFF000000); // Primary Text / Dark Canvas
-  static const Color coreWhite = Color(0xFFFFFFFF); // Light Canvas / Text on Orange
+  // 1. Primary & Brand Colors
+  static const Color primaryOrange = Color(0xFFFF7900); // Strategic Highlights & Primary CTAs
+  static const Color darkOrange = Color(0xFFF16E00); // WCAG AA Compliant Orange on light surfaces
+  static const Color black = Color(0xFF000000); // Primary Headings & High-contrast Text
+  static const Color white = Color(0xFFFFFFFF); // Clean Content Surfaces
+  static const Color warmCream = Color(0xFFFFF3E8); // Highlighted Cards & Important Info Sections
+  static const Color background = Color(0xFFF2F2F2); // Main Application Canvas Background
 
-  // Monochromes & Grayscale
-  static const Color darkGrey = Color(0xFF333333); // Secondary text & dark cards
-  static const Color mediumGrey = Color(0xFF666666); // Subtitles, captions, inactive icons
-  static const Color borderGrey = Color(0xFFCCCCCC); // Sharp structural borders (1px)
-  static const Color lightGrey = Color(0xFFF6F6F6); // Background fills & input backgrounds
-  static const Color cardBg = Color(0xFFFFFFFF); // Card background
-  static const Color darkSurface = Color(0xFF141416); // Deep charcoal executive background
+  // 2. Secondary & Grayscale Hierarchy
+  static const Color secondaryText = Color(0xFF8F8F8F); // Metadata, subtitles, inactive states
+  static const Color darkSecondaryText = Color(0xFF333333); // Body text, secondary headings
+  static const Color lightBorder = Color(0xFFE4E4E4); // Subtle 1px structural card/field borders
+  static const Color lightGray = Color(0xFFEEEEEE); // Input fills & soft control surfaces
 
-  // Semantic Accents
-  static const Color success = Color(0xFF228722); // Verified status / Success
-  static const Color warning = Color(0xFF8F6B00); // Alerts / Attention
-  static const Color danger = Color(0xFFCD3C14); // Critical warnings / Errors
-  static const Color info = Color(0xFF527EDB); // Informational links
+  // 3. Status & Semantic Colors
+  static const Color error = Color(0xFFD6382B); // Destructive actions & error states
+  static const Color success = Color(0xFF107C41); // Restrained corporate green
+
+  // Backward-compatible aliases to ensure existing references compile seamlessly
+  static const Color brandOrange = primaryOrange;
+  static const Color accessibleOrange = darkOrange;
+  static const Color coreBlack = black;
+  static const Color coreWhite = white;
+  static const Color darkGrey = darkSecondaryText;
+  static const Color mediumGrey = secondaryText;
+  static const Color borderGrey = lightBorder;
+  static const Color lightGrey = lightGray;
+  static const Color cardBg = white;
+  static const Color darkSurface = black;
+  static const Color danger = error;
+  static const Color warning = Color(0xFF8F6B00);
+  static const Color info = primaryOrange;
 }

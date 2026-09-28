@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/colors.dart';
+import '../../../../core/theme/app_design_system.dart';
 
 class OrangeTextField extends StatefulWidget {
   final String label;
@@ -44,47 +46,58 @@ class _OrangeTextFieldState extends State<OrangeTextField> {
       children: [
         Text(
           widget.label,
-          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                color: OrangeColors.darkGrey,
-                fontWeight: FontWeight.w700,
-                fontSize: 12.sp,
-              ),
+          style: GoogleFonts.cairo(
+            color: OrangeColors.darkSecondaryText,
+            fontWeight: FontWeight.w700,
+            fontSize: 13.sp,
+          ),
         ),
-        SizedBox(height: 6.h),
+        SizedBox(height: 8.h),
         TextFormField(
           controller: widget.controller,
           obscureText: widget.isPassword ? _obscureText : false,
           keyboardType: widget.keyboardType,
           enabled: widget.enabled,
           validator: widget.validator,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: OrangeColors.coreBlack,
-                fontSize: 14.sp,
-              ),
+          style: GoogleFonts.cairo(
+            color: OrangeColors.black,
+            fontSize: 15.sp,
+            fontWeight: FontWeight.w500,
+          ),
           decoration: InputDecoration(
             hintText: widget.hint,
-            contentPadding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
+            hintStyle: GoogleFonts.cairo(
+              color: OrangeColors.secondaryText,
+              fontSize: 14.sp,
+            ),
+            filled: true,
+            fillColor: OrangeColors.white,
+            contentPadding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 16.h),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(4.0.r),
-              borderSide: const BorderSide(color: OrangeColors.borderGrey, width: 1.5),
+              borderRadius: AppRadius.inputRadius,
+              borderSide: const BorderSide(color: OrangeColors.lightBorder, width: 1.5),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(4.0.r),
-              borderSide: const BorderSide(color: OrangeColors.borderGrey, width: 1.5),
+              borderRadius: AppRadius.inputRadius,
+              borderSide: const BorderSide(color: OrangeColors.lightBorder, width: 1.5),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(4.0.r),
-              borderSide: const BorderSide(color: OrangeColors.brandOrange, width: 2.0),
+              borderRadius: AppRadius.inputRadius,
+              borderSide: const BorderSide(color: OrangeColors.primaryOrange, width: 2.0),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(4.0.r),
-              borderSide: const BorderSide(color: OrangeColors.danger, width: 1.5),
+              borderRadius: AppRadius.inputRadius,
+              borderSide: const BorderSide(color: OrangeColors.error, width: 1.5),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: AppRadius.inputRadius,
+              borderSide: const BorderSide(color: OrangeColors.error, width: 2.0),
             ),
             suffixIcon: widget.isPassword
                 ? IconButton(
                     icon: Icon(
                       _obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                      color: OrangeColors.mediumGrey,
+                      color: OrangeColors.secondaryText,
                       size: 20.sp,
                     ),
                     onPressed: () {

@@ -2,7 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/colors.dart';
+import '../../../../core/theme/app_design_system.dart';
 import '../cubit/auth_cubit.dart';
 import '../cubit/auth_state.dart';
 import '../widgets/orange_button.dart';
@@ -30,8 +32,6 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
     super.initState();
     _emailController = TextEditingController(text: widget.initialEmail ?? '');
     _tokenController = TextEditingController(text: widget.initialToken ?? '');
-
-    // Smart URL parsing: if user pastes full invitation link, extract token & email automatically
     _tokenController.addListener(_handleLinkOrTokenPaste);
   }
 
@@ -49,9 +49,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
             selection: TextSelection.collapsed(offset: token.length),
           );
         }
-        if (email != null &&
-            email.isNotEmpty &&
-            _emailController.text.isEmpty) {
+        if (email != null && email.isNotEmpty && _emailController.text.isEmpty) {
           _emailController.text = email;
         }
       } catch (_) {}
@@ -71,31 +69,35 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
   void _handleSubmit() {
     if (_formKey.currentState?.validate() ?? false) {
       context.read<AuthCubit>().setPassword(
-        _emailController.text.trim(),
-        _passwordController.text,
-        _tokenController.text.trim().isNotEmpty
-            ? _tokenController.text.trim()
-            : null,
-      );
+            _emailController.text.trim(),
+            _passwordController.text,
+            _tokenController.text.trim().isNotEmpty ? _tokenController.text.trim() : null,
+          );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: OrangeColors.coreWhite,
+      backgroundColor: OrangeColors.background,
       appBar: AppBar(
-        backgroundColor: OrangeColors.coreBlack,
+        backgroundColor: OrangeColors.white,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(color: OrangeColors.lightBorder, height: 1),
+        ),
         title: Text(
           'account_activation_title'.tr(),
-          style: TextStyle(
+          style: GoogleFonts.cairo(
             fontSize: 18.sp,
-            fontWeight: FontWeight.w800,
-            color: OrangeColors.coreWhite,
+            fontWeight: FontWeight.w700,
+            color: OrangeColors.black,
           ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: OrangeColors.coreWhite),
+          icon: const Icon(Icons.arrow_back, color: OrangeColors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -105,11 +107,14 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 backgroundColor: OrangeColors.success,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+                behavior: SnackBarBehavior.floating,
                 content: Text(
                   'activation_success'.tr(),
-                  style: TextStyle(
+                  style: GoogleFonts.cairo(
                     fontWeight: FontWeight.w700,
                     fontSize: 13.sp,
+                    color: OrangeColors.white,
                   ),
                 ),
               ),
@@ -118,8 +123,13 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
           } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                backgroundColor: OrangeColors.danger,
-                content: Text(state.message, style: TextStyle(fontSize: 13.sp)),
+                backgroundColor: OrangeColors.error,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+                behavior: SnackBarBehavior.floating,
+                content: Text(
+                  state.message,
+                  style: GoogleFonts.cairo(fontSize: 13.sp, color: OrangeColors.white),
+                ),
               ),
             );
           }
@@ -129,110 +139,113 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
 
           return SafeArea(
             child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: 420.w),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      // Badge
-                      Text(
-                        'account_activation_title'.tr(),
-                        style: TextStyle(
-                          fontSize: 22.sp,
-                          fontWeight: FontWeight.w900,
-                          color: OrangeColors.coreBlack,
-                        ),
-                      ),
-                      SizedBox(height: 6.h),
-                      Text(
-                        'activation_description'.tr(),
-                        style: TextStyle(
-                          fontSize: 13.sp,
-                          color: OrangeColors.mediumGrey,
-                          height: 1.4,
-                        ),
-                      ),
-                      SizedBox(height: 24.h),
-
-                      // Email Field
-                      OrangeTextField(
-                        label: 'email_label'.tr(),
-                        hint: 'email_hint'.tr(),
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (v) {
-                          if (v == null || v.trim().isEmpty) {
-                            return 'email_required'.tr();
-                          }
-                          if (!v.contains('@')) return 'Invalid email address';
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 16.h),
-
-                      // Smart Token or Full Link Field
-                      OrangeTextField(
-                        label: 'activation_token_label'.tr(),
-                        hint: 'activation_token_hint'.tr(),
-                        controller: _tokenController,
-                      ),
-                      SizedBox(height: 16.h),
-
-                      // New Password Field
-                      OrangeTextField(
-                        label: 'new_password_label'.tr(),
-                        hint: 'password_hint'.tr(),
-                        controller: _passwordController,
-                        isPassword: true,
-                        validator: (v) {
-                          if (v == null || v.isEmpty) {
-                            return 'password_required'.tr();
-                          }
-                          if (v.length < 6) return 'password_too_short'.tr();
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 16.h),
-
-                      // Confirm Password Field
-                      OrangeTextField(
-                        label: 'confirm_password_label'.tr(),
-                        hint: 'password_hint'.tr(),
-                        controller: _confirmPasswordController,
-                        isPassword: true,
-                        validator: (v) {
-                          if (v != _passwordController.text) {
-                            return 'passwords_do_not_match'.tr();
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 24.h),
-
-                      // Submit Button
-                      OrangeButton(
-                        text: 'save_password_button'.tr(),
-                        isLoading: isLoading,
-                        onPressed: _handleSubmit,
-                      ),
-                      SizedBox(height: 14.h),
-
-                      // Back to login
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: Text(
-                          'back_to_login'.tr(),
-                          style: TextStyle(
-                            color: OrangeColors.coreBlack,
+                child: Container(
+                  padding: EdgeInsets.all(24.w),
+                  decoration: AppCards.secondary(
+                    borderRadius: AppRadius.cardRadius,
+                    withSubtleShadow: true,
+                  ),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          'account_activation_title'.tr(),
+                          style: GoogleFonts.cairo(
+                            fontSize: 22.sp,
                             fontWeight: FontWeight.w700,
-                            fontSize: 13.sp,
+                            color: OrangeColors.black,
                           ),
                         ),
-                      ),
-                    ],
+                        SizedBox(height: 6.h),
+                        Text(
+                          'activation_description'.tr(),
+                          style: GoogleFonts.cairo(
+                            fontSize: 13.sp,
+                            color: OrangeColors.secondaryText,
+                            height: 1.45,
+                          ),
+                        ),
+                        SizedBox(height: 24.h),
+
+                        // Email Field
+                        OrangeTextField(
+                          label: 'email_label'.tr(),
+                          hint: 'email_hint'.tr(),
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (v) {
+                            if (v == null || v.trim().isEmpty) {
+                              return 'email_required'.tr();
+                            }
+                            if (!v.contains('@')) return 'Invalid email address';
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 16.h),
+
+                        // Activation Token Field
+                        OrangeTextField(
+                          label: 'token_label'.tr(),
+                          hint: 'token_hint'.tr(),
+                          controller: _tokenController,
+                          validator: (v) {
+                            if (v == null || v.trim().isEmpty) {
+                              return 'token_required'.tr();
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 16.h),
+
+                        // New Password Field
+                        OrangeTextField(
+                          label: 'new_password_label'.tr(),
+                          hint: 'new_password_hint'.tr(),
+                          controller: _passwordController,
+                          isPassword: true,
+                          validator: (v) {
+                            if (v == null || v.isEmpty) {
+                              return 'password_required'.tr();
+                            }
+                            if (v.length < 8) {
+                              return 'password_min_length'.tr();
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 16.h),
+
+                        // Confirm Password Field
+                        OrangeTextField(
+                          label: 'confirm_password_label'.tr(),
+                          hint: 'confirm_password_hint'.tr(),
+                          controller: _confirmPasswordController,
+                          isPassword: true,
+                          validator: (v) {
+                            if (v == null || v.isEmpty) {
+                              return 'confirm_password_required'.tr();
+                            }
+                            if (v != _passwordController.text) {
+                              return 'passwords_do_not_match'.tr();
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 24.h),
+
+                        // Submit Button
+                        OrangeButton(
+                          text: 'activate_account_button'.tr(),
+                          isLoading: isLoading,
+                          onPressed: _handleSubmit,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

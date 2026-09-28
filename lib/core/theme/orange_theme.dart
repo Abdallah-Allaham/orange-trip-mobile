@@ -3,136 +3,176 @@ import 'package:google_fonts/google_fonts.dart';
 import '../constants/colors.dart';
 
 class OrangeTheme {
-  static const double borderRadius = 4.0; // Sharp corporate radius
+  static const double cardBorderRadius = 24.0;
+  static const double buttonBorderRadius = 22.0;
+  static const double inputBorderRadius = 20.0;
+  static const double dialogBorderRadius = 28.0;
 
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      primaryColor: OrangeColors.brandOrange,
-      scaffoldBackgroundColor: OrangeColors.lightGrey,
+      primaryColor: OrangeColors.primaryOrange,
+      scaffoldBackgroundColor: OrangeColors.background,
       colorScheme: const ColorScheme.light(
-        primary: OrangeColors.brandOrange,
-        secondary: OrangeColors.accessibleOrange,
-        surface: OrangeColors.coreWhite,
-        error: OrangeColors.danger,
-        onPrimary: OrangeColors.coreBlack,
-        onSurface: OrangeColors.coreBlack,
+        primary: OrangeColors.primaryOrange,
+        secondary: OrangeColors.darkOrange,
+        surface: OrangeColors.white,
+        error: OrangeColors.error,
+        onPrimary: OrangeColors.white,
+        onSurface: OrangeColors.black,
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: OrangeColors.coreBlack,
-        foregroundColor: OrangeColors.coreWhite,
+        backgroundColor: OrangeColors.white,
+        foregroundColor: OrangeColors.black,
         elevation: 0,
+        scrolledUnderElevation: 0,
         centerTitle: false,
         titleTextStyle: GoogleFonts.cairo(
           fontSize: 18,
           fontWeight: FontWeight.w700,
-          color: OrangeColors.coreWhite,
+          color: OrangeColors.black,
         ),
       ),
       cardTheme: CardThemeData(
-        color: OrangeColors.coreWhite,
+        color: OrangeColors.white,
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          side: const BorderSide(color: OrangeColors.borderGrey, width: 1.0),
+          borderRadius: BorderRadius.circular(cardBorderRadius),
+          side: const BorderSide(color: OrangeColors.lightBorder, width: 1.0),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: OrangeColors.brandOrange,
-          foregroundColor: OrangeColors.coreBlack,
+          backgroundColor: OrangeColors.primaryOrange,
+          foregroundColor: OrangeColors.white,
           elevation: 0,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          minimumSize: const Size.fromHeight(54),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
+            borderRadius: BorderRadius.circular(buttonBorderRadius),
           ),
           textStyle: GoogleFonts.cairo(
-            fontSize: 15,
-            fontWeight: FontWeight.w800,
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
           ),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: OrangeColors.coreBlack,
+          foregroundColor: OrangeColors.primaryOrange,
           elevation: 0,
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-          side: const BorderSide(color: OrangeColors.coreBlack, width: 1.5),
+          minimumSize: const Size.fromHeight(54),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          side: const BorderSide(color: OrangeColors.primaryOrange, width: 1.5),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
+            borderRadius: BorderRadius.circular(buttonBorderRadius),
           ),
           textStyle: GoogleFonts.cairo(
-            fontSize: 14,
+            fontSize: 16,
             fontWeight: FontWeight.w700,
           ),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: OrangeColors.coreWhite,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        fillColor: OrangeColors.white,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: const BorderSide(color: OrangeColors.borderGrey, width: 1.0),
+          borderRadius: BorderRadius.circular(inputBorderRadius),
+          borderSide: const BorderSide(color: OrangeColors.lightBorder, width: 1.5),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: const BorderSide(color: OrangeColors.borderGrey, width: 1.0),
+          borderRadius: BorderRadius.circular(inputBorderRadius),
+          borderSide: const BorderSide(color: OrangeColors.lightBorder, width: 1.5),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: const BorderSide(color: OrangeColors.brandOrange, width: 2.0),
+          borderRadius: BorderRadius.circular(inputBorderRadius),
+          borderSide: const BorderSide(color: OrangeColors.primaryOrange, width: 2.0),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: const BorderSide(color: OrangeColors.danger, width: 1.5),
+          borderRadius: BorderRadius.circular(inputBorderRadius),
+          borderSide: const BorderSide(color: OrangeColors.error, width: 1.5),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: const BorderSide(color: OrangeColors.danger, width: 2.0),
+          borderRadius: BorderRadius.circular(inputBorderRadius),
+          borderSide: const BorderSide(color: OrangeColors.error, width: 2.0),
         ),
         labelStyle: GoogleFonts.cairo(
-          fontSize: 13,
+          fontSize: 14,
           fontWeight: FontWeight.w600,
-          color: OrangeColors.darkGrey,
+          color: OrangeColors.darkSecondaryText,
         ),
         hintStyle: GoogleFonts.cairo(
-          fontSize: 13,
-          color: OrangeColors.mediumGrey,
+          fontSize: 14,
+          color: OrangeColors.secondaryText,
         ),
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: OrangeColors.white,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(dialogBorderRadius),
+        ),
+      ),
+      bottomSheetTheme: const BottomSheetThemeData(
+        backgroundColor: OrangeColors.white,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(30.0)),
+        ),
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith<Color>((states) {
+          if (states.contains(WidgetState.selected)) {
+            return OrangeColors.white;
+          }
+          return OrangeColors.darkSecondaryText;
+        }),
+        trackColor: WidgetStateProperty.resolveWith<Color>((states) {
+          if (states.contains(WidgetState.selected)) {
+            return OrangeColors.primaryOrange;
+          }
+          return OrangeColors.lightGray;
+        }),
+        trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
       ),
       textTheme: TextTheme(
         displayLarge: GoogleFonts.cairo(
-          fontSize: 32,
-          fontWeight: FontWeight.w900,
-          color: OrangeColors.coreBlack,
+          fontSize: 30,
+          fontWeight: FontWeight.w700,
+          color: OrangeColors.black,
+          height: 1.2,
         ),
         titleLarge: GoogleFonts.cairo(
-          fontSize: 20,
-          fontWeight: FontWeight.w800,
-          color: OrangeColors.coreBlack,
+          fontSize: 22,
+          fontWeight: FontWeight.w700,
+          color: OrangeColors.black,
+          height: 1.25,
         ),
         titleMedium: GoogleFonts.cairo(
-          fontSize: 16,
+          fontSize: 18,
           fontWeight: FontWeight.w700,
-          color: OrangeColors.coreBlack,
+          color: OrangeColors.black,
+          height: 1.3,
         ),
         bodyLarge: GoogleFonts.cairo(
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
-          color: OrangeColors.darkGrey,
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          color: OrangeColors.black,
+          height: 1.45,
         ),
         bodyMedium: GoogleFonts.cairo(
-          fontSize: 13,
+          fontSize: 14,
           fontWeight: FontWeight.w400,
-          color: OrangeColors.darkGrey,
+          color: OrangeColors.darkSecondaryText,
+          height: 1.4,
         ),
         labelSmall: GoogleFonts.cairo(
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-          color: OrangeColors.mediumGrey,
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          color: OrangeColors.secondaryText,
         ),
       ),
     );
