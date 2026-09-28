@@ -1,0 +1,100 @@
+name: Orange Trip Mobile CI/CD
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  test_and_analyze:
+    name: Flutter Analyze & Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Run Static Analysis
+        run: flutter analyze
+
+      - name: Run Unit Tests
+        run: flutter test
+
+  build_android:
+    name: Build Android APK
+    needs: test_and_analyze
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build Debug APK
+        run: flutter build apk --debug
+
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: orange-trip-cairo2026-android-debug
+          path: build/app/outputs/flutter-apk/app-debug.apk
+
+  build_ios:
+    name: Build iOS (macOS Runner)
+    needs: test_and_analyze
+    runs-on: macos-14
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build iOS Application (Simulator / Unsigned)
+        run: flutter build ios --no-codesign --simulator
+
+      - name: Compress iOS Runner Bundle
+        run: |
+          cd build/ios/iphonesimulator
+          zip -r Runner-sim.zip Runner.app
+
+      - name: Upload iOS Simulator Bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: orange-trip-cairo2026-ios-simulator
+          path: build/ios/iphonesimulator/Runner-sim.zip
