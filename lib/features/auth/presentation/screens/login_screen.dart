@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/theme/app_design_system.dart';
+import '../../../../core/widgets/app_brand_logo.dart';
 import '../cubit/auth_cubit.dart';
 import '../cubit/auth_state.dart';
 import '../widgets/orange_button.dart';
@@ -100,15 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10.r),
-                                child: Image.asset(
-                                  'assets/images/orange_logo.png',
-                                  width: 44.w,
-                                  height: 44.w,
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
+                              AppBrandLogo(size: 44.w),
                               OutlinedButton.icon(
                                 onPressed: _toggleLanguage,
                                 icon: Icon(

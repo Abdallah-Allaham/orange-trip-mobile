@@ -7,6 +7,7 @@ import '../../../../core/constants/colors.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/localization/app_strings.dart';
 import '../../../../core/theme/app_design_system.dart';
+import '../../../../core/widgets/app_brand_logo.dart';
 import '../../../auth/domain/entities/user_entity.dart';
 import '../../../auth/presentation/cubit/auth_cubit.dart';
 import '../../../auth/presentation/widgets/orange_button.dart';
@@ -72,15 +73,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
         iconTheme: const IconThemeData(color: OrangeColors.black),
         title: Row(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8.r),
-              child: Image.asset(
-                'assets/images/orange_logo.png',
-                width: 28.w,
-                height: 28.w,
-                fit: BoxFit.contain,
-              ),
-            ),
+            AppBrandLogo(size: 30.w),
             SizedBox(width: 12.w),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,14 +244,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12.r),
-                  child: Image.asset(
-                    'assets/images/orange_logo.png',
-                    width: 48.w,
-                    height: 48.w,
-                  ),
-                ),
+                AppBrandLogo(size: 52.w),
                 SizedBox(height: 20.h),
                 const CircularProgressIndicator(
                   color: OrangeColors.primaryOrange,

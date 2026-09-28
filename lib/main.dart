@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'core/constants/colors.dart';
 import 'core/di/injection_container.dart';
 import 'core/theme/orange_theme.dart';
+import 'core/widgets/app_brand_logo.dart';
 import 'features/auth/presentation/cubit/auth_cubit.dart';
 import 'features/auth/presentation/cubit/auth_state.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
@@ -76,14 +77,7 @@ class AuthGate extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(14.r),
-                    child: Image.asset(
-                      'assets/images/orange_logo.png',
-                      width: 56.w,
-                      height: 56.w,
-                    ),
-                  ),
+                  AppBrandLogo(size: 64.w),
                   SizedBox(height: 24.h),
                   const CircularProgressIndicator(
                     color: OrangeColors.brandOrange,

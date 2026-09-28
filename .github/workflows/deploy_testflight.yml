@@ -28,33 +28,71 @@ jobs:
       - name: Run Tests
         run: flutter test
 
-      - name: Setup App Store Connect Private Key
+      - name: Setup App Store Connect API Key
         run: |
           mkdir -p ~/.appstoreconnect/private_keys
+          mkdir -p ~/.private_keys
           echo "${{ secrets.APP_STORE_PRIVATE_KEY }}" > ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
+          cp ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8 ~/.private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
+          chmod 600 ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
+          chmod 600 ~/.private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
 
-      - name: Build IPA (Unsigned / Release)
-        run: flutter build ipa --release --no-codesign
+      - name: Build iOS Archive
+        run: |
+          flutter build ipa --release --no-codesign --build-number=${{ github.run_number }}
+
+      - name: Create ExportOptions.plist
+        run: |
+          cat <<EOF > ios/ExportOptions.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>destination</key>
+              <string>export</string>
+              <key>method</key>
+              <string>app-store</string>
+              <key>signingStyle</key>
+              <string>automatic</string>
+              <key>manageAppVersionAndBuildNumber</key>
+              <false/>
+              <key>uploadSymbols</key>
+              <true/>
+          </dict>
+          </plist>
+          EOF
+
+      - name: Export and Sign IPA
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath build/ios/archive/Runner.xcarchive \
+            -exportPath build/ios/ipa \
+            -exportOptionsPlist ios/ExportOptions.plist \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8 \
+            -authenticationKeyID "${{ secrets.APP_STORE_KEY_ID }}" \
+            -authenticationKeyIssuerID "${{ secrets.APP_STORE_ISSUER_ID }}"
 
       - name: Upload IPA Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: orange-trip-ios-build
-          path: build/ios/archive/Runner.xcarchive
+          name: orange-trip-ios-ipa
+          path: build/ios/ipa/*.ipa
+          if-no-files-found: warn
 
       - name: Upload to TestFlight via Altool
-        if: env.APP_STORE_KEY_ID != ''
-        env:
-          APP_STORE_KEY_ID: ${{ secrets.APP_STORE_KEY_ID }}
-          APP_STORE_ISSUER_ID: ${{ secrets.APP_STORE_ISSUER_ID }}
         run: |
-          echo "Uploading build to TestFlight using App Store Connect API Key..."
-          # If full signed IPA is present:
-          if [ -f "build/ios/ipa/*.ipa" ]; then
-            xcrun altool --upload-app -f build/ios/ipa/*.ipa \
-              --apiKey "$APP_STORE_KEY_ID" \
-              --apiIssuer "$APP_STORE_ISSUER_ID" \
+          IPA_PATH=$(find build/ios/ipa -name "*.ipa" | head -n 1)
+          if [ -n "$IPA_PATH" ]; then
+            echo "Found IPA at: $IPA_PATH"
+            echo "Uploading build to TestFlight using App Store Connect API Key..."
+            xcrun altool --upload-app \
+              -f "$IPA_PATH" \
+              --apiKey "${{ secrets.APP_STORE_KEY_ID }}" \
+              --apiIssuer "${{ secrets.APP_STORE_ISSUER_ID }}" \
               --type ios
+            echo "Successfully submitted build to TestFlight!"
           else
-            echo "Signing with API Key and uploading..."
+            echo "No IPA found in build/ios/ipa, checking xcarchive upload fallback..."
+            exit 1
           fi
