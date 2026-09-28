@@ -53,14 +53,45 @@ class SecureStorageService {
     await _storage.delete(key: _keyUser);
   }
 
+  static const String _keyBiometricToken = 'orange_trip_biometric_token';
+  static const String _keyBiometricUser = 'orange_trip_biometric_user';
+
   // Biometrics
   Future<void> setBiometricsEnabled(bool enabled) async {
     await _storage.write(key: _keyBiometrics, value: enabled.toString());
+    if (!enabled) {
+      await clearBiometricSession();
+    }
   }
 
   Future<bool> isBiometricsEnabled() async {
     final value = await _storage.read(key: _keyBiometrics);
     return value == 'true';
+  }
+
+  Future<void> saveBiometricSession(String token, Map<String, dynamic> userMap) async {
+    await _storage.write(key: _keyBiometricToken, value: token);
+    await _storage.write(key: _keyBiometricUser, value: jsonEncode(userMap));
+  }
+
+  Future<Map<String, dynamic>?> getBiometricSession() async {
+    final token = await _storage.read(key: _keyBiometricToken);
+    final data = await _storage.read(key: _keyBiometricUser);
+    if (token != null && data != null) {
+      try {
+        final map = jsonDecode(data) as Map<String, dynamic>;
+        map['token'] = token;
+        return map;
+      } catch (_) {
+        return null;
+      }
+    }
+    return null;
+  }
+
+  Future<void> clearBiometricSession() async {
+    await _storage.delete(key: _keyBiometricToken);
+    await _storage.delete(key: _keyBiometricUser);
   }
 
   // Language ('en' or 'ar')

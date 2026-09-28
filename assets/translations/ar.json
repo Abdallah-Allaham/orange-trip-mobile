@@ -27,5 +27,15 @@
   "home": "الرئيسية",
   "travel": "السفر والإقامة",
   "itinerary": "الجدول الزمني",
-  "profile": "الملف الشخصي"
+  "profile": "الملف الشخصي",
+  "dashboard": "لوحة القيادة",
+  "next_activity_hour": "شو في عنا كمان ساعة؟",
+  "gathering_point": "نقطة التجمع",
+  "dress_code": "قواعد اللباس المعتمد",
+  "assigned_bus": "الحافلة المخصصة",
+  "assigned_group": "المجموعة التنفيذية",
+  "flight_logistics": "بيانات الطيران (الملكية الأردنية)",
+  "hotel_logistics": "الإقامة بفندق سانت ريجيس",
+  "wifi_password_copied": "تم نسخ كلمة مرور شبكة الفندق بنجاح"
 }
+

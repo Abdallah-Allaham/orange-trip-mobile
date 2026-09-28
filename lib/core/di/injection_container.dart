@@ -7,6 +7,11 @@ import '../../features/auth/domain/usecases/check_eligibility_usecase.dart';
 import '../../features/auth/domain/usecases/login_usecase.dart';
 import '../../features/auth/domain/usecases/set_password_usecase.dart';
 import '../../features/auth/presentation/cubit/auth_cubit.dart';
+import '../../features/dashboard/data/datasources/dashboard_remote_data_source.dart';
+import '../../features/dashboard/data/repositories/dashboard_repository_impl.dart';
+import '../../features/dashboard/domain/repositories/dashboard_repository.dart';
+import '../../features/dashboard/domain/usecases/get_dashboard_data_usecase.dart';
+import '../../features/dashboard/presentation/cubit/dashboard_cubit.dart';
 import '../network/api_client.dart';
 import '../storage/secure_storage_service.dart';
 
@@ -48,4 +53,30 @@ Future<void> initInjection() async {
       authRepository: sl(),
     ),
   );
+
+  // 3. Dashboard & Logistics Feature
+  // Data Source
+  sl.registerLazySingleton<DashboardRemoteDataSource>(
+    () => DashboardRemoteDataSourceImpl(apiClient: sl()),
+  );
+
+  // Repository
+  sl.registerLazySingleton<DashboardRepository>(
+    () => DashboardRepositoryImpl(
+      remoteDataSource: sl(),
+      storageService: sl(),
+    ),
+  );
+
+  // Use Cases
+  sl.registerLazySingleton(() => GetDashboardDataUseCase(sl()));
+
+  // Cubit
+  sl.registerFactory(
+    () => DashboardCubit(
+      getDashboardDataUseCase: sl(),
+      repository: sl(),
+    ),
+  );
 }
+

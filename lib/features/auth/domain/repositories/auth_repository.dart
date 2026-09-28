@@ -8,4 +8,6 @@ abstract class AuthRepository {
   Future<void> logout();
   Future<bool> isBiometricsEnabled();
   Future<void> setBiometricsEnabled(bool enabled);
+  Future<UserEntity?> getBiometricUser();
+  Future<void> cacheUser(UserEntity user);
 }

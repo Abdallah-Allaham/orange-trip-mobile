@@ -7,6 +7,8 @@ abstract class AuthLocalDataSource {
   Future<void> clearUser();
   Future<bool> isBiometricsEnabled();
   Future<void> setBiometricsEnabled(bool enabled);
+  Future<void> cacheBiometricUser(UserModel user);
+  Future<UserModel?> getBiometricUser();
 }
 
 class AuthLocalDataSourceImpl implements AuthLocalDataSource {
@@ -44,5 +46,19 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<void> setBiometricsEnabled(bool enabled) async {
     await storageService.setBiometricsEnabled(enabled);
+  }
+
+  @override
+  Future<void> cacheBiometricUser(UserModel user) async {
+    await storageService.saveBiometricSession(user.token, user.toJson());
+  }
+
+  @override
+  Future<UserModel?> getBiometricUser() async {
+    final data = await storageService.getBiometricSession();
+    if (data != null) {
+      return UserModel.fromJson(data);
+    }
+    return null;
   }
 }

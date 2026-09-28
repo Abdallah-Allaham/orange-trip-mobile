@@ -10,17 +10,22 @@ import 'features/auth/presentation/cubit/auth_state.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
 import 'features/dashboard/presentation/screens/dashboard_shell_screen.dart';
 
+import 'core/storage/secure_storage_service.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await initInjection();
+
+  final storage = sl<SecureStorageService>();
+  final savedLang = await storage.getLanguage(); // defaults to 'en'
 
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('en'), Locale('ar')],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
-      startLocale: const Locale('ar'),
+      startLocale: Locale(savedLang),
       child: const OrangeTripApp(),
     ),
   );
