@@ -26,7 +26,7 @@ class AuthRepositoryImpl implements AuthRepository {
           (password == 'Orange2026!' || password == 'Orange2026')) {
         const fallbackRana = UserModel(
           userId: 3,
-          fullName: 'Rana Dababneh',
+          fullName: 'Eng. Rana Dababneh',
           email: 'rana.dababneh@orange.jo',
           employeeId: 'DIR-006',
           role: 'Executive Director',
