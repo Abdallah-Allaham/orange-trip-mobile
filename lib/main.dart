@@ -70,7 +70,7 @@ class AuthGate extends StatelessWidget {
           return DashboardShellScreen(user: state.user);
         }
 
-        if (state is AuthLoading && state is! Unauthenticated) {
+        if (state is AuthInitial) {
           return Scaffold(
             backgroundColor: OrangeColors.background,
             body: Center(
