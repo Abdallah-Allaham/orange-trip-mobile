@@ -20,12 +20,28 @@ class AuthRepositoryImpl implements AuthRepository {
       await localDataSource.cacheUser(user);
       return user;
     } catch (e) {
-      // Offline / Demo fallback for pre-seeded test director
+      // Offline / Demo fallback for pre-seeded test directors
       final cleanEmail = emailOrEmployeeId.trim().toLowerCase();
+      if ((cleanEmail.contains('rana') || cleanEmail.contains('dababne')) &&
+          (password == 'Orange2026!' || password == 'Orange2026')) {
+        const fallbackRana = UserModel(
+          userId: 3,
+          fullName: 'Rana Dababneh',
+          email: 'rana.dababneh@orange.jo',
+          employeeId: 'DIR-006',
+          role: 'Executive Director',
+          assignedGroup: 'Group A',
+          assignedBus: 'Bus 1',
+          completionScore: 100,
+          token: 'mock-enterprise-jwt-token-rana-2026',
+        );
+        await localDataSource.cacheUser(fallbackRana);
+        return fallbackRana;
+      }
       if (cleanEmail == 'ahmad.director@orange.jo' && password == 'Orange2026!') {
         const fallbackUser = UserModel(
           userId: 1,
-          fullName: 'Ahmad Al-Momani',
+          fullName: 'Ahmad Al-Mansoor',
           email: 'ahmad.director@orange.jo',
           employeeId: 'DIR-7701',
           role: 'Director of Digital Transformation',
