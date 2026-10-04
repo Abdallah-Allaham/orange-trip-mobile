@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "jo.orange.orange_trip_mobile"
+    namespace = "com.abood.orangetrip.cairo"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 

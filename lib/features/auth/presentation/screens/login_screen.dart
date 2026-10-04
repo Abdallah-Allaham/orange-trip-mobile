@@ -23,7 +23,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController(text: 'ahmad.director@orange.jo');
+  final _emailController = TextEditingController(text: 'rana.dababneh@orange.jo');
   final _passwordController = TextEditingController(text: 'Orange2026!');
   bool _enableBiometrics = false;
 

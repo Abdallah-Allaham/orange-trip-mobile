@@ -101,15 +101,15 @@ class AuthCubit extends Cubit<AuthState> {
           emit(Authenticated(cachedUser));
         } else {
           const fallbackUser = UserModel(
-            userId: 1,
-            fullName: 'Ahmad Al-Momani',
-            email: 'ahmad.director@orange.jo',
-            employeeId: 'DIR-7701',
-            role: 'Director of Digital Transformation',
-            assignedGroup: 'Group Alpha (VIP)',
-            assignedBus: 'Bus 1 (Executive VIP)',
-            completionScore: 65,
-            token: 'mock-enterprise-jwt-token-orange-2026',
+            userId: 3,
+            fullName: 'Eng. Rana Dababneh',
+            email: 'rana.dababneh@orange.jo',
+            employeeId: 'DIR-006',
+            role: 'Executive Director',
+            assignedGroup: 'Group A',
+            assignedBus: 'Bus 1',
+            completionScore: 100,
+            token: 'mock-enterprise-jwt-token-rana-2026',
           );
           await authRepository.cacheUser(fallbackUser);
           emit(const Authenticated(fallbackUser));

@@ -1,11 +1,8 @@
 name: Orange Trip Mobile CI/CD
 
 on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
   workflow_dispatch:
+
 
 jobs:
   test_and_analyze:
