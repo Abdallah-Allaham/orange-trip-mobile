@@ -45,7 +45,7 @@ class OrangeTripApp extends StatelessWidget {
         return BlocProvider<AuthCubit>(
           create: (_) => sl<AuthCubit>()..checkAuthStatus(),
           child: MaterialApp(
-            title: 'Orange Trip — Cairo 2026',
+            title: 'O Trip',
             debugShowCheckedModeBanner: false,
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,

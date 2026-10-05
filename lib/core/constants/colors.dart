@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Premium Enterprise Design System Color Palette
-/// Designed specifically for Orange Trip Cairo 2026.
+/// Designed specifically for O Trip Executive Portal.
 /// MINIMAL + ORANGE + BLACK + WHITE + SOFT GRAYS + WARM CREAM
 class OrangeColors {
   // 1. Primary & Brand Colors

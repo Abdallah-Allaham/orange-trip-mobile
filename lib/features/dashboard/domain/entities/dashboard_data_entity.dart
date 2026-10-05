@@ -5,8 +5,10 @@ import 'flight_entity.dart';
 import 'hotel_entity.dart';
 import 'itinerary_item_entity.dart';
 import 'itinerary_summary_entity.dart';
+import 'trip_settings_entity.dart';
 
 class DashboardDataEntity extends Equatable {
+  final TripSettingsEntity? tripSettings;
   final FlightEntity flight;
   final HotelEntity hotel;
   final ItinerarySummaryEntity itinerarySummary;
@@ -21,6 +23,7 @@ class DashboardDataEntity extends Equatable {
   final bool isBiometricsEnabled;
 
   const DashboardDataEntity({
+    this.tripSettings,
     required this.flight,
     required this.hotel,
     required this.itinerarySummary,
@@ -36,6 +39,7 @@ class DashboardDataEntity extends Equatable {
   });
 
   DashboardDataEntity copyWith({
+    TripSettingsEntity? tripSettings,
     FlightEntity? flight,
     HotelEntity? hotel,
     ItinerarySummaryEntity? itinerarySummary,
@@ -50,6 +54,7 @@ class DashboardDataEntity extends Equatable {
     bool? isBiometricsEnabled,
   }) {
     return DashboardDataEntity(
+      tripSettings: tripSettings ?? this.tripSettings,
       flight: flight ?? this.flight,
       hotel: hotel ?? this.hotel,
       itinerarySummary: itinerarySummary ?? this.itinerarySummary,
@@ -67,6 +72,7 @@ class DashboardDataEntity extends Equatable {
 
   @override
   List<Object?> get props => [
+        tripSettings,
         flight,
         hotel,
         itinerarySummary,

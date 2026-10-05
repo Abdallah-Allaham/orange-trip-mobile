@@ -24,11 +24,25 @@ class Authenticated extends AuthState {
 class Unauthenticated extends AuthState {
   final bool canUseBiometrics;
   final String? lastEmail;
+  final String? sessionMessage;
 
-  const Unauthenticated({this.canUseBiometrics = false, this.lastEmail});
+  const Unauthenticated({
+    this.canUseBiometrics = false,
+    this.lastEmail,
+    this.sessionMessage,
+  });
 
   @override
-  List<Object?> get props => [canUseBiometrics, lastEmail];
+  List<Object?> get props => [canUseBiometrics, lastEmail, sessionMessage];
+}
+
+class SessionRevokedState extends AuthState {
+  final String message;
+
+  const SessionRevokedState(this.message);
+
+  @override
+  List<Object?> get props => [message];
 }
 
 class EligibilityCheckedState extends AuthState {

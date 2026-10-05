@@ -16,12 +16,38 @@ class HotelBriefCard extends StatelessWidget {
     required this.isArabic,
   });
 
-  void _copyWifi(BuildContext context) {
-    Clipboard.setData(const ClipboardData(text: 'OrangeCairo2026'));
+  String _extractWifiPassword() {
+    final instructions = hotel.wifiInstructions.trim();
+    if (instructions.isEmpty) return 'Available in Lobby';
+    if (instructions.contains('Pass:')) {
+      final part = instructions.split('Pass:').last.trim();
+      return part.split(' ').first;
+    }
+    if (instructions.contains('Password:')) {
+      final part = instructions.split('Password:').last.trim();
+      return part.split(' ').first;
+    }
+    return instructions;
+  }
+
+  String _extractCity() {
+    final addr = isArabic ? hotel.hotelAddressAr : hotel.hotelAddressEn;
+    if (addr.isNotEmpty) {
+      final parts = addr.split(',');
+      if (parts.length >= 2) {
+        return parts[parts.length - 2].trim();
+      }
+      return parts.last.trim();
+    }
+    return isArabic ? 'مقر الإقامة' : 'Stay';
+  }
+
+  void _copyWifi(BuildContext context, String pass) {
+    Clipboard.setData(ClipboardData(text: pass));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          isArabic ? 'تم نسخ كلمة مرور الواي فاي (OrangeCairo2026)' : 'Wi-Fi password copied (OrangeCairo2026)',
+          isArabic ? 'تم نسخ كلمة مرور الواي فاي ($pass)' : 'Wi-Fi password copied ($pass)',
           style: GoogleFonts.cairo(fontWeight: FontWeight.w600, color: OrangeColors.white),
         ),
         backgroundColor: OrangeColors.black,
@@ -34,6 +60,11 @@ class HotelBriefCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final wifiPass = _extractWifiPassword();
+    final cityBadge = _extractCity();
+    final checkIn = hotel.checkInDate.isNotEmpty ? hotel.checkInDate : 'Check-In upon arrival';
+    final checkOut = hotel.checkOutDate.isNotEmpty ? hotel.checkOutDate : 'Check-Out upon departure';
+
     return Container(
       padding: AppSpacing.cardPaddingCompact,
       decoration: AppCards.secondary(borderRadius: AppRadius.cardRadius),
@@ -44,20 +75,26 @@ class HotelBriefCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Icon(Icons.hotel_outlined, color: OrangeColors.primaryOrange, size: 18.sp),
-                  SizedBox(width: 8.w),
-                  Text(
-                    hotel.hotelName,
-                    style: GoogleFonts.cairo(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w700,
-                      color: OrangeColors.black,
+              Expanded(
+                child: Row(
+                  children: [
+                    Icon(Icons.hotel_outlined, color: OrangeColors.primaryOrange, size: 18.sp),
+                    SizedBox(width: 8.w),
+                    Expanded(
+                      child: Text(
+                        hotel.hotelName,
+                        style: GoogleFonts.cairo(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w700,
+                          color: OrangeColors.black,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+              SizedBox(width: 8.w),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
                 decoration: BoxDecoration(
@@ -65,7 +102,7 @@ class HotelBriefCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10.r),
                 ),
                 child: Text(
-                  'Cairo',
+                  cityBadge,
                   style: GoogleFonts.cairo(
                     fontSize: 11.sp,
                     fontWeight: FontWeight.w600,
@@ -87,33 +124,40 @@ class HotelBriefCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      isArabic ? 'تسجيل الوصول' : 'Check-In',
-                      style: GoogleFonts.cairo(fontSize: 11.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
-                    ),
-                    SizedBox(height: 2.h),
-                    Text(
-                      '2 Nov 2026, 14:00',
-                      style: GoogleFonts.cairo(fontSize: 12.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        isArabic ? 'تسجيل الوصول' : 'Check-In',
+                        style: GoogleFonts.cairo(fontSize: 11.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
+                      ),
+                      SizedBox(height: 2.h),
+                      Text(
+                        checkIn,
+                        style: GoogleFonts.cairo(fontSize: 12.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      isArabic ? 'تسجيل المغادرة' : 'Check-Out',
-                      style: GoogleFonts.cairo(fontSize: 11.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
-                    ),
-                    SizedBox(height: 2.h),
-                    Text(
-                      '5 Nov 2026, 12:00',
-                      style: GoogleFonts.cairo(fontSize: 12.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
-                    ),
-                  ],
+                SizedBox(width: 12.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        isArabic ? 'تسجيل المغادرة' : 'Check-Out',
+                        style: GoogleFonts.cairo(fontSize: 11.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
+                      ),
+                      SizedBox(height: 2.h),
+                      Text(
+                        checkOut,
+                        style: GoogleFonts.cairo(fontSize: 12.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -130,26 +174,31 @@ class HotelBriefCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Icon(Icons.wifi, size: 16.sp, color: OrangeColors.primaryOrange),
-                    SizedBox(width: 8.w),
-                    Text(
-                      isArabic ? 'الواي فاي: ' : 'Wi-Fi: ',
-                      style: GoogleFonts.cairo(fontSize: 12.sp, color: OrangeColors.darkSecondaryText, fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      'OrangeCairo2026',
-                      style: GoogleFonts.cairo(
-                        fontSize: 13.sp,
-                        fontWeight: FontWeight.w800,
-                        color: OrangeColors.primaryOrange,
+                Expanded(
+                  child: Row(
+                    children: [
+                      Icon(Icons.wifi, size: 16.sp, color: OrangeColors.primaryOrange),
+                      SizedBox(width: 8.w),
+                      Text(
+                        isArabic ? 'الواي فاي: ' : 'Wi-Fi: ',
+                        style: GoogleFonts.cairo(fontSize: 12.sp, color: OrangeColors.darkSecondaryText, fontWeight: FontWeight.w600),
                       ),
-                    ),
-                  ],
+                      Flexible(
+                        child: Text(
+                          wifiPass,
+                          style: GoogleFonts.cairo(
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w800,
+                            color: OrangeColors.primaryOrange,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 InkWell(
-                  onTap: () => _copyWifi(context),
+                  onTap: () => _copyWifi(context, wifiPass),
                   borderRadius: BorderRadius.circular(12.r),
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),

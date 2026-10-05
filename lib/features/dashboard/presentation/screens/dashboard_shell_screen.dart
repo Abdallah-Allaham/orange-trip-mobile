@@ -50,7 +50,60 @@ class _DashboardShellView extends StatefulWidget {
 class _DashboardShellViewState extends State<_DashboardShellView> {
   int _currentTabIndex = 0;
   int _travelSubTabIndex = 0; // 0 = Flights, 1 = VIP Buses, 2 = Hotel & Wi-Fi
-  String _selectedItineraryDay = 'all'; // 'all', '2026-11-02', '2026-11-03', '2026-11-04', '2026-11-05'
+  String _selectedItineraryDay = 'all';
+
+  String _resolveDestination(dynamic flight, dynamic summary, dynamic hotel, dynamic tripSettings, bool isAr) {
+    if (tripSettings != null) {
+      final city = isAr ? tripSettings.destinationCityAr : tripSettings.destinationCityEn;
+      if (city != null && city.toString().trim().isNotEmpty) return city.toString();
+    }
+    if (summary?.weatherCity != null && summary.weatherCity.toString().trim().isNotEmpty) {
+      return summary.weatherCity.toString();
+    }
+    if (flight?.outboundRoute != null && flight.outboundRoute.toString().trim().isNotEmpty) {
+      final route = flight.outboundRoute.toString();
+      if (route.contains('→') || route.contains('->')) {
+        final dest = route.contains('→') ? route.split('→').last : route.split('->').last;
+        final cleaned = dest.replaceAll(RegExp(r'\([^)]+\)'), '').trim();
+        if (cleaned.isNotEmpty) return cleaned;
+      }
+    }
+    return isAr ? 'وجهة الرحلة الرسمية' : 'Official Destination';
+  }
+
+  String _formatTripDates(dynamic flight, dynamic hotel, dynamic tripSettings, List<dynamic> items, bool isAr) {
+    if (tripSettings != null && tripSettings.startDate != null && tripSettings.startDate.toString().isNotEmpty) {
+      try {
+        final sDt = DateTime.parse(tripSettings.startDate.toString().trim());
+        if (tripSettings.endDate != null && tripSettings.endDate.toString().isNotEmpty) {
+          final eDt = DateTime.parse(tripSettings.endDate.toString().trim());
+          final sStr = DateFormat('d MMM', isAr ? 'ar' : 'en').format(sDt);
+          final eStr = DateFormat('d MMM yyyy', isAr ? 'ar' : 'en').format(eDt);
+          return '$sStr – $eStr';
+        }
+        return DateFormat('d MMM yyyy', isAr ? 'ar' : 'en').format(sDt);
+      } catch (_) {}
+    }
+    if (flight?.outboundDepartureTime != null && flight.outboundDepartureTime.toString().isNotEmpty) {
+      try {
+        final depDt = DateTime.parse(flight.outboundDepartureTime.toString().replaceAll(' ', 'T'));
+        if (flight?.returnDepartureTime != null && flight.returnDepartureTime.toString().isNotEmpty) {
+          final retDt = DateTime.parse(flight.returnDepartureTime.toString().replaceAll(' ', 'T'));
+          final depStr = DateFormat('d MMM', isAr ? 'ar' : 'en').format(depDt);
+          final retStr = DateFormat('d MMM yyyy', isAr ? 'ar' : 'en').format(retDt);
+          return '$depStr – $retStr';
+        }
+        return DateFormat('d MMM yyyy', isAr ? 'ar' : 'en').format(depDt);
+      } catch (_) {}
+    }
+    if (hotel?.checkInDate != null && hotel.checkInDate.toString().isNotEmpty) {
+      final inDate = hotel.checkInDate.toString().split(',').first;
+      final outDate = hotel.checkOutDate?.toString().split(',').first ?? '';
+      if (outDate.isNotEmpty) return '$inDate – $outDate';
+      return inDate;
+    }
+    return '';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -318,6 +371,8 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                     assignedGroup: data.assignedGroup.isNotEmpty ? data.assignedGroup : widget.user.assignedGroup,
                     countdownDuration: state.tripCountdown,
                     isArabic: isAr,
+                    destination: _resolveDestination(data.flight, data.itinerarySummary, data.hotel, data.tripSettings, isAr),
+                    tripDates: _formatTripDates(data.flight, data.hotel, data.tripSettings, data.allItineraryItems, isAr),
                   ),
                   SizedBox(height: 16.h),
 
@@ -383,7 +438,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   SizedBox(height: 16.h),
 
                   // 7. 24/7 Operations Desk Hotline Banner
-                  _buildHotlineBanner(isAr),
+                  _buildHotlineBanner(isAr, hotel: data.hotel),
                   SizedBox(height: 20.h),
                 ],
               ),
@@ -396,7 +451,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
     );
   }
 
-  Widget _buildHotlineBanner(bool isAr) {
+  Widget _buildHotlineBanner(bool isAr, {dynamic hotel}) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
       decoration: BoxDecoration(
@@ -446,7 +501,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
             ),
           ),
           InkWell(
-            onTap: () => _showEmergencyDialog(isAr),
+            onTap: () => _showEmergencyDialog(isAr, hotel: hotel),
             borderRadius: BorderRadius.circular(16.r),
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
@@ -469,7 +524,14 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
     );
   }
 
-  void _showEmergencyDialog(bool isAr) {
+  void _showEmergencyDialog(bool isAr, {dynamic hotel}) {
+    final hotelName = (hotel?.hotelName != null && hotel.hotelName.toString().isNotEmpty)
+        ? hotel.hotelName.toString()
+        : (isAr ? 'استقبال فندق الإقامة' : 'Hotel Front Desk');
+    final hotelPhone = (hotel?.hotelPhone != null && hotel.hotelPhone.toString().isNotEmpty)
+        ? hotel.hotelPhone.toString()
+        : '+20 2 2597 9000';
+
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -507,7 +569,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   child: const Icon(Icons.phone, color: OrangeColors.primaryOrange),
                 ),
                 title: Text(
-                  isAr ? 'غرفة عمليات أورنج الأردن' : 'Orange Jordan Ops Room',
+                  isAr ? 'غرفة عمليات إدارة الرحلة 24/7' : 'Trip Operations Center',
                   style: GoogleFonts.cairo(fontWeight: FontWeight.w700, fontSize: 13.sp),
                 ),
                 subtitle: Text('+962 7 7700 0001', style: GoogleFonts.cairo(color: OrangeColors.secondaryText, fontSize: 12.sp)),
@@ -529,14 +591,14 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   child: const Icon(Icons.hotel, color: OrangeColors.primaryOrange),
                 ),
                 title: Text(
-                  isAr ? 'استقبال فندق سانت ريجيس' : 'The St. Regis Reception',
+                  hotelName,
                   style: GoogleFonts.cairo(fontWeight: FontWeight.w700, fontSize: 13.sp),
                 ),
-                subtitle: Text('+20 2 2597 9000', style: GoogleFonts.cairo(color: OrangeColors.secondaryText, fontSize: 12.sp)),
+                subtitle: Text(hotelPhone, style: GoogleFonts.cairo(color: OrangeColors.secondaryText, fontSize: 12.sp)),
                 trailing: TextButton(
                   onPressed: () {
                     Navigator.pop(ctx);
-                    launchPhoneCall('+20225979000');
+                    launchPhoneCall(hotelPhone.replaceAll(' ', ''));
                   },
                   child: Text(
                     isAr ? 'اتصال' : 'Call',
@@ -661,6 +723,85 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
   }
 
   Widget _buildReturnFlightCard(dynamic flight, bool isAr) {
+    final airline = flight?.airline ?? 'Royal Jordanian';
+    final flightNum = flight?.flightNumberReturn ?? 'RJ 506';
+    final returnRoute = flight?.returnRoute ?? 'Cairo (CAI) → Amman (AMM)';
+    final depRaw = flight?.returnDepartureTime ?? '';
+    final arrRaw = flight?.returnArrivalTime ?? '';
+
+    String originCity = 'Cairo';
+    String originCode = 'CAI';
+    String destCity = 'Amman';
+    String destCode = 'AMM';
+
+    if (returnRoute.contains('→') || returnRoute.contains('->')) {
+      final parts = returnRoute.contains('→') ? returnRoute.split('→') : returnRoute.split('->');
+      if (parts.length == 2) {
+        final origPart = parts[0].trim();
+        final dstPart = parts[1].trim();
+
+        final oMatch = RegExp(r'\(([^)]+)\)').firstMatch(origPart);
+        if (oMatch != null) {
+          originCode = oMatch.group(1) ?? 'CAI';
+          originCity = origPart.replaceAll(RegExp(r'\([^)]+\)'), '').trim();
+        } else {
+          originCity = origPart;
+          originCode = origPart.length <= 4 ? origPart.toUpperCase() : origPart.substring(0, 3).toUpperCase();
+        }
+
+        final dMatch = RegExp(r'\(([^)]+)\)').firstMatch(dstPart);
+        if (dMatch != null) {
+          destCode = dMatch.group(1) ?? 'AMM';
+          destCity = dstPart.replaceAll(RegExp(r'\([^)]+\)'), '').trim();
+        } else {
+          destCity = dstPart;
+          destCode = dstPart.length <= 4 ? dstPart.toUpperCase() : dstPart.substring(0, 3).toUpperCase();
+        }
+      }
+    }
+
+    String returnDate = 'TBD';
+    String depTime = 'TBD';
+    String arrTime = 'TBD';
+
+    if (depRaw.isNotEmpty) {
+      try {
+        final dt = DateTime.parse(depRaw.replaceAll(' ', 'T'));
+        returnDate = DateFormat('d MMM yyyy', isAr ? 'ar' : 'en').format(dt);
+        depTime = DateFormat('hh:mm a').format(dt);
+      } catch (_) {
+        if (depRaw.contains(' ')) {
+          returnDate = depRaw.split(' ').first;
+          depTime = depRaw.split(' ').last;
+        } else {
+          returnDate = depRaw;
+        }
+      }
+    }
+
+    if (arrRaw.isNotEmpty) {
+      try {
+        final dt = DateTime.parse(arrRaw.replaceAll(' ', 'T'));
+        arrTime = DateFormat('hh:mm a').format(dt);
+      } catch (_) {
+        arrTime = arrRaw.contains(' ') ? arrRaw.split(' ').last : arrRaw;
+      }
+    }
+
+    String duration = isAr ? 'مباشر' : 'Direct';
+    if (depRaw.isNotEmpty && arrRaw.isNotEmpty) {
+      try {
+        final dep = DateTime.parse(depRaw.replaceAll(' ', 'T'));
+        final arr = DateTime.parse(arrRaw.replaceAll(' ', 'T'));
+        final diff = arr.difference(dep);
+        if (!diff.isNegative) {
+          final h = diff.inHours;
+          final m = diff.inMinutes.remainder(60);
+          duration = isAr ? '${h > 0 ? "$h س " : ""}$m د' : '${h > 0 ? "${h}h " : ""}${m}m';
+        }
+      } catch (_) {}
+    }
+
     return Container(
       padding: AppSpacing.cardPaddingCompact,
       decoration: AppCards.secondary(borderRadius: AppRadius.cardRadius),
@@ -677,7 +818,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                     SizedBox(width: 8.w),
                     Expanded(
                       child: Text(
-                        'Royal Jordanian · RJ 506',
+                        '$airline · $flightNum',
                         style: GoogleFonts.cairo(
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w700,
@@ -710,7 +851,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   ),
                   SizedBox(width: 6.w),
                   Text(
-                    '5 Nov 2026',
+                    returnDate,
                     style: GoogleFonts.cairo(
                       fontSize: 11.sp,
                       fontWeight: FontWeight.w600,
@@ -735,7 +876,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'CAI',
+                      originCode,
                       style: GoogleFonts.cairo(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w800,
@@ -745,7 +886,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                     ),
                     SizedBox(height: 2.h),
                     Text(
-                      '07:00 PM',
+                      depTime,
                       style: GoogleFonts.cairo(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w700,
@@ -753,7 +894,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                       ),
                     ),
                     Text(
-                      'Cairo',
+                      originCity,
                       style: GoogleFonts.cairo(
                         fontSize: 11.sp,
                         color: OrangeColors.secondaryText,
@@ -771,7 +912,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                     ),
                     SizedBox(height: 2.h),
                     Text(
-                      isAr ? '2 س 15 د' : '2h 15m',
+                      duration,
                       style: GoogleFonts.cairo(
                         fontSize: 10.sp,
                         color: OrangeColors.secondaryText,
@@ -784,7 +925,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      'AMM',
+                      destCode,
                       style: GoogleFonts.cairo(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w800,
@@ -794,7 +935,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                     ),
                     SizedBox(height: 2.h),
                     Text(
-                      '09:15 PM',
+                      arrTime,
                       style: GoogleFonts.cairo(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w700,
@@ -802,7 +943,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                       ),
                     ),
                     Text(
-                      'Amman',
+                      destCity,
                       style: GoogleFonts.cairo(
                         fontSize: 11.sp,
                         color: OrangeColors.secondaryText,
@@ -975,17 +1116,42 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
         final data = state is DashboardLoaded ? state.data : null;
         final allItems = data?.allItineraryItems ?? [];
 
-        // Filter items by selected day
-        final filteredItems = _selectedItineraryDay == 'all'
-            ? allItems
-            : allItems.where((i) => i.date == _selectedItineraryDay).toList();
+        final distinctDates = allItems
+            .map((i) => i.date.trim())
+            .where((d) => d.isNotEmpty)
+            .toSet()
+            .toList()
+          ..sort();
 
-        final dayFilters = [
-          {'key': 'all', 'label': isAr ? 'كافة الأيام' : 'All Days', 'sub': '2-5 Nov'},
-          {'key': '2026-11-02', 'label': isAr ? 'اليوم 1' : 'Day 1', 'sub': '2 Nov'},
-          {'key': '2026-11-03', 'label': isAr ? 'اليوم 2' : 'Day 2', 'sub': '3 Nov'},
-          {'key': '2026-11-04', 'label': isAr ? 'اليوم 3' : 'Day 3', 'sub': '4 Nov'},
-          {'key': '2026-11-05', 'label': isAr ? 'اليوم 4' : 'Day 4', 'sub': '5 Nov'},
+        final effectiveSelectedDay = (distinctDates.contains(_selectedItineraryDay) || _selectedItineraryDay == 'all')
+            ? _selectedItineraryDay
+            : 'all';
+
+        // Filter items by selected day
+        final filteredItems = effectiveSelectedDay == 'all'
+            ? allItems
+            : allItems.where((i) => i.date.trim() == effectiveSelectedDay).toList();
+
+        final dayFilters = <Map<String, String>>[
+          {
+            'key': 'all',
+            'label': isAr ? 'كافة الأيام' : 'All Days',
+            'sub': '${allItems.length} ${isAr ? "فعاليات" : "events"}',
+          },
+          ...distinctDates.asMap().entries.map((entry) {
+            final index = entry.key + 1;
+            final dateStr = entry.value;
+            String sub = dateStr;
+            try {
+              final parsed = DateTime.parse(dateStr);
+              sub = DateFormat('d MMM', isAr ? 'ar' : 'en').format(parsed);
+            } catch (_) {}
+            return {
+              'key': dateStr,
+              'label': isAr ? 'اليوم $index' : 'Day $index',
+              'sub': sub,
+            };
+          }),
         ];
 
         return ListView(

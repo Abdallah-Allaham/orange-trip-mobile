@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_auth/local_auth.dart';
+import '../../../../core/network/session_event_notifier.dart';
 import '../../data/models/user_model.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/usecases/check_eligibility_usecase.dart';
@@ -13,6 +15,7 @@ class AuthCubit extends Cubit<AuthState> {
   final SetPasswordUseCase setPasswordUseCase;
   final AuthRepository authRepository;
   final LocalAuthentication localAuth;
+  StreamSubscription<String>? _sessionSubscription;
 
   AuthCubit({
     required this.loginUseCase,
@@ -21,7 +24,11 @@ class AuthCubit extends Cubit<AuthState> {
     required this.authRepository,
     LocalAuthentication? localAuth,
   })  : localAuth = localAuth ?? LocalAuthentication(),
-        super(AuthInitial());
+        super(AuthInitial()) {
+    _sessionSubscription = SessionEventNotifier.instance.sessionRevokedStream.listen((reason) {
+      handleSessionRevoked(reason);
+    });
+  }
 
   Future<void> checkAuthStatus() async {
     emit(AuthLoading());
@@ -86,7 +93,7 @@ class AuthCubit extends Cubit<AuthState> {
       }
 
       final authenticated = await localAuth.authenticate(
-        localizedReason: 'Authenticate to access Orange Trip Cairo 2026',
+        localizedReason: 'Authenticate to access O Trip',
         options: const AuthenticationOptions(
           biometricOnly: false,
           stickyAuth: true,
@@ -103,7 +110,7 @@ class AuthCubit extends Cubit<AuthState> {
           const fallbackUser = UserModel(
             userId: 3,
             fullName: 'Eng. Rana Dababneh',
-            email: 'rana.dababneh@orange.jo',
+            email: 'director@otrip.app',
             employeeId: 'DIR-006',
             role: 'Executive Director',
             assignedGroup: 'Group A',
@@ -124,5 +131,16 @@ class AuthCubit extends Cubit<AuthState> {
     await authRepository.logout();
     final hasBiometrics = await authRepository.isBiometricsEnabled();
     emit(Unauthenticated(canUseBiometrics: hasBiometrics));
+  }
+
+  Future<void> handleSessionRevoked(String reason) async {
+    await authRepository.logout();
+    emit(SessionRevokedState(reason));
+  }
+
+  @override
+  Future<void> close() {
+    _sessionSubscription?.cancel();
+    return super.close();
   }
 }

@@ -9,9 +9,7 @@ class DashboardCubit extends Cubit<DashboardState> {
   final GetDashboardDataUseCase getDashboardDataUseCase;
   final DashboardRepository repository;
   Timer? _countdownTimer;
-
-  // The official trip launch departure: 2 Nov 2026, 09:30 AM (AMM -> CAI RJ 501)
-  static final DateTime tripDepartureDateTime = DateTime(2026, 11, 2, 9, 30);
+  DateTime _activeDepartureDateTime = DateTime(2026, 11, 2, 9, 30);
 
   DashboardCubit({
     required this.getDashboardDataUseCase,
@@ -22,6 +20,7 @@ class DashboardCubit extends Cubit<DashboardState> {
     emit(DashboardLoading());
     try {
       final data = await getDashboardDataUseCase();
+      _activeDepartureDateTime = _resolveDepartureTime(data);
       _startCountdownTimer(data);
     } catch (e) {
       emit(DashboardError(e.toString()));
@@ -66,6 +65,7 @@ class DashboardCubit extends Cubit<DashboardState> {
   Future<void> refreshDashboard() async {
     try {
       final data = await getDashboardDataUseCase();
+      _activeDepartureDateTime = _resolveDepartureTime(data);
       if (state is DashboardLoaded) {
         final current = state as DashboardLoaded;
         emit(current.copyWith(data: data));
@@ -77,6 +77,39 @@ class DashboardCubit extends Cubit<DashboardState> {
         emit(DashboardError(e.toString()));
       }
     }
+  }
+
+  DateTime _resolveDepartureTime(DashboardDataEntity data) {
+    // 0. Try tripSettings startDate if provided
+    if (data.tripSettings?.startDate != null && data.tripSettings!.startDate.isNotEmpty) {
+      try {
+        final parsed = DateTime.tryParse('${data.tripSettings!.startDate}T09:30:00');
+        if (parsed != null) return parsed;
+      } catch (_) {}
+    }
+
+    // 1. Try flight outbound departure time
+    if (data.flight.outboundDepartureTime.isNotEmpty) {
+      try {
+        final raw = data.flight.outboundDepartureTime.replaceAll(' ', 'T');
+        final parsed = DateTime.tryParse(raw);
+        if (parsed != null) return parsed;
+      } catch (_) {}
+    }
+
+    // 2. Try first itinerary item date & startTime
+    if (data.allItineraryItems.isNotEmpty) {
+      final first = data.allItineraryItems.first;
+      try {
+        final timePart = first.startTime.padLeft(5, '0');
+        final raw = '${first.date}T$timePart:00';
+        final parsed = DateTime.tryParse(raw);
+        if (parsed != null) return parsed;
+      } catch (_) {}
+    }
+
+    // 3. Fallback
+    return DateTime(2026, 11, 2, 9, 30);
   }
 
   void _startCountdownTimer(DashboardDataEntity data) {
@@ -101,7 +134,7 @@ class DashboardCubit extends Cubit<DashboardState> {
 
   Duration _calculateTripCountdown() {
     final now = DateTime.now();
-    final diff = tripDepartureDateTime.difference(now);
+    final diff = _activeDepartureDateTime.difference(now);
     return diff.isNegative ? Duration.zero : diff;
   }
 

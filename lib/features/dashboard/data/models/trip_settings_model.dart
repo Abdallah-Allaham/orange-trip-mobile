@@ -1,0 +1,99 @@
+import '../../domain/entities/trip_settings_entity.dart';
+
+class TripSettingsModel extends TripSettingsEntity {
+  const TripSettingsModel({
+    required super.id,
+    required super.tripCode,
+    required super.titleEn,
+    required super.titleAr,
+    required super.destinationCityEn,
+    required super.destinationCityAr,
+    required super.destinationCountryEn,
+    required super.destinationCountryAr,
+    required super.airportCode,
+    required super.startDate,
+    required super.endDate,
+    required super.hotelName,
+    required super.hotelPhone,
+    required super.wifiPassword,
+    required super.flightCode,
+    required super.weatherTemp,
+    required super.weatherConditionEn,
+    required super.weatherConditionAr,
+    required super.tripVersion,
+    required super.isActive,
+  });
+
+  factory TripSettingsModel.fromJson(Map<String, dynamic> json) {
+    return TripSettingsModel(
+      id: json['id'] ?? json['Id'] ?? 1,
+      tripCode: json['tripCode'] ?? json['TripCode'] ?? 'O-TRIP',
+      titleEn: json['titleEn'] ?? json['TitleEn'] ?? 'O Trip Executive Portal',
+      titleAr: json['titleAr'] ?? json['TitleAr'] ?? 'بوابة تنظيم الرحلات التنفيذية',
+      destinationCityEn: json['destinationCityEn'] ?? json['DestinationCityEn'] ?? 'Cairo',
+      destinationCityAr: json['destinationCityAr'] ?? json['DestinationCityAr'] ?? 'القاهرة',
+      destinationCountryEn: json['destinationCountryEn'] ?? json['DestinationCountryEn'] ?? 'Egypt',
+      destinationCountryAr: json['destinationCountryAr'] ?? json['DestinationCountryAr'] ?? 'مصر',
+      airportCode: json['airportCode'] ?? json['AirportCode'] ?? 'CAI',
+      startDate: json['startDate'] ?? json['StartDate'] ?? '2026-11-02',
+      endDate: json['endDate'] ?? json['EndDate'] ?? '2026-11-05',
+      hotelName: json['hotelName'] ?? json['HotelName'] ?? 'The St. Regis Cairo',
+      hotelPhone: json['hotelPhone'] ?? json['HotelPhone'] ?? '+20 2 2597 9000',
+      wifiPassword: json['wifiPassword'] ?? json['WifiPassword'] ?? 'OrangeCairo2026',
+      flightCode: json['flightCode'] ?? json['FlightCode'] ?? 'RJ 501',
+      weatherTemp: json['weatherTemp'] ?? json['WeatherTemp'] ?? '27°C',
+      weatherConditionEn: json['weatherConditionEn'] ?? json['WeatherConditionEn'] ?? 'Sunny & Pleasant',
+      weatherConditionAr: json['weatherConditionAr'] ?? json['WeatherConditionAr'] ?? 'مشمس ومعتدل',
+      tripVersion: json['tripVersion'] ?? json['TripVersion'] ?? 1,
+      isActive: json['isActive'] ?? json['IsActive'] ?? true,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'tripCode': tripCode,
+      'titleEn': titleEn,
+      'titleAr': titleAr,
+      'destinationCityEn': destinationCityEn,
+      'destinationCityAr': destinationCityAr,
+      'destinationCountryEn': destinationCountryEn,
+      'destinationCountryAr': destinationCountryAr,
+      'airportCode': airportCode,
+      'startDate': startDate,
+      'endDate': endDate,
+      'hotelName': hotelName,
+      'hotelPhone': hotelPhone,
+      'wifiPassword': wifiPassword,
+      'flightCode': flightCode,
+      'weatherTemp': weatherTemp,
+      'weatherConditionEn': weatherConditionEn,
+      'weatherConditionAr': weatherConditionAr,
+      'tripVersion': tripVersion,
+      'isActive': isActive,
+    };
+  }
+
+  static const defaultSettings = TripSettingsModel(
+    id: 1,
+    tripCode: 'O-TRIP-2026',
+    titleEn: 'O Trip Executive Portal',
+    titleAr: 'بوابة تنظيم الرحلات التنفيذية',
+    destinationCityEn: 'Cairo',
+    destinationCityAr: 'القاهرة',
+    destinationCountryEn: 'Egypt',
+    destinationCountryAr: 'مصر',
+    airportCode: 'CAI',
+    startDate: '2026-11-02',
+    endDate: '2026-11-05',
+    hotelName: 'The St. Regis Cairo',
+    hotelPhone: '+20 2 2597 9000',
+    wifiPassword: 'OrangeCairo2026',
+    flightCode: 'RJ 501',
+    weatherTemp: '27°C',
+    weatherConditionEn: 'Sunny & Pleasant',
+    weatherConditionAr: 'مشمس ومعتدل',
+    tripVersion: 1,
+    isActive: true,
+  );
+}

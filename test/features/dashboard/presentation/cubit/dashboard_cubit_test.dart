@@ -5,12 +5,39 @@ import 'package:orange_trip_mobile/features/dashboard/domain/entities/flight_ent
 import 'package:orange_trip_mobile/features/dashboard/domain/entities/hotel_entity.dart';
 import 'package:orange_trip_mobile/features/dashboard/domain/entities/itinerary_item_entity.dart';
 import 'package:orange_trip_mobile/features/dashboard/domain/entities/itinerary_summary_entity.dart';
+import 'package:orange_trip_mobile/features/dashboard/domain/entities/trip_settings_entity.dart';
 import 'package:orange_trip_mobile/features/dashboard/domain/repositories/dashboard_repository.dart';
 import 'package:orange_trip_mobile/features/dashboard/domain/usecases/get_dashboard_data_usecase.dart';
 import 'package:orange_trip_mobile/features/dashboard/presentation/cubit/dashboard_cubit.dart';
 import 'package:orange_trip_mobile/features/dashboard/presentation/cubit/dashboard_state.dart';
 
 class MockDashboardRepository implements DashboardRepository {
+  @override
+  Future<TripSettingsEntity> getActiveTrip() async {
+    return const TripSettingsEntity(
+      id: 1,
+      tripCode: 'O-TRIP-2026',
+      titleEn: 'O Trip Executive Portal',
+      titleAr: 'بوابة تنظيم الرحلات التنفيذية',
+      destinationCityEn: 'Cairo',
+      destinationCityAr: 'القاهرة',
+      destinationCountryEn: 'Egypt',
+      destinationCountryAr: 'مصر',
+      airportCode: 'CAI',
+      startDate: '2026-11-02',
+      endDate: '2026-11-05',
+      hotelName: 'The St. Regis Cairo',
+      hotelPhone: '+20 2 2597 9000',
+      wifiPassword: 'OrangeCairo2026',
+      flightCode: 'RJ 501',
+      weatherTemp: '27°C',
+      weatherConditionEn: 'Sunny & Pleasant',
+      weatherConditionAr: 'مشمس ومعتدل',
+      tripVersion: 1,
+      isActive: true,
+    );
+  }
+
   @override
   Future<DashboardDataEntity> getDashboardData() async {
     return const DashboardDataEntity(

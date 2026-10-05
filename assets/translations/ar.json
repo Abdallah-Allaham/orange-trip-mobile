@@ -1,10 +1,10 @@
 {
-  "brand_orange": "Orange",
-  "app_title": "رحلة القاهرة 2026",
+  "brand_orange": "O-Trip",
+  "app_title": "بوابة تنظيم الرحلات",
   "language_toggle": "English",
-  "email_label": "البريد المؤسسي (@orange.jo)",
-  "email_hint": "name@orange.jo",
-  "email_required": "يرجى إدخال البريد المؤسسي",
+  "email_label": "البريد الإلكتروني",
+  "email_hint": "name@domain.com",
+  "email_required": "يرجى إدخال البريد الإلكتروني",
   "password_label": "كلمة المرور",
   "password_hint": "••••••••",
   "password_required": "يرجى إدخال كلمة المرور",
@@ -13,10 +13,10 @@
   "first_time_prompt": "مشارك لأول مرة؟ تعيين كلمة المرور برابط التفعيل",
   "biometric_unlock": "الدخول السريع بالبصمة",
   "account_activation_title": "تفعيل الحساب",
-  "activation_badge": "تفعيل حساب كبار المدراء",
-  "activation_description": "أدخل بريدك المؤسسي المعتمد وكلمة المرور الجديدة لتفعيل حسابك.",
+  "activation_badge": "إعداد حساب المشارك",
+  "activation_description": "أدخل بريدك المعتمد وكلمة المرور الجديدة لتفعيل حسابك.",
   "activation_token_label": "رابط الدعوة أو رمز التفعيل (اختياري)",
-  "activation_token_hint": "الصق الرابط أو الرمز ORG-CAI-XXXXXX",
+  "activation_token_hint": "الصق الرابط أو الرمز",
   "new_password_label": "كلمة المرور الجديدة",
   "confirm_password_label": "تأكيد كلمة المرور",
   "save_password_button": "تفعيل الحساب والدخول",
@@ -33,9 +33,8 @@
   "gathering_point": "نقطة التجمع",
   "dress_code": "قواعد اللباس المعتمد",
   "assigned_bus": "الحافلة المخصصة",
-  "assigned_group": "المجموعة التنفيذية",
-  "flight_logistics": "بيانات الطيران (الملكية الأردنية)",
-  "hotel_logistics": "الإقامة بفندق سانت ريجيس",
-  "wifi_password_copied": "تم نسخ كلمة مرور شبكة الفندق بنجاح"
+  "assigned_group": "المجموعة المخصصة",
+  "flight_logistics": "بيانات وتفاصيل الطيران",
+  "hotel_logistics": "تفاصيل الإقامة والفندق",
+  "wifi_password_copied": "تم نسخ كلمة مرور الواي فاي بنجاح"
 }
-

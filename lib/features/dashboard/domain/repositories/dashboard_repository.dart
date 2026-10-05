@@ -4,8 +4,10 @@ import '../entities/flight_entity.dart';
 import '../entities/hotel_entity.dart';
 import '../entities/itinerary_item_entity.dart';
 import '../entities/itinerary_summary_entity.dart';
+import '../entities/trip_settings_entity.dart';
 
 abstract class DashboardRepository {
+  Future<TripSettingsEntity> getActiveTrip();
   Future<FlightEntity> getFlightDetails();
   Future<HotelEntity> getHotelDetails();
   Future<ItinerarySummaryEntity> getItinerarySummary();

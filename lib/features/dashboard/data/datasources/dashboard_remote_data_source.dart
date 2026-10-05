@@ -7,8 +7,10 @@ import '../models/flight_model.dart';
 import '../models/hotel_model.dart';
 import '../models/itinerary_item_model.dart';
 import '../models/itinerary_summary_model.dart';
+import '../models/trip_settings_model.dart';
 
 abstract class DashboardRemoteDataSource {
+  Future<TripSettingsModel> getActiveTrip();
   Future<FlightModel> getFlight();
   Future<HotelModel> getHotel();
   Future<ItinerarySummaryModel> getItinerarySummary();
@@ -22,6 +24,19 @@ class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
   final ApiClient apiClient;
 
   DashboardRemoteDataSourceImpl({required this.apiClient});
+
+  @override
+  Future<TripSettingsModel> getActiveTrip() async {
+    try {
+      final response = await apiClient.dio.get(ApiConstants.activeTrip);
+      if (response.statusCode == 200 && response.data != null) {
+        return TripSettingsModel.fromJson(response.data as Map<String, dynamic>);
+      }
+      return TripSettingsModel.defaultSettings;
+    } catch (_) {
+      return TripSettingsModel.defaultSettings;
+    }
+  }
 
   @override
   Future<FlightModel> getFlight() async {

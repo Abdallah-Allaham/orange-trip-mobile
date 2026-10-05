@@ -47,7 +47,7 @@ class ExecutiveServicesGrid extends StatelessWidget {
             _buildServiceItem(
               icon: Icons.hotel_outlined,
               title: isArabic ? 'الفندق والواي فاي' : 'Hotel & Wi-Fi',
-              subtitle: 'The St. Regis Cairo',
+              subtitle: isArabic ? 'مقر الإقامة والإنترنت' : 'Stay & Connection',
               onTap: () => onTabSelect(1), // Tab 1 = Travel
             ),
             _buildServiceItem(

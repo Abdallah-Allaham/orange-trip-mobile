@@ -11,6 +11,8 @@ class TripCountdownHero extends StatelessWidget {
   final String assignedGroup;
   final Duration countdownDuration;
   final bool isArabic;
+  final String? destination;
+  final String? tripDates;
 
   const TripCountdownHero({
     super.key,
@@ -20,6 +22,8 @@ class TripCountdownHero extends StatelessWidget {
     required this.assignedGroup,
     required this.countdownDuration,
     required this.isArabic,
+    this.destination,
+    this.tripDates,
   });
 
   @override
@@ -88,7 +92,9 @@ class TripCountdownHero extends StatelessWidget {
                   border: Border.all(color: OrangeColors.lightBorder),
                 ),
                 child: Text(
-                  isArabic ? 'وفد الإدارة العليا' : 'Executive Board',
+                  assignedGroup.isNotEmpty
+                      ? assignedGroup
+                      : (isArabic ? 'وفد المشاركين' : 'Delegation Member'),
                   style: GoogleFonts.cairo(
                     fontSize: 10.5.sp,
                     fontWeight: FontWeight.w700,
@@ -104,32 +110,40 @@ class TripCountdownHero extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Icon(
-                    Icons.location_on_outlined,
-                    color: OrangeColors.primaryOrange,
-                    size: 18.sp,
-                  ),
-                  SizedBox(width: 6.w),
-                  Text(
-                    isArabic ? 'القاهرة، مصر 2026' : 'Cairo, Egypt 2026',
-                    style: GoogleFonts.cairo(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w700,
-                      color: OrangeColors.black,
+              Expanded(
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.location_on_outlined,
+                      color: OrangeColors.primaryOrange,
+                      size: 18.sp,
                     ),
-                  ),
-                ],
-              ),
-              Text(
-                '2 Nov – 5 Nov 2026',
-                style: GoogleFonts.cairo(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w600,
-                  color: OrangeColors.secondaryText,
+                    SizedBox(width: 6.w),
+                    Expanded(
+                      child: Text(
+                        (destination != null && destination!.isNotEmpty)
+                            ? destination!
+                            : (isArabic ? 'وجهة الرحلة الرسمية' : 'Official Destination'),
+                        style: GoogleFonts.cairo(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w700,
+                          color: OrangeColors.black,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
               ),
+              if (tripDates != null && tripDates!.isNotEmpty)
+                Text(
+                  tripDates!,
+                  style: GoogleFonts.cairo(
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w600,
+                    color: OrangeColors.secondaryText,
+                  ),
+                ),
             ],
           ),
           SizedBox(height: 14.h),

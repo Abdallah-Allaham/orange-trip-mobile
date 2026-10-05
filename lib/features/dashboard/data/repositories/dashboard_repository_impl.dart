@@ -6,6 +6,7 @@ import '../../domain/entities/flight_entity.dart';
 import '../../domain/entities/hotel_entity.dart';
 import '../../domain/entities/itinerary_item_entity.dart';
 import '../../domain/entities/itinerary_summary_entity.dart';
+import '../../domain/entities/trip_settings_entity.dart';
 import '../../domain/repositories/dashboard_repository.dart';
 import '../datasources/dashboard_remote_data_source.dart';
 import '../models/announcement_model.dart';
@@ -13,6 +14,7 @@ import '../models/flight_model.dart';
 import '../models/hotel_model.dart';
 import '../models/itinerary_item_model.dart';
 import '../models/itinerary_summary_model.dart';
+import '../models/trip_settings_model.dart';
 
 class DashboardRepositoryImpl implements DashboardRepository {
   final DashboardRemoteDataSource remoteDataSource;
@@ -22,6 +24,15 @@ class DashboardRepositoryImpl implements DashboardRepository {
     required this.remoteDataSource,
     required this.storageService,
   });
+
+  @override
+  Future<TripSettingsEntity> getActiveTrip() async {
+    try {
+      return await remoteDataSource.getActiveTrip();
+    } catch (_) {
+      return TripSettingsModel.defaultSettings;
+    }
+  }
 
   @override
   Future<FlightEntity> getFlightDetails() async {
@@ -338,6 +349,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
   @override
   Future<DashboardDataEntity> getDashboardData() async {
     final results = await Future.wait([
+      getActiveTrip(),
       getFlightDetails(),
       getHotelDetails(),
       getItinerarySummary(),
@@ -348,14 +360,15 @@ class DashboardRepositoryImpl implements DashboardRepository {
       isBiometricsEnabled(),
     ]);
 
-    final flight = results[0] as FlightEntity;
-    final hotel = results[1] as HotelEntity;
-    final summary = results[2] as ItinerarySummaryEntity;
-    final allItems = results[3] as List<ItineraryItemEntity>;
-    final announcements = results[4] as List<AnnouncementEntity>;
-    final profileMap = results[5] as Map<String, dynamic>?;
-    final cachedUserMap = results[6] as Map<String, dynamic>?;
-    final biometricsEnabled = results[7] as bool;
+    final tripSettings = results[0] as TripSettingsEntity;
+    final flight = results[1] as FlightEntity;
+    final hotel = results[2] as HotelEntity;
+    final summary = results[3] as ItinerarySummaryEntity;
+    final allItems = results[4] as List<ItineraryItemEntity>;
+    final announcements = results[5] as List<AnnouncementEntity>;
+    final profileMap = results[6] as Map<String, dynamic>?;
+    final cachedUserMap = results[7] as Map<String, dynamic>?;
+    final biometricsEnabled = results[8] as bool;
 
     final assignedBus = profileMap?['assignedBus'] ??
         profileMap?['AssignedBus'] ??
@@ -421,6 +434,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
     ];
 
     return DashboardDataEntity(
+      tripSettings: tripSettings,
       flight: flight,
       hotel: hotel,
       itinerarySummary: summary,

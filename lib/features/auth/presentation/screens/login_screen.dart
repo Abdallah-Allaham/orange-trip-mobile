@@ -23,8 +23,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController(text: 'rana.dababneh@orange.jo');
-  final _passwordController = TextEditingController(text: 'Orange2026!');
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool _enableBiometrics = false;
 
   @override
@@ -62,6 +62,21 @@ class _LoginScreenState extends State<LoginScreen> {
         listener: (context, state) {
           if (state is Authenticated) {
             widget.onLoginSuccess();
+          } else if (state is SessionRevokedState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: OrangeColors.primaryOrange,
+                duration: const Duration(seconds: 6),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+                behavior: SnackBarBehavior.floating,
+                content: Text(
+                  isArabic
+                      ? 'تنبيه: تم إغلاق أو إعادة ضبط جلسة المشترك من قِبل إدارة الرحلة. يرجى تسجيل الدخول مجدداً أو استخدام رابط الدعوة.'
+                      : 'Notice: Your attendee session was reset by the trip administrator. Please sign in again or use your invitation link.',
+                  style: GoogleFonts.cairo(fontWeight: FontWeight.w700, color: OrangeColors.white),
+                ),
+              ),
+            );
           } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
