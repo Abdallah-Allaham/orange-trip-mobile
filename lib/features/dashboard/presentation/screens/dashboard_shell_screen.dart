@@ -670,7 +670,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   FlightBriefCard(flight: flight, isArabic: isAr),
                   SizedBox(height: 14.h),
                 ],
-                _buildReturnFlightCard(flight, isAr),
+                _buildReturnFlightCard(flight, data?.tripSettings, isAr),
               ],
 
               // SUB-TAB 1: VIP BUSES FLEET
@@ -722,15 +722,20 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
     );
   }
 
-  Widget _buildReturnFlightCard(dynamic flight, bool isAr) {
+  Widget _buildReturnFlightCard(dynamic flight, dynamic tripSettings, bool isAr) {
     final airline = flight?.airline ?? 'Royal Jordanian';
     final flightNum = flight?.flightNumberReturn ?? 'RJ 506';
-    final returnRoute = flight?.returnRoute ?? 'Cairo (CAI) → Amman (AMM)';
+    final dynCity = tripSettings != null
+        ? (isAr ? tripSettings.destinationCityAr : tripSettings.destinationCityEn)
+        : 'Cairo';
+    final dynCode = tripSettings?.airportCode ?? 'CAI';
+    final defaultRoute = '$dynCity ($dynCode) → Amman (AMM)';
+    final returnRoute = flight?.returnRoute ?? defaultRoute;
     final depRaw = flight?.returnDepartureTime ?? '';
     final arrRaw = flight?.returnArrivalTime ?? '';
 
-    String originCity = 'Cairo';
-    String originCode = 'CAI';
+    String originCity = dynCity.isNotEmpty ? dynCity : 'Cairo';
+    String originCode = dynCode.isNotEmpty ? dynCode : 'CAI';
     String destCity = 'Amman';
     String destCode = 'AMM';
 
