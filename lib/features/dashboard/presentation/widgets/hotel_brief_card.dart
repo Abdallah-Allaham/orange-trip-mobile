@@ -5,20 +5,26 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/theme/app_design_system.dart';
 import '../../domain/entities/hotel_entity.dart';
+import '../../domain/entities/trip_settings_entity.dart';
 
 class HotelBriefCard extends StatelessWidget {
   final HotelEntity hotel;
   final bool isArabic;
   final String? destinationCity;
+  final TripSettingsEntity? tripSettings;
 
   const HotelBriefCard({
     super.key,
     required this.hotel,
     required this.isArabic,
     this.destinationCity,
+    this.tripSettings,
   });
 
   String _extractWifiPassword() {
+    if (tripSettings != null && tripSettings!.wifiPassword.isNotEmpty) {
+      return tripSettings!.wifiPassword;
+    }
     final instructions = hotel.wifiInstructions.trim();
     if (instructions.isEmpty) return 'Available in Lobby';
     if (instructions.contains('Pass:')) {
@@ -33,6 +39,11 @@ class HotelBriefCard extends StatelessWidget {
   }
 
   String _extractCity() {
+    if (tripSettings != null && tripSettings!.destinationCityEn.isNotEmpty) {
+      return isArabic && tripSettings!.destinationCityAr.isNotEmpty
+          ? tripSettings!.destinationCityAr
+          : tripSettings!.destinationCityEn;
+    }
     if (destinationCity != null && destinationCity!.trim().isNotEmpty) {
       return destinationCity!.trim();
     }
@@ -67,8 +78,15 @@ class HotelBriefCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final wifiPass = _extractWifiPassword();
     final cityBadge = _extractCity();
-    final checkIn = hotel.checkInDate.isNotEmpty ? hotel.checkInDate : 'Check-In upon arrival';
-    final checkOut = hotel.checkOutDate.isNotEmpty ? hotel.checkOutDate : 'Check-Out upon departure';
+    final displayHotelName = (tripSettings != null && tripSettings!.hotelName.isNotEmpty)
+        ? tripSettings!.hotelName
+        : hotel.hotelName;
+    final checkIn = (tripSettings != null && tripSettings!.startDate.isNotEmpty)
+        ? '${tripSettings!.startDate}, 14:00'
+        : (hotel.checkInDate.isNotEmpty ? hotel.checkInDate : 'Check-In upon arrival');
+    final checkOut = (tripSettings != null && tripSettings!.endDate.isNotEmpty)
+        ? '${tripSettings!.endDate}, 12:00'
+        : (hotel.checkOutDate.isNotEmpty ? hotel.checkOutDate : 'Check-Out upon departure');
 
     return Container(
       padding: AppSpacing.cardPaddingCompact,
@@ -87,7 +105,7 @@ class HotelBriefCard extends StatelessWidget {
                     SizedBox(width: 8.w),
                     Expanded(
                       child: Text(
-                        hotel.hotelName,
+                        displayHotelName,
                         style: GoogleFonts.cairo(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w700,

@@ -413,18 +413,20 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   ),
                   SizedBox(height: 16.h),
 
-                  // 4. Flight Logistics Brief Card (RJ 501 & Return RJ 506)
+                  // 4. Flight Logistics Brief Card (Outbound RJ Flight)
                   FlightBriefCard(
                     flight: data.flight,
                     isArabic: isAr,
+                    tripSettings: data.tripSettings,
                   ),
                   SizedBox(height: 16.h),
 
-                  // 5. Hotel Logistics Brief Card (The St. Regis Cairo + Wi-Fi)
+                  // 5. Hotel Logistics Brief Card (Active Hotel + Wi-Fi)
                   HotelBriefCard(
                     hotel: data.hotel,
                     isArabic: isAr,
                     destinationCity: _resolveDestination(data.flight, data.itinerarySummary, data.hotel, data.tripSettings, isAr),
+                    tripSettings: data.tripSettings,
                   ),
                   SizedBox(height: 16.h),
 
@@ -503,7 +505,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
               // SUB-TAB 0: FLIGHTS
               if (_travelSubTabIndex == 0) ...[
                 if (flight != null) ...[
-                  FlightBriefCard(flight: flight, isArabic: isAr),
+                  FlightBriefCard(flight: flight, isArabic: isAr, tripSettings: data?.tripSettings),
                   SizedBox(height: 14.h),
                 ],
                 _buildReturnFlightCard(flight, data?.tripSettings, isAr),
@@ -521,6 +523,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                     hotel: hotel,
                     isArabic: isAr,
                     destinationCity: _resolveDestination(flight, null, hotel, data?.tripSettings, isAr),
+                    tripSettings: data?.tripSettings,
                   ),
                 ],
               ],
@@ -612,15 +615,29 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
     if (depRaw.isNotEmpty) {
       try {
         final dt = DateTime.parse(depRaw.replaceAll(' ', 'T'));
-        returnDate = DateFormat('d MMM yyyy', isAr ? 'ar' : 'en').format(dt);
+        returnDate = DateFormat('d MMM', isAr ? 'ar' : 'en').format(dt);
         depTime = DateFormat('hh:mm a').format(dt);
       } catch (_) {
-        if (depRaw.contains(' ')) {
-          returnDate = depRaw.split(' ').first;
-          depTime = depRaw.split(' ').last;
+        if (depRaw.contains('·') || depRaw.contains('•')) {
+          returnDate = depRaw.split(RegExp(r'[·•]')).first.trim();
+          depTime = depRaw.split(RegExp(r'[·•]')).last.trim();
         } else {
-          returnDate = depRaw;
+          final parts = depRaw.split(' ');
+          if (parts.length >= 2 && !parts[1].contains(':')) {
+            returnDate = '${parts[0]} ${parts[1]}';
+            depTime = parts.last;
+          } else {
+            returnDate = parts.first;
+            depTime = parts.last;
+          }
         }
+      }
+    } else if (tripSettings != null && tripSettings.endDate.isNotEmpty) {
+      try {
+        final dt = DateTime.parse(tripSettings.endDate);
+        returnDate = DateFormat('d MMM', isAr ? 'ar' : 'en').format(dt);
+      } catch (_) {
+        returnDate = tripSettings.endDate;
       }
     }
 
@@ -629,7 +646,13 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
         final dt = DateTime.parse(arrRaw.replaceAll(' ', 'T'));
         arrTime = DateFormat('hh:mm a').format(dt);
       } catch (_) {
-        arrTime = arrRaw.contains(' ') ? arrRaw.split(' ').last : arrRaw;
+        if (arrRaw.contains('·') || arrRaw.contains('•')) {
+          arrTime = arrRaw.split(RegExp(r'[·•]')).last.trim();
+        } else if (arrRaw.contains(' ')) {
+          arrTime = arrRaw.split(' ').last.trim();
+        } else {
+          arrTime = arrRaw;
+        }
       }
     }
 
@@ -959,14 +982,24 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
     return BlocBuilder<DashboardCubit, DashboardState>(
       builder: (context, state) {
         final data = state is DashboardLoaded ? state.data : null;
-        final allItems = data?.allItineraryItems ?? [];
+        // Generate all trip days from tripSettings.startDate to tripSettings.endDate
+        final tripDates = <String>[];
+        if (data?.tripSettings != null) {
+          try {
+            final start = DateTime.parse(data!.tripSettings.startDate);
+            final end = DateTime.parse(data.tripSettings.endDate);
+            if (!end.isBefore(start)) {
+              for (var d = start; !d.isAfter(end); d = d.add(const Duration(days: 1))) {
+                tripDates.add(DateFormat('yyyy-MM-dd').format(d));
+              }
+            }
+          } catch (_) {}
+        }
 
-        final distinctDates = allItems
-            .map((i) => i.date.trim())
-            .where((d) => d.isNotEmpty)
-            .toSet()
-            .toList()
-          ..sort();
+        final distinctDates = <String>{
+          ...tripDates,
+          ...allItems.map((i) => i.date.trim()).where((d) => d.isNotEmpty)
+        }.toList()..sort();
 
         final effectiveSelectedDay = (distinctDates.contains(_selectedItineraryDay) || _selectedItineraryDay == 'all')
             ? _selectedItineraryDay

@@ -5,24 +5,43 @@ import 'package:intl/intl.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/theme/app_design_system.dart';
 import '../../domain/entities/flight_entity.dart';
+import '../../domain/entities/trip_settings_entity.dart';
 
 class FlightBriefCard extends StatelessWidget {
   final FlightEntity flight;
   final bool isArabic;
+  final TripSettingsEntity? tripSettings;
 
   const FlightBriefCard({
     super.key,
     required this.flight,
     required this.isArabic,
+    this.tripSettings,
   });
 
   String _extractDate(String dtStr) {
-    if (dtStr.isEmpty) return 'TBD';
+    if (dtStr.isEmpty) {
+      if (tripSettings != null && tripSettings!.startDate.isNotEmpty) {
+        try {
+          final dt = DateTime.parse(tripSettings!.startDate);
+          return DateFormat('d MMM', isArabic ? 'ar' : 'en').format(dt);
+        } catch (_) {
+          return tripSettings!.startDate;
+        }
+      }
+      return 'TBD';
+    }
     try {
       final dt = DateTime.parse(dtStr.replaceAll(' ', 'T'));
-      return DateFormat('d MMM yyyy', isArabic ? 'ar' : 'en').format(dt);
+      return DateFormat('d MMM', isArabic ? 'ar' : 'en').format(dt);
     } catch (_) {
-      if (dtStr.contains(' ')) return dtStr.split(' ').first;
+      if (dtStr.contains('·') || dtStr.contains('•')) {
+        return dtStr.split(RegExp(r'[·•]')).first.trim();
+      }
+      final parts = dtStr.split(' ');
+      if (parts.length >= 2 && !parts[1].contains(':')) {
+        return '${parts[0]} ${parts[1]}';
+      }
       return dtStr;
     }
   }
@@ -33,7 +52,10 @@ class FlightBriefCard extends StatelessWidget {
       final dt = DateTime.parse(dtStr.replaceAll(' ', 'T'));
       return DateFormat('hh:mm a').format(dt);
     } catch (_) {
-      if (dtStr.contains(' ')) return dtStr.split(' ').last;
+      if (dtStr.contains('·') || dtStr.contains('•')) {
+        return dtStr.split(RegExp(r'[·•]')).last.trim();
+      }
+      if (dtStr.contains(' ')) return dtStr.split(' ').last.trim();
       return dtStr;
     }
   }
@@ -41,8 +63,12 @@ class FlightBriefCard extends StatelessWidget {
   Map<String, String> _parseRoute(String route) {
     String originCity = 'Amman';
     String originCode = 'AMM';
-    String destCity = 'Destination';
-    String destCode = 'DST';
+    String destCity = (tripSettings != null && tripSettings!.destinationCityEn.isNotEmpty)
+        ? (isArabic && tripSettings!.destinationCityAr.isNotEmpty ? tripSettings!.destinationCityAr : tripSettings!.destinationCityEn)
+        : 'Destination';
+    String destCode = (tripSettings != null && tripSettings!.airportCode.isNotEmpty)
+        ? tripSettings!.airportCode
+        : 'DST';
 
     if (route.contains('→') || route.contains('->')) {
       final parts = route.contains('→') ? route.split('→') : route.split('->');
@@ -59,16 +85,21 @@ class FlightBriefCard extends StatelessWidget {
           originCode = originPart.length <= 4 ? originPart.toUpperCase() : originPart.substring(0, 3).toUpperCase();
         }
 
-        final destCodeMatch = RegExp(r'\(([^)]+)\)').firstMatch(destPart);
-        if (destCodeMatch != null) {
-          destCode = destCodeMatch.group(1) ?? 'DST';
-          destCity = destPart.replaceAll(RegExp(r'\([^)]+\)'), '').trim();
+        if (tripSettings != null && tripSettings!.destinationCityEn.isNotEmpty) {
+          destCity = isArabic && tripSettings!.destinationCityAr.isNotEmpty ? tripSettings!.destinationCityAr : tripSettings!.destinationCityEn;
+          destCode = tripSettings!.airportCode.isNotEmpty ? tripSettings!.airportCode : 'DST';
         } else {
-          destCity = destPart;
-          destCode = destPart.length <= 4 ? destPart.toUpperCase() : destPart.substring(0, 3).toUpperCase();
+          final destCodeMatch = RegExp(r'\(([^)]+)\)').firstMatch(destPart);
+          if (destCodeMatch != null) {
+            destCode = destCodeMatch.group(1) ?? 'DST';
+            destCity = destPart.replaceAll(RegExp(r'\([^)]+\)'), '').trim();
+          } else {
+            destCity = destPart;
+            destCode = destPart.length <= 4 ? destPart.toUpperCase() : destPart.substring(0, 3).toUpperCase();
+          }
         }
       }
-    } else if (route.isNotEmpty) {
+    } else if (route.isNotEmpty && (tripSettings == null || tripSettings!.destinationCityEn.isEmpty)) {
       destCity = route;
       destCode = route.length <= 4 ? route.toUpperCase() : route.substring(0, 3).toUpperCase();
     }
@@ -101,6 +132,9 @@ class FlightBriefCard extends StatelessWidget {
     final depTime = _extractTime(flight.outboundDepartureTime, '09:30 AM');
     final arrTime = _extractTime(flight.outboundArrivalTime, '10:55 AM');
     final duration = _calculateDuration(flight.outboundDepartureTime, flight.outboundArrivalTime);
+    final displayFlightNum = (tripSettings != null && tripSettings!.flightCode.isNotEmpty)
+        ? tripSettings!.flightCode
+        : flight.flightNumberOutbound;
 
     return Container(
       padding: AppSpacing.cardPaddingCompact,
@@ -119,7 +153,7 @@ class FlightBriefCard extends StatelessWidget {
                     SizedBox(width: 8.w),
                     Expanded(
                       child: Text(
-                        '${flight.airline} · ${flight.flightNumberOutbound}',
+                        '${flight.airline} · $displayFlightNum',
                         style: GoogleFonts.cairo(
                           fontSize: 13.5.sp,
                           fontWeight: FontWeight.w700,

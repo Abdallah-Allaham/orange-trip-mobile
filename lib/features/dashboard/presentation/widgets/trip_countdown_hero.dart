@@ -95,7 +95,7 @@ class TripCountdownHero extends StatelessWidget {
                   border: Border.all(color: OrangeColors.lightBorder),
                 ),
                 child: Text(
-                  isArabic ? 'وفد المشاركين' : 'Delegation Member',
+                  isArabic ? 'عضو الوفد الرسمي' : 'Official Delegation Member',
                   style: GoogleFonts.cairo(
                     fontSize: 10.5.sp,
                     fontWeight: FontWeight.w700,
