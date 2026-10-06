@@ -19,12 +19,6 @@ class NextActivityCard extends StatelessWidget {
     this.onDetailsTap,
   });
 
-  String _formatDuration(Duration duration) {
-    final minutes = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
-    final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
-    return '$minutes:$seconds';
-  }
-
   @override
   Widget build(BuildContext context) {
     final activityTitle = isArabic ? summary.nextActivityAr : summary.nextActivity;
@@ -64,29 +58,6 @@ class NextActivityCard extends StatelessWidget {
                             ),
                           ),
                         ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              // Live Interactive Countdown Pill
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
-                decoration: BoxDecoration(
-                  color: OrangeColors.black,
-                  borderRadius: BorderRadius.circular(14.r),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.timer_outlined, size: 13.sp, color: OrangeColors.primaryOrange),
-                    SizedBox(width: 5.w),
-                    Text(
-                      _formatDuration(countdownDuration),
-                      style: GoogleFonts.cairo(
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w800,
-                        color: OrangeColors.white,
                       ),
                     ),
                   ],

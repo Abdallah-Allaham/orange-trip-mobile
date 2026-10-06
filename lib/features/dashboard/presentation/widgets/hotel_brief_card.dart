@@ -9,11 +9,13 @@ import '../../domain/entities/hotel_entity.dart';
 class HotelBriefCard extends StatelessWidget {
   final HotelEntity hotel;
   final bool isArabic;
+  final String? destinationCity;
 
   const HotelBriefCard({
     super.key,
     required this.hotel,
     required this.isArabic,
+    this.destinationCity,
   });
 
   String _extractWifiPassword() {
@@ -31,6 +33,9 @@ class HotelBriefCard extends StatelessWidget {
   }
 
   String _extractCity() {
+    if (destinationCity != null && destinationCity!.trim().isNotEmpty) {
+      return destinationCity!.trim();
+    }
     final addr = isArabic ? hotel.hotelAddressAr : hotel.hotelAddressEn;
     if (addr.isNotEmpty) {
       final parts = addr.split(',');

@@ -7,23 +7,25 @@ import '../../../../core/theme/app_design_system.dart';
 class TripCountdownHero extends StatelessWidget {
   final String fullName;
   final String role;
-  final String assignedBus;
-  final String assignedGroup;
+  final String? assignedBus;
+  final String? assignedGroup;
   final Duration countdownDuration;
   final bool isArabic;
   final String? destination;
   final String? tripDates;
+  final String? weatherTemp;
 
   const TripCountdownHero({
     super.key,
     required this.fullName,
     required this.role,
-    required this.assignedBus,
-    required this.assignedGroup,
+    this.assignedBus,
+    this.assignedGroup,
     required this.countdownDuration,
     required this.isArabic,
     this.destination,
     this.tripDates,
+    this.weatherTemp,
   });
 
   @override
@@ -92,9 +94,7 @@ class TripCountdownHero extends StatelessWidget {
                   border: Border.all(color: OrangeColors.lightBorder),
                 ),
                 child: Text(
-                  assignedGroup.isNotEmpty
-                      ? assignedGroup
-                      : (isArabic ? 'وفد المشاركين' : 'Delegation Member'),
+                  isArabic ? 'وفد المشاركين' : 'Delegation Member',
                   style: GoogleFonts.cairo(
                     fontSize: 10.5.sp,
                     fontWeight: FontWeight.w700,
@@ -135,15 +135,45 @@ class TripCountdownHero extends StatelessWidget {
                   ],
                 ),
               ),
-              if (tripDates != null && tripDates!.isNotEmpty)
-                Text(
-                  tripDates!,
-                  style: GoogleFonts.cairo(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w600,
-                    color: OrangeColors.secondaryText,
-                  ),
-                ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (weatherTemp != null && weatherTemp!.isNotEmpty) ...[
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
+                      decoration: BoxDecoration(
+                        color: OrangeColors.warmCream,
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.wb_sunny_outlined, size: 13.sp, color: OrangeColors.primaryOrange),
+                          SizedBox(width: 4.w),
+                          Text(
+                            weatherTemp!,
+                            style: GoogleFonts.cairo(
+                              fontSize: 11.5.sp,
+                              fontWeight: FontWeight.w700,
+                              color: OrangeColors.primaryOrange,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 8.w),
+                  ],
+                  if (tripDates != null && tripDates!.isNotEmpty)
+                    Text(
+                      tripDates!,
+                      style: GoogleFonts.cairo(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w600,
+                        color: OrangeColors.secondaryText,
+                      ),
+                    ),
+                ],
+              ),
             ],
           ),
           SizedBox(height: 14.h),

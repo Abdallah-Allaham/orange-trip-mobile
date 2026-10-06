@@ -131,22 +131,15 @@ class FlightBriefCard extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(width: 8.w),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
-                decoration: BoxDecoration(
-                  color: OrangeColors.lightGray,
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
-                child: Text(
+              if (depDate.isNotEmpty && depDate != 'TBD')
+                Text(
                   depDate,
                   style: GoogleFonts.cairo(
-                    fontSize: 11.sp,
+                    fontSize: 11.5.sp,
+                    color: OrangeColors.secondaryText,
                     fontWeight: FontWeight.w600,
-                    color: OrangeColors.darkSecondaryText,
                   ),
                 ),
-              ),
             ],
           ),
           SizedBox(height: 14.h),

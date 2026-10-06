@@ -373,6 +373,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                     isArabic: isAr,
                     destination: _resolveDestination(data.flight, data.itinerarySummary, data.hotel, data.tripSettings, isAr),
                     tripDates: _formatTripDates(data.flight, data.hotel, data.tripSettings, data.allItineraryItems, isAr),
+                    weatherTemp: data.tripSettings?.weatherTemp ?? data.itinerarySummary.weatherTemp,
                   ),
                   SizedBox(height: 16.h),
 
@@ -422,6 +423,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   HotelBriefCard(
                     hotel: data.hotel,
                     isArabic: isAr,
+                    destinationCity: _resolveDestination(data.flight, data.itinerarySummary, data.hotel, data.tripSettings, isAr),
                   ),
                   SizedBox(height: 16.h),
 
@@ -435,10 +437,6 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                       });
                     },
                   ),
-                  SizedBox(height: 16.h),
-
-                  // 7. 24/7 Operations Desk Hotline Banner
-                  _buildHotlineBanner(isAr, hotel: data.hotel),
                   SizedBox(height: 20.h),
                 ],
               ),
@@ -447,169 +445,6 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
         }
 
         return const SizedBox.shrink();
-      },
-    );
-  }
-
-  Widget _buildHotlineBanner(bool isAr, {dynamic hotel}) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-      decoration: BoxDecoration(
-        color: OrangeColors.black,
-        borderRadius: BorderRadius.circular(20.r),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(8.w),
-                  decoration: BoxDecoration(
-                    color: OrangeColors.primaryOrange,
-                    borderRadius: BorderRadius.circular(14.r),
-                  ),
-                  child: Icon(Icons.support_agent, color: OrangeColors.white, size: 20.sp),
-                ),
-                SizedBox(width: 12.w),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        isAr ? 'مكتب العمليات والطوارئ 24/7' : '24/7 Operations Desk',
-                        style: GoogleFonts.cairo(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w700,
-                          color: OrangeColors.white,
-                        ),
-                      ),
-                      Text(
-                        '+962 7 7700 0001',
-                        style: GoogleFonts.cairo(
-                          fontSize: 11.sp,
-                          color: OrangeColors.secondaryText,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          InkWell(
-            onTap: () => _showEmergencyDialog(isAr, hotel: hotel),
-            borderRadius: BorderRadius.circular(16.r),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-              decoration: BoxDecoration(
-                color: OrangeColors.primaryOrange,
-                borderRadius: BorderRadius.circular(16.r),
-              ),
-              child: Text(
-                isAr ? 'اتصال مباشر' : 'Direct Call',
-                style: GoogleFonts.cairo(
-                  fontSize: 11.sp,
-                  fontWeight: FontWeight.w700,
-                  color: OrangeColors.white,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showEmergencyDialog(bool isAr, {dynamic hotel}) {
-    final hotelName = (hotel?.hotelName != null && hotel.hotelName.toString().isNotEmpty)
-        ? hotel.hotelName.toString()
-        : (isAr ? 'استقبال فندق الإقامة' : 'Hotel Front Desk');
-    final hotelPhone = (hotel?.hotelPhone != null && hotel.hotelPhone.toString().isNotEmpty)
-        ? hotel.hotelPhone.toString()
-        : '+20 2 2597 9000';
-
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: AppRadius.bottomSheetRadius,
-      ),
-      builder: (ctx) {
-        return Padding(
-          padding: EdgeInsets.all(24.w),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(8.w),
-                    decoration: BoxDecoration(
-                      color: OrangeColors.warmCream,
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    child: Icon(Icons.emergency, color: OrangeColors.primaryOrange, size: 22.sp),
-                  ),
-                  SizedBox(width: 12.w),
-                  Text(
-                    isAr ? 'أرقام الطوارئ وغرفة العمليات 24/7' : '24/7 Emergency Contacts',
-                    style: GoogleFonts.cairo(fontSize: 16.sp, fontWeight: FontWeight.w700),
-                  ),
-                ],
-              ),
-              Divider(height: 28.h, color: OrangeColors.lightBorder),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: CircleAvatar(
-                  backgroundColor: OrangeColors.warmCream,
-                  child: const Icon(Icons.phone, color: OrangeColors.primaryOrange),
-                ),
-                title: Text(
-                  isAr ? 'غرفة عمليات إدارة الرحلة 24/7' : 'Trip Operations Center',
-                  style: GoogleFonts.cairo(fontWeight: FontWeight.w700, fontSize: 13.sp),
-                ),
-                subtitle: Text('+962 7 7700 0001', style: GoogleFonts.cairo(color: OrangeColors.secondaryText, fontSize: 12.sp)),
-                trailing: TextButton(
-                  onPressed: () {
-                    Navigator.pop(ctx);
-                    launchPhoneCall('+962777000001');
-                  },
-                  child: Text(
-                    isAr ? 'اتصال' : 'Call',
-                    style: GoogleFonts.cairo(color: OrangeColors.primaryOrange, fontWeight: FontWeight.w700),
-                  ),
-                ),
-              ),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: CircleAvatar(
-                  backgroundColor: OrangeColors.warmCream,
-                  child: const Icon(Icons.hotel, color: OrangeColors.primaryOrange),
-                ),
-                title: Text(
-                  hotelName,
-                  style: GoogleFonts.cairo(fontWeight: FontWeight.w700, fontSize: 13.sp),
-                ),
-                subtitle: Text(hotelPhone, style: GoogleFonts.cairo(color: OrangeColors.secondaryText, fontSize: 12.sp)),
-                trailing: TextButton(
-                  onPressed: () {
-                    Navigator.pop(ctx);
-                    launchPhoneCall(hotelPhone.replaceAll(' ', ''));
-                  },
-                  child: Text(
-                    isAr ? 'اتصال' : 'Call',
-                    style: GoogleFonts.cairo(color: OrangeColors.primaryOrange, fontWeight: FontWeight.w700),
-                  ),
-                ),
-              ),
-              SizedBox(height: 12.h),
-            ],
-          ),
-        );
       },
     );
   }
@@ -681,7 +516,11 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
               // SUB-TAB 2: HOTEL & WI-FI
               if (_travelSubTabIndex == 2) ...[
                 if (hotel != null) ...[
-                  HotelBriefCard(hotel: hotel, isArabic: isAr),
+                  HotelBriefCard(
+                    hotel: hotel,
+                    isArabic: isAr,
+                    destinationCity: _resolveDestination(flight, null, hotel, data?.tripSettings, isAr),
+                  ),
                 ],
               ],
             ],
@@ -1554,42 +1393,143 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
               ),
               SizedBox(height: 14.h),
 
-              // 5. Emergency Contact Info Card (Direct Clickable Dialing)
+              // 5. Card A: 24/7 Medical & Safety Emergency
               Container(
                 padding: EdgeInsets.all(18.w),
                 decoration: AppCards.secondary(borderRadius: BorderRadius.circular(20.r)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      isAr ? 'جهة الاتصال في حالات الطوارئ' : 'Emergency Contact Person',
-                      style: GoogleFonts.cairo(fontSize: 13.sp, fontWeight: FontWeight.w700, color: OrangeColors.darkSecondaryText),
+                    Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(7.w),
+                          decoration: BoxDecoration(
+                            color: Colors.red.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                          child: Icon(Icons.emergency_outlined, color: Colors.red, size: 20.sp),
+                        ),
+                        SizedBox(width: 10.w),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                isAr ? 'طوارئ السلامة والصحة 24/7' : '24/7 Medical & Safety Emergency',
+                                style: GoogleFonts.cairo(fontSize: 13.5.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
+                              ),
+                              Text(
+                                isAr ? 'الإسعاف والرعاية الطبية الفورية' : 'Immediate medical & safety response',
+                                style: GoogleFonts.cairo(fontSize: 11.sp, color: OrangeColors.secondaryText),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                     Divider(height: 20.h, color: OrangeColors.lightBorder),
-                    _buildProfileRow(isAr ? 'الاسم' : 'Name', 'Noor Al-Mansoor'),
-                    Divider(height: 16.h, color: OrangeColors.lightBorder),
-                    _buildProfileRow(isAr ? 'صلة القرابة' : 'Relationship', isAr ? 'الزوجة' : 'Spouse'),
-                    Divider(height: 16.h, color: OrangeColors.lightBorder),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          isAr ? 'رقم الهاتف' : 'Phone',
+                          isAr ? 'خط الطوارئ المباشر' : 'Emergency Hotline',
                           style: GoogleFonts.cairo(color: OrangeColors.secondaryText, fontSize: 12.sp, fontWeight: FontWeight.w500),
                         ),
                         InkWell(
-                          onTap: () => launchPhoneCall('+962779998888'),
+                          onTap: () => launchPhoneCall(data?.hotel.emergencyContact ?? '+20 100 000 9999'),
                           borderRadius: BorderRadius.circular(10.r),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                            decoration: BoxDecoration(
+                              color: Colors.red.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.phone_in_talk, size: 14.sp, color: Colors.red),
+                                SizedBox(width: 6.w),
+                                Text(
+                                  (data != null && data.hotel.emergencyContact.isNotEmpty)
+                                      ? data.hotel.emergencyContact
+                                      : '+20 100 000 9999',
+                                  style: GoogleFonts.cairo(color: Colors.red, fontSize: 12.5.sp, fontWeight: FontWeight.w700),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 14.h),
+
+              // 5. Card B: 24/7 Operations & Logistics Desk
+              Container(
+                padding: EdgeInsets.all(18.w),
+                decoration: AppCards.secondary(borderRadius: BorderRadius.circular(20.r)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(7.w),
+                          decoration: BoxDecoration(
+                            color: OrangeColors.warmCream,
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                          child: Icon(Icons.support_agent_outlined, color: OrangeColors.primaryOrange, size: 20.sp),
+                        ),
+                        SizedBox(width: 10.w),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Icon(Icons.phone_in_talk, size: 14.sp, color: OrangeColors.primaryOrange),
-                              SizedBox(width: 6.w),
                               Text(
-                                '+962 7 7999 8888',
-                                style: GoogleFonts.cairo(color: OrangeColors.primaryOrange, fontSize: 13.sp, fontWeight: FontWeight.w700),
+                                isAr ? 'مكتب العمليات وإدارة الرحلة 24/7' : '24/7 Trip Operations & Logistics',
+                                style: GoogleFonts.cairo(fontSize: 13.5.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
+                              ),
+                              Text(
+                                isAr ? 'منسق عام وفد أورنج والخدمات اللوجستية' : 'Delegation lead & travel logistics',
+                                style: GoogleFonts.cairo(fontSize: 11.sp, color: OrangeColors.secondaryText),
                               ),
                             ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Divider(height: 20.h, color: OrangeColors.lightBorder),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          isAr ? 'ضابط العمليات' : 'Operations Officer',
+                          style: GoogleFonts.cairo(color: OrangeColors.secondaryText, fontSize: 12.sp, fontWeight: FontWeight.w500),
+                        ),
+                        InkWell(
+                          onTap: () => launchPhoneCall('+962 7 7111 2233'),
+                          borderRadius: BorderRadius.circular(10.r),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                            decoration: BoxDecoration(
+                              color: OrangeColors.warmCream,
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.phone_in_talk, size: 14.sp, color: OrangeColors.primaryOrange),
+                                SizedBox(width: 6.w),
+                                Text(
+                                  '+962 7 7111 2233',
+                                  style: GoogleFonts.cairo(color: OrangeColors.primaryOrange, fontSize: 12.5.sp, fontWeight: FontWeight.w700),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -1691,22 +1631,6 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildProfileRow(String title, String value) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: GoogleFonts.cairo(color: OrangeColors.secondaryText, fontSize: 12.sp, fontWeight: FontWeight.w500),
-        ),
-        Text(
-          value,
-          style: GoogleFonts.cairo(color: OrangeColors.black, fontSize: 13.sp, fontWeight: FontWeight.w700),
-        ),
-      ],
     );
   }
 }

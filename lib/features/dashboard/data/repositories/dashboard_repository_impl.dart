@@ -399,7 +399,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
     const buses = [
       BusEntity(
         id: 1,
-        busNumber: 'Bus 1 (VIP Executive Coach)',
+        busNumber: 'Bus 1',
         busNameEn: 'Bus 1',
         busNameAr: 'حافلة 1',
         driverName: 'Mohammad Al-Sayed',
@@ -411,12 +411,12 @@ class DashboardRepositoryImpl implements DashboardRepository {
         gatheringTime: '08:45 AM',
         departureTime: '09:00 AM',
         capacity: 35,
-        assignedGroup: 'Group A',
+        assignedGroup: '',
         status: 'On Schedule',
       ),
       BusEntity(
         id: 2,
-        busNumber: 'Bus 2 (VIP Executive Coach)',
+        busNumber: 'Bus 2',
         busNameEn: 'Bus 2',
         busNameAr: 'حافلة 2',
         driverName: 'Ahmed Mostafa',
@@ -428,7 +428,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
         gatheringTime: '08:45 AM',
         departureTime: '09:00 AM',
         capacity: 35,
-        assignedGroup: 'Group B',
+        assignedGroup: '',
         status: 'On Schedule',
       ),
     ];

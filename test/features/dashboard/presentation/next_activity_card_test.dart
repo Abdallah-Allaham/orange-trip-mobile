@@ -34,6 +34,6 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Official Welcome Dinner — Nile Cruise'), findsOneWidget);
-    expect(find.text('45:12'), findsOneWidget);
+    expect(find.text('Gathering: St. Regis Lobby'), findsOneWidget);
   });
 }

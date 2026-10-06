@@ -8,13 +8,13 @@ import '../../domain/entities/announcement_entity.dart';
 class AnnouncementCard extends StatelessWidget {
   final AnnouncementEntity announcement;
   final bool isArabic;
-  final VoidCallback onAcknowledge;
+  final VoidCallback? onAcknowledge;
 
   const AnnouncementCard({
     super.key,
     required this.announcement,
     required this.isArabic,
-    required this.onAcknowledge,
+    this.onAcknowledge,
   });
 
   @override
@@ -56,10 +56,6 @@ class AnnouncementCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Text(
-                isArabic ? 'اليوم' : 'Today',
-                style: GoogleFonts.cairo(fontSize: 11.sp, color: OrangeColors.secondaryText),
-              ),
             ],
           ),
           SizedBox(height: 10.h),
@@ -83,56 +79,6 @@ class AnnouncementCard extends StatelessWidget {
               color: OrangeColors.darkSecondaryText,
               height: 1.4,
             ),
-          ),
-          SizedBox(height: 12.h),
-
-          // Acknowledge Action Button
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              if (!announcement.isAcknowledged)
-                InkWell(
-                  onTap: onAcknowledge,
-                  borderRadius: BorderRadius.circular(16.r),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
-                    decoration: BoxDecoration(
-                      color: OrangeColors.primaryOrange,
-                      borderRadius: BorderRadius.circular(16.r),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.check, size: 14.sp, color: OrangeColors.white),
-                        SizedBox(width: 6.w),
-                        Text(
-                          isArabic ? 'تم الاطلاع' : 'Got it',
-                          style: GoogleFonts.cairo(
-                            fontSize: 11.sp,
-                            fontWeight: FontWeight.w700,
-                            color: OrangeColors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              else
-                Row(
-                  children: [
-                    Icon(Icons.check_circle, size: 16.sp, color: OrangeColors.success),
-                    SizedBox(width: 5.w),
-                    Text(
-                      isArabic ? 'تم تأكيد الاطلاع' : 'Acknowledged',
-                      style: GoogleFonts.cairo(
-                        fontSize: 11.sp,
-                        fontWeight: FontWeight.w700,
-                        color: OrangeColors.success,
-                      ),
-                    ),
-                  ],
-                ),
-            ],
           ),
         ],
       ),

@@ -37,6 +37,31 @@ class AuthCubit extends Cubit<AuthState> {
       final hasBiometrics = await authRepository.isBiometricsEnabled();
 
       if (cachedUser != null) {
+        if (hasBiometrics) {
+          try {
+            final isSupported = await localAuth.isDeviceSupported();
+            final canCheck = await localAuth.canCheckBiometrics;
+            if (isSupported && canCheck) {
+              final authenticated = await localAuth.authenticate(
+                localizedReason: 'Authenticate to access Trip Portal',
+                options: const AuthenticationOptions(
+                  biometricOnly: false,
+                  stickyAuth: true,
+                ),
+              );
+              if (authenticated) {
+                emit(Authenticated(cachedUser));
+                return;
+              } else {
+                emit(Unauthenticated(
+                  canUseBiometrics: true,
+                  lastEmail: cachedUser.email,
+                ));
+                return;
+              }
+            }
+          } catch (_) {}
+        }
         emit(Authenticated(cachedUser));
       } else {
         emit(Unauthenticated(

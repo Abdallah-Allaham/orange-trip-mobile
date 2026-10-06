@@ -40,8 +40,10 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
     if (text.startsWith('http://') || text.startsWith('https://')) {
       try {
         final uri = Uri.parse(text);
-        final token = uri.queryParameters['token'];
-        final email = uri.queryParameters['email'];
+        final token = uri.queryParameters['token'] ??
+            uri.queryParameters['activationToken'] ??
+            uri.queryParameters['resetToken'];
+        final email = uri.queryParameters['email'] ?? uri.queryParameters['companyEmail'];
 
         if (token != null && token.isNotEmpty) {
           _tokenController.value = TextEditingValue(
@@ -212,7 +214,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                             if (v == null || v.isEmpty) {
                               return 'password_required'.tr();
                             }
-                            if (v.length < 8) {
+                            if (v.length < 6) {
                               return 'password_min_length'.tr();
                             }
                             return null;
