@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/theme/app_design_system.dart';
+import '../../../../core/utils/name_formatter.dart';
 
 class TripCountdownHero extends StatelessWidget {
   final String fullName;
@@ -74,7 +75,7 @@ class TripCountdownHero extends StatelessWidget {
                     ),
                     SizedBox(height: 2.h),
                     Text(
-                      fullName,
+                      NameFormatter.formatWithTitle(fullName, isArabic: isArabic),
                       style: GoogleFonts.cairo(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w700,

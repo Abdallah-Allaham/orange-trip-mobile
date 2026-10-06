@@ -23,6 +23,7 @@ import '../widgets/flight_brief_card.dart';
 import '../widgets/hotel_brief_card.dart';
 import '../widgets/next_activity_card.dart';
 import '../widgets/trip_countdown_hero.dart';
+import '../../../../core/utils/name_formatter.dart';
 
 class DashboardShellScreen extends StatelessWidget {
   final UserEntity user;
@@ -141,7 +142,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   ),
                 ),
                 Text(
-                  widget.user.fullName,
+                  NameFormatter.formatWithTitle(widget.user.fullName, isArabic: isAr),
                   style: GoogleFonts.cairo(
                     fontSize: 12.sp,
                     color: OrangeColors.secondaryText,
@@ -1210,7 +1211,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                       radius: 28.r,
                       backgroundColor: OrangeColors.primaryOrange,
                       child: Text(
-                        fullName.isNotEmpty ? fullName[0].toUpperCase() : 'U',
+                        NameFormatter.getInitial(fullName),
                         style: GoogleFonts.cairo(
                           color: OrangeColors.white,
                           fontWeight: FontWeight.w800,
@@ -1224,7 +1225,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            fullName,
+                            NameFormatter.formatWithTitle(fullName, isArabic: isAr),
                             style: GoogleFonts.cairo(
                               fontSize: 17.sp,
                               fontWeight: FontWeight.w700,
