@@ -10,7 +10,6 @@ import '../cubit/auth_cubit.dart';
 import '../cubit/auth_state.dart';
 import '../widgets/orange_button.dart';
 import '../widgets/orange_text_field.dart';
-import 'set_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   final VoidCallback onLoginSuccess;
