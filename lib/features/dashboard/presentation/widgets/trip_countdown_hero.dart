@@ -44,66 +44,69 @@ class TripCountdownHero extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Header: Welcome Greeting & Status Dot
+          // Header: Top Row (Welcome Greeting on Left, Delegation Badge on Right)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 8.w,
-                          height: 8.w,
-                          decoration: const BoxDecoration(
-                            color: OrangeColors.success,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        SizedBox(width: 8.w),
-                        Text(
-                          isArabic ? 'مرحباً،' : 'Welcome,',
-                          style: GoogleFonts.cairo(
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.w600,
-                            color: OrangeColors.secondaryText,
-                          ),
-                        ),
-                      ],
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 8.w,
+                    height: 8.w,
+                    decoration: const BoxDecoration(
+                      color: OrangeColors.success,
+                      shape: BoxShape.circle,
                     ),
-                    SizedBox(height: 2.h),
-                    Text(
-                      NameFormatter.formatWithTitle(fullName, isArabic: isArabic),
-                      style: GoogleFonts.cairo(
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w700,
-                        color: OrangeColors.black,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(width: 8.w),
+                  Text(
+                    isArabic ? 'مرحباً،' : 'Welcome,',
+                    style: GoogleFonts.cairo(
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w600,
+                      color: OrangeColors.secondaryText,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               // Executive Delegation Badge
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-                decoration: BoxDecoration(
-                  color: OrangeColors.white,
-                  borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: OrangeColors.lightBorder),
-                ),
-                child: Text(
-                  isArabic ? 'عضو الوفد الرسمي' : 'Official Delegation Member',
-                  style: GoogleFonts.cairo(
-                    fontSize: 10.5.sp,
-                    fontWeight: FontWeight.w700,
-                    color: OrangeColors.primaryOrange,
+              Flexible(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                  decoration: BoxDecoration(
+                    color: OrangeColors.white,
+                    borderRadius: BorderRadius.circular(12.r),
+                    border: Border.all(color: OrangeColors.lightBorder),
+                  ),
+                  child: Text(
+                    isArabic ? 'عضو الوفد الرسمي' : 'Official Delegation Member',
+                    style: GoogleFonts.cairo(
+                      fontSize: 10.5.sp,
+                      fontWeight: FontWeight.w700,
+                      color: OrangeColors.primaryOrange,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
             ],
+          ),
+          SizedBox(height: 6.h),
+
+          // Dedicated Full-Width Participant Name
+          Text(
+            NameFormatter.formatWithTitle(fullName, isArabic: isArabic),
+            style: GoogleFonts.cairo(
+              fontSize: 18.5.sp,
+              fontWeight: FontWeight.w700,
+              color: OrangeColors.black,
+              height: 1.25,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
           SizedBox(height: 16.h),
 

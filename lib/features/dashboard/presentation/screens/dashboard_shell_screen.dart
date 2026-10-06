@@ -982,12 +982,15 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
     return BlocBuilder<DashboardCubit, DashboardState>(
       builder: (context, state) {
         final data = state is DashboardLoaded ? state.data : null;
+        final allItems = data?.allItineraryItems ?? [];
+        final tripSettings = data?.tripSettings;
+
         // Generate all trip days from tripSettings.startDate to tripSettings.endDate
         final tripDates = <String>[];
-        if (data?.tripSettings != null) {
+        if (tripSettings != null && tripSettings.startDate.isNotEmpty && tripSettings.endDate.isNotEmpty) {
           try {
-            final start = DateTime.parse(data!.tripSettings.startDate);
-            final end = DateTime.parse(data.tripSettings.endDate);
+            final start = DateTime.parse(tripSettings.startDate);
+            final end = DateTime.parse(tripSettings.endDate);
             if (!end.isBefore(start)) {
               for (var d = start; !d.isAfter(end); d = d.add(const Duration(days: 1))) {
                 tripDates.add(DateFormat('yyyy-MM-dd').format(d));
