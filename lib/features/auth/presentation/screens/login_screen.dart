@@ -251,23 +251,58 @@ class _LoginScreenState extends State<LoginScreen> {
                             SizedBox(height: 14.h),
                           ],
 
-                          // First Time Attendee
+                          // Forgot Password / First Time Attendee Prompt
                           TextButton(
                             onPressed: () {
-                              final authCubit = context.read<AuthCubit>();
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => BlocProvider.value(
-                                    value: authCubit,
-                                    child: SetPasswordScreen(
-                                      initialEmail: _emailController.text.trim(),
+                              showDialog(
+                                context: context,
+                                builder: (ctx) => AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.r),
+                                  ),
+                                  title: Row(
+                                    children: [
+                                      Icon(Icons.info_outline, color: OrangeColors.primaryOrange, size: 22.sp),
+                                      SizedBox(width: 8.w),
+                                      Expanded(
+                                        child: Text(
+                                          isArabic ? 'تفعيل الحساب وكلمة المرور' : 'Account Activation & Password',
+                                          style: GoogleFonts.cairo(
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: 15.sp,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  content: Text(
+                                    isArabic
+                                        ? 'لإعداد كلمة المرور الخاصة بك أو إعادة تعيينها، يرجى فتح رابط الدعوة المرسل إلى بريدك الإلكتروني من قبل إدارة الرحلة، أو التواصل مباشرة مع مسؤول الرحلة:\n\nadmin@orange.jo'
+                                        : 'To set or reset your password, please open the invitation link sent to your email by the trip committee, or contact the trip administrator:\n\nadmin@orange.jo',
+                                    style: GoogleFonts.cairo(
+                                      fontSize: 13.sp,
+                                      height: 1.5,
+                                      color: OrangeColors.darkSecondaryText,
                                     ),
                                   ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.of(ctx).pop(),
+                                      child: Text(
+                                        isArabic ? 'حسناً' : 'OK',
+                                        style: GoogleFonts.cairo(
+                                          fontWeight: FontWeight.w700,
+                                          color: OrangeColors.primaryOrange,
+                                          fontSize: 14.sp,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               );
                             },
                             child: Text(
-                              'first_time_prompt'.tr(),
+                              isArabic ? 'نسيت كلمة المرور؟ أو تفعيل الحساب' : 'Forgot Password or First-Time Login?',
                               textAlign: TextAlign.center,
                               style: GoogleFonts.cairo(
                                 color: OrangeColors.primaryOrange,
