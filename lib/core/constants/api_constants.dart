@@ -35,7 +35,6 @@ class ApiConstants {
   static const String announcements = '/Communication/announcements';
   static String acknowledgeAnnouncement(int id) => '/Communication/announcements/$id/acknowledge';
   static const String help = '/Communication/help';
-  static const String faqs = '/Communication/faqs';
 
   // Timeouts
   static const Duration connectTimeout = Duration(seconds: 15);
