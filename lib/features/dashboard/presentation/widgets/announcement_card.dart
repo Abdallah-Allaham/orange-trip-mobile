@@ -80,6 +80,68 @@ class AnnouncementCard extends StatelessWidget {
               height: 1.4,
             ),
           ),
+          SizedBox(height: 12.h),
+
+          // Bottom Action Row: Acknowledge Button or Acknowledged Status
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              if (announcement.isAcknowledged)
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFDCFCE7),
+                    borderRadius: BorderRadius.circular(8.r),
+                    border: Border.all(color: const Color(0xFF86EFAC)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.check_circle_outline, size: 13.sp, color: const Color(0xFF16A34A)),
+                      SizedBox(width: 4.w),
+                      Text(
+                        isArabic ? '✓ تم الاطلاع' : '✓ Acknowledged',
+                        style: GoogleFonts.cairo(
+                          fontSize: 11.sp,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF16A34A),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              else
+                SizedBox(
+                  height: 32.h,
+                  child: ElevatedButton(
+                    onPressed: onAcknowledge,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: OrangeColors.primaryOrange,
+                      foregroundColor: OrangeColors.white,
+                      elevation: 0,
+                      padding: EdgeInsets.symmetric(horizontal: 14.w),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.check, size: 14.sp),
+                        SizedBox(width: 4.w),
+                        Text(
+                          isArabic ? 'تم الاطلاع' : 'Got it',
+                          style: GoogleFonts.cairo(
+                            fontSize: 11.5.sp,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ],
       ),
     );
