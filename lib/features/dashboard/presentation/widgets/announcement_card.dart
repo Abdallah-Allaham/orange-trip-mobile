@@ -88,7 +88,7 @@ class AnnouncementCard extends StatelessWidget {
             children: [
               if (announcement.isAcknowledged)
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
                   decoration: BoxDecoration(
                     color: const Color(0xFFDCFCE7),
                     borderRadius: BorderRadius.circular(8.r),
@@ -111,29 +111,26 @@ class AnnouncementCard extends StatelessWidget {
                   ),
                 )
               else
-                SizedBox(
-                  height: 32.h,
-                  child: ElevatedButton(
-                    onPressed: onAcknowledge,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: OrangeColors.primaryOrange,
-                      foregroundColor: OrangeColors.white,
-                      elevation: 0,
-                      padding: EdgeInsets.symmetric(horizontal: 14.w),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
+                InkWell(
+                  onTap: onAcknowledge,
+                  borderRadius: BorderRadius.circular(8.r),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
+                    decoration: BoxDecoration(
+                      color: OrangeColors.primaryOrange,
+                      borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.check, size: 14.sp),
-                        SizedBox(width: 4.w),
+                        Icon(Icons.check, size: 14.sp, color: OrangeColors.white),
+                        SizedBox(width: 5.w),
                         Text(
                           isArabic ? 'تم الاطلاع' : 'Got it',
                           style: GoogleFonts.cairo(
                             fontSize: 11.5.sp,
                             fontWeight: FontWeight.w700,
+                            color: OrangeColors.white,
                           ),
                         ),
                       ],
