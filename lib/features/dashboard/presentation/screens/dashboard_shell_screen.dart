@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/localization/app_strings.dart';
@@ -134,7 +133,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
               children: [
                 Text(
                   strings.appTitle,
-                  style: GoogleFonts.cairo(
+                  style: AppTypography.font(
                     fontSize: 15.sp,
                     fontWeight: FontWeight.w700,
                     color: OrangeColors.black,
@@ -143,7 +142,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                 ),
                 Text(
                   NameFormatter.formatWithTitle(widget.user.fullName, isArabic: isAr),
-                  style: GoogleFonts.cairo(
+                  style: AppTypography.font(
                     fontSize: 12.sp,
                     color: OrangeColors.secondaryText,
                     fontWeight: FontWeight.w500,
@@ -259,7 +258,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
             SizedBox(height: 3.h),
             Text(
               label,
-              style: GoogleFonts.cairo(
+              style: AppTypography.font(
                 fontSize: 11.sp,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                 color: isSelected ? OrangeColors.black : OrangeColors.secondaryText,
@@ -307,7 +306,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                 SizedBox(height: 14.h),
                 Text(
                   isAr ? 'جاري تحميل لوحة القيادة اللوجستية...' : 'Loading Executive Dashboard...',
-                  style: GoogleFonts.cairo(
+                  style: AppTypography.font(
                     fontSize: 13.sp,
                     color: OrangeColors.darkSecondaryText,
                     fontWeight: FontWeight.w600,
@@ -329,13 +328,13 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   SizedBox(height: 14.h),
                   Text(
                     isAr ? 'تعذر جلب بيانات السفر والجدول الزمني' : 'Failed to load trip logistics',
-                    style: GoogleFonts.cairo(fontSize: 15.sp, fontWeight: FontWeight.w700),
+                    style: AppTypography.font(fontSize: 15.sp, fontWeight: FontWeight.w700),
                   ),
                   SizedBox(height: 6.h),
                   Text(
                     state.message,
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.cairo(fontSize: 13.sp, color: OrangeColors.secondaryText),
+                    style: AppTypography.font(fontSize: 13.sp, color: OrangeColors.secondaryText),
                   ),
                   SizedBox(height: 20.h),
                   OrangeButton(
@@ -390,7 +389,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                             SnackBar(
                               content: Text(
                                 isAr ? 'تم تأكيد الاطلاع على التنبيه الإداري' : 'Announcement acknowledged successfully',
-                                style: GoogleFonts.cairo(fontWeight: FontWeight.w600, color: OrangeColors.white),
+                                style: AppTypography.font(fontWeight: FontWeight.w600, color: OrangeColors.white),
                               ),
                               backgroundColor: OrangeColors.success,
                               behavior: SnackBarBehavior.floating,
@@ -471,7 +470,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
             children: [
               Text(
                 isAr ? 'ترتيبات السفر والتنقلات والإقامة' : 'Executive Travel & Ground Logistics',
-                style: GoogleFonts.cairo(fontSize: 18.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
+                style: AppTypography.font(fontSize: 18.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
               ),
               SizedBox(height: 14.h),
 
@@ -552,7 +551,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
           child: Center(
             child: Text(
               label,
-              style: GoogleFonts.cairo(
+              style: AppTypography.font(
                 fontSize: 11.5.sp,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                 color: isSelected ? OrangeColors.white : OrangeColors.darkSecondaryText,
@@ -687,7 +686,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                     Expanded(
                       child: Text(
                         '$airline · $flightNum',
-                        style: GoogleFonts.cairo(
+                        style: AppTypography.font(
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w700,
                           color: OrangeColors.black,
@@ -710,7 +709,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                     ),
                     child: Text(
                       isAr ? 'رحلة العودة' : 'RETURN',
-                      style: GoogleFonts.cairo(
+                      style: AppTypography.font(
                         fontSize: 10.sp,
                         fontWeight: FontWeight.w700,
                         color: OrangeColors.primaryOrange,
@@ -720,7 +719,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   SizedBox(width: 6.w),
                   Text(
                     returnDate,
-                    style: GoogleFonts.cairo(
+                    style: AppTypography.font(
                       fontSize: 11.sp,
                       fontWeight: FontWeight.w600,
                       color: OrangeColors.secondaryText,
@@ -745,7 +744,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   children: [
                     Text(
                       originCode,
-                      style: GoogleFonts.cairo(
+                      style: AppTypography.font(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w800,
                         color: OrangeColors.black,
@@ -755,7 +754,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                     SizedBox(height: 2.h),
                     Text(
                       depTime,
-                      style: GoogleFonts.cairo(
+                      style: AppTypography.font(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w700,
                         color: OrangeColors.primaryOrange,
@@ -763,7 +762,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                     ),
                     Text(
                       originCity,
-                      style: GoogleFonts.cairo(
+                      style: AppTypography.font(
                         fontSize: 11.sp,
                         color: OrangeColors.secondaryText,
                         fontWeight: FontWeight.w500,
@@ -781,7 +780,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                     SizedBox(height: 2.h),
                     Text(
                       duration,
-                      style: GoogleFonts.cairo(
+                      style: AppTypography.font(
                         fontSize: 10.sp,
                         color: OrangeColors.secondaryText,
                         fontWeight: FontWeight.w600,
@@ -794,7 +793,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   children: [
                     Text(
                       destCode,
-                      style: GoogleFonts.cairo(
+                      style: AppTypography.font(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w800,
                         color: OrangeColors.black,
@@ -804,7 +803,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                     SizedBox(height: 2.h),
                     Text(
                       arrTime,
-                      style: GoogleFonts.cairo(
+                      style: AppTypography.font(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w700,
                         color: OrangeColors.primaryOrange,
@@ -812,7 +811,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                     ),
                     Text(
                       destCity,
-                      style: GoogleFonts.cairo(
+                      style: AppTypography.font(
                         fontSize: 11.sp,
                         color: OrangeColors.secondaryText,
                         fontWeight: FontWeight.w500,
@@ -853,13 +852,13 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                         SizedBox(width: 8.w),
                         Text(
                           isAr ? bus.busNameAr : bus.busNameEn,
-                          style: GoogleFonts.cairo(fontSize: 14.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
+                          style: AppTypography.font(fontSize: 14.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
                         ),
                       ],
                     ),
                     Text(
                       bus.busNumber,
-                      style: GoogleFonts.cairo(fontSize: 12.sp, color: OrangeColors.primaryOrange, fontWeight: FontWeight.w700),
+                      style: AppTypography.font(fontSize: 12.sp, color: OrangeColors.primaryOrange, fontWeight: FontWeight.w700),
                     ),
                   ],
                 ),
@@ -873,12 +872,12 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                       children: [
                         Text(
                           isAr ? 'نقطة التجمع: ' : 'Gathering Point: ',
-                          style: GoogleFonts.cairo(fontSize: 12.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
+                          style: AppTypography.font(fontSize: 12.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
                         ),
                         Expanded(
                           child: Text(
                             isAr ? bus.gatheringPointAr : bus.gatheringPointEn,
-                            style: GoogleFonts.cairo(fontSize: 12.5.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
+                            style: AppTypography.font(fontSize: 12.5.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
                           ),
                         ),
                       ],
@@ -888,20 +887,20 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                       children: [
                         Text(
                           isAr ? 'التجمع: ' : 'Gathering: ',
-                          style: GoogleFonts.cairo(fontSize: 12.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
+                          style: AppTypography.font(fontSize: 12.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
                         ),
                         Text(
                           bus.gatheringTime,
-                          style: GoogleFonts.cairo(fontSize: 12.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
+                          style: AppTypography.font(fontSize: 12.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
                         ),
                         SizedBox(width: 16.w),
                         Text(
                           isAr ? 'الانطلاق: ' : 'Departure: ',
-                          style: GoogleFonts.cairo(fontSize: 12.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
+                          style: AppTypography.font(fontSize: 12.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
                         ),
                         Text(
                           bus.departureTime,
-                          style: GoogleFonts.cairo(fontSize: 12.sp, fontWeight: FontWeight.w700, color: OrangeColors.primaryOrange),
+                          style: AppTypography.font(fontSize: 12.sp, fontWeight: FontWeight.w700, color: OrangeColors.primaryOrange),
                         ),
                       ],
                     ),
@@ -915,7 +914,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                             children: [
                               Text(
                                 '${isAr ? "مشرف الحافلة:" : "Coordinator:"} ${bus.coordinatorName}',
-                                style: GoogleFonts.cairo(fontSize: 11.5.sp, fontWeight: FontWeight.w700),
+                                style: AppTypography.font(fontSize: 11.5.sp, fontWeight: FontWeight.w700),
                               ),
                               SizedBox(height: 4.h),
                               InkWell(
@@ -928,7 +927,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                                     SizedBox(width: 6.w),
                                     Text(
                                       bus.coordinatorPhone,
-                                      style: GoogleFonts.cairo(fontSize: 12.sp, color: OrangeColors.primaryOrange, fontWeight: FontWeight.w700),
+                                      style: AppTypography.font(fontSize: 12.sp, color: OrangeColors.primaryOrange, fontWeight: FontWeight.w700),
                                     ),
                                   ],
                                 ),
@@ -942,7 +941,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                             children: [
                               Text(
                                 '${isAr ? "السائق:" : "Driver:"} ${bus.driverName}',
-                                style: GoogleFonts.cairo(fontSize: 11.5.sp, color: OrangeColors.darkSecondaryText, fontWeight: FontWeight.w500),
+                                style: AppTypography.font(fontSize: 11.5.sp, color: OrangeColors.darkSecondaryText, fontWeight: FontWeight.w500),
                               ),
                               SizedBox(height: 4.h),
                               InkWell(
@@ -955,7 +954,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                                     SizedBox(width: 6.w),
                                     Text(
                                       bus.driverPhone,
-                                      style: GoogleFonts.cairo(fontSize: 12.sp, color: OrangeColors.darkSecondaryText, fontWeight: FontWeight.w600),
+                                      style: AppTypography.font(fontSize: 12.sp, color: OrangeColors.darkSecondaryText, fontWeight: FontWeight.w600),
                                     ),
                                   ],
                                 ),
@@ -1040,7 +1039,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
           children: [
             Text(
               isAr ? 'برنامج الرحلة والفعاليات الرسمية' : 'Official Trip Agenda & Timeline',
-              style: GoogleFonts.cairo(fontSize: 18.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
+              style: AppTypography.font(fontSize: 18.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
             ),
             SizedBox(height: 14.h),
 
@@ -1074,7 +1073,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                           children: [
                             Text(
                               df['label']!,
-                              style: GoogleFonts.cairo(
+                              style: AppTypography.font(
                                 fontSize: 12.sp,
                                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
                                 color: isSelected ? OrangeColors.white : OrangeColors.black,
@@ -1082,7 +1081,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                             ),
                             Text(
                               df['sub']!,
-                              style: GoogleFonts.cairo(
+                              style: AppTypography.font(
                                 fontSize: 10.sp,
                                 color: isSelected ? OrangeColors.white.withValues(alpha: 0.85) : OrangeColors.secondaryText,
                               ),
@@ -1108,7 +1107,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                       SizedBox(height: 12.h),
                       Text(
                         isAr ? 'لا توجد أنشطة مجدولة لهذا اليوم' : 'No scheduled activities for this day',
-                        style: GoogleFonts.cairo(color: OrangeColors.secondaryText, fontSize: 13.sp),
+                        style: AppTypography.font(color: OrangeColors.secondaryText, fontSize: 13.sp),
                       ),
                     ],
                   ),
@@ -1142,7 +1141,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                 ),
                 child: Text(
                   '${item.date.split("-").sublist(1).reversed.join("/")} · ${item.startTime} - ${item.endTime}',
-                  style: GoogleFonts.cairo(
+                  style: AppTypography.font(
                     color: OrangeColors.primaryOrange,
                     fontWeight: FontWeight.w700,
                     fontSize: 11.sp,
@@ -1166,7 +1165,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                         Flexible(
                           child: Text(
                             isAr ? item.dressCodeAr : item.dressCodeEn,
-                            style: GoogleFonts.cairo(fontSize: 10.sp, fontWeight: FontWeight.w600, color: OrangeColors.darkSecondaryText),
+                            style: AppTypography.font(fontSize: 10.sp, fontWeight: FontWeight.w600, color: OrangeColors.darkSecondaryText),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -1180,12 +1179,12 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
           SizedBox(height: 10.h),
           Text(
             isAr ? item.titleAr : item.titleEn,
-            style: GoogleFonts.cairo(fontWeight: FontWeight.w700, fontSize: 14.sp, color: OrangeColors.black),
+            style: AppTypography.font(fontWeight: FontWeight.w700, fontSize: 14.sp, color: OrangeColors.black),
           ),
           SizedBox(height: 4.h),
           Text(
             isAr ? item.descriptionAr : item.descriptionEn,
-            style: GoogleFonts.cairo(fontSize: 12.sp, color: OrangeColors.darkSecondaryText, height: 1.4),
+            style: AppTypography.font(fontSize: 12.sp, color: OrangeColors.darkSecondaryText, height: 1.4),
           ),
           SizedBox(height: 10.h),
           Row(
@@ -1195,7 +1194,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
               Expanded(
                 child: Text(
                   isAr ? item.locationAr : item.locationEn,
-                  style: GoogleFonts.cairo(fontSize: 11.5.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
+                  style: AppTypography.font(fontSize: 11.5.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
                 ),
               ),
             ],
@@ -1209,7 +1208,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                 Expanded(
                   child: Text(
                     '${isAr ? "نقطة التجمع:" : "Gathering:"} ${isAr ? item.gatheringPointAr : item.gatheringPointEn}',
-                    style: GoogleFonts.cairo(fontSize: 11.5.sp, color: OrangeColors.darkSecondaryText, fontWeight: FontWeight.w600),
+                    style: AppTypography.font(fontSize: 11.5.sp, color: OrangeColors.darkSecondaryText, fontWeight: FontWeight.w600),
                   ),
                 ),
               ],
@@ -1248,7 +1247,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                       backgroundColor: OrangeColors.primaryOrange,
                       child: Text(
                         NameFormatter.getInitial(fullName),
-                        style: GoogleFonts.cairo(
+                        style: AppTypography.font(
                           color: OrangeColors.white,
                           fontWeight: FontWeight.w800,
                           fontSize: 22.sp,
@@ -1262,7 +1261,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                         children: [
                           Text(
                             NameFormatter.formatWithTitle(fullName, isArabic: isAr),
-                            style: GoogleFonts.cairo(
+                            style: AppTypography.font(
                               fontSize: 17.sp,
                               fontWeight: FontWeight.w700,
                               color: OrangeColors.black,
@@ -1271,7 +1270,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                           SizedBox(height: 2.h),
                           Text(
                             widget.user.email,
-                            style: GoogleFonts.cairo(
+                            style: AppTypography.font(
                               fontSize: 12.5.sp,
                               color: OrangeColors.secondaryText,
                               fontWeight: FontWeight.w500,
@@ -1294,7 +1293,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   children: [
                     Text(
                       isAr ? 'لغة التطبيق' : 'Application Language',
-                      style: GoogleFonts.cairo(fontSize: 13.sp, fontWeight: FontWeight.w700, color: OrangeColors.darkSecondaryText),
+                      style: AppTypography.font(fontSize: 13.sp, fontWeight: FontWeight.w700, color: OrangeColors.darkSecondaryText),
                     ),
                     SizedBox(height: 12.h),
                     Row(
@@ -1318,7 +1317,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                               child: Center(
                                 child: Text(
                                   'English',
-                                  style: GoogleFonts.cairo(
+                                  style: AppTypography.font(
                                     fontSize: 12.sp,
                                     fontWeight: !isAr ? FontWeight.w700 : FontWeight.w500,
                                     color: !isAr ? OrangeColors.white : OrangeColors.darkSecondaryText,
@@ -1348,7 +1347,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                               child: Center(
                                 child: Text(
                                   'العربية',
-                                  style: GoogleFonts.cairo(
+                                  style: AppTypography.font(
                                     fontSize: 12.sp,
                                     fontWeight: isAr ? FontWeight.w700 : FontWeight.w500,
                                     color: isAr ? OrangeColors.white : OrangeColors.darkSecondaryText,
@@ -1372,11 +1371,11 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   value: isBiometricsEnabled,
                   title: Text(
                     isAr ? 'تسجيل الدخول بالبصمة أو Face ID' : 'Biometric Quick Unlock',
-                    style: GoogleFonts.cairo(fontSize: 13.sp, fontWeight: FontWeight.w700),
+                    style: AppTypography.font(fontSize: 13.sp, fontWeight: FontWeight.w700),
                   ),
                   subtitle: Text(
                     isAr ? 'الدخول السريع والآمن دون الحاجة لكتابة كلمة المرور' : 'Unlock instantly using fingerprint or Face ID',
-                    style: GoogleFonts.cairo(fontSize: 11.sp, color: OrangeColors.secondaryText),
+                    style: AppTypography.font(fontSize: 11.sp, color: OrangeColors.secondaryText),
                   ),
                   secondary: Container(
                     padding: EdgeInsets.all(8.w),
@@ -1394,7 +1393,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                           enabled
                               ? (isAr ? 'تم تفعيل البصمة لتسجيل الدخول السريع' : 'Biometrics enabled')
                               : (isAr ? 'تم إلغاء تفعيل البصمة' : 'Biometrics disabled'),
-                          style: GoogleFonts.cairo(fontWeight: FontWeight.w600, color: OrangeColors.white),
+                          style: AppTypography.font(fontWeight: FontWeight.w600, color: OrangeColors.white),
                         ),
                         backgroundColor: OrangeColors.black,
                         behavior: SnackBarBehavior.floating,
@@ -1416,13 +1415,13 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                   children: [
                     Text(
                       isAr ? 'كلمة المرور والأمان' : 'Password & Security',
-                      style: GoogleFonts.cairo(fontSize: 13.sp, fontWeight: FontWeight.w700, color: OrangeColors.darkSecondaryText),
+                      style: AppTypography.font(fontSize: 13.sp, fontWeight: FontWeight.w700, color: OrangeColors.darkSecondaryText),
                     ),
                     TextButton(
                       onPressed: () => _showChangePasswordDialog(isAr),
                       child: Text(
                         isAr ? 'تغيير كلمة المرور' : 'Change Password',
-                        style: GoogleFonts.cairo(fontSize: 12.5.sp, fontWeight: FontWeight.w700, color: OrangeColors.primaryOrange),
+                        style: AppTypography.font(fontSize: 12.5.sp, fontWeight: FontWeight.w700, color: OrangeColors.primaryOrange),
                       ),
                     ),
                   ],
@@ -1454,11 +1453,11 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                             children: [
                               Text(
                                 isAr ? 'طوارئ السلامة والصحة 24/7' : '24/7 Medical & Safety Emergency',
-                                style: GoogleFonts.cairo(fontSize: 13.5.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
+                                style: AppTypography.font(fontSize: 13.5.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
                               ),
                               Text(
                                 isAr ? 'الإسعاف والرعاية الطبية الفورية' : 'Immediate medical & safety response',
-                                style: GoogleFonts.cairo(fontSize: 11.sp, color: OrangeColors.secondaryText),
+                                style: AppTypography.font(fontSize: 11.sp, color: OrangeColors.secondaryText),
                               ),
                             ],
                           ),
@@ -1471,7 +1470,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                       children: [
                         Text(
                           isAr ? 'خط الطوارئ المباشر' : 'Emergency Hotline',
-                          style: GoogleFonts.cairo(color: OrangeColors.secondaryText, fontSize: 12.sp, fontWeight: FontWeight.w500),
+                          style: AppTypography.font(color: OrangeColors.secondaryText, fontSize: 12.sp, fontWeight: FontWeight.w500),
                         ),
                         InkWell(
                           onTap: () => launchPhoneCall(data?.hotel.emergencyContact ?? '+20 100 000 9999'),
@@ -1491,7 +1490,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                                   (data != null && data.hotel.emergencyContact.isNotEmpty)
                                       ? data.hotel.emergencyContact
                                       : '+20 100 000 9999',
-                                  style: GoogleFonts.cairo(color: Colors.red, fontSize: 12.5.sp, fontWeight: FontWeight.w700),
+                                  style: AppTypography.font(color: Colors.red, fontSize: 12.5.sp, fontWeight: FontWeight.w700),
                                 ),
                               ],
                             ),
@@ -1528,11 +1527,11 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                             children: [
                               Text(
                                 isAr ? 'مكتب العمليات وإدارة الرحلة 24/7' : '24/7 Trip Operations & Logistics',
-                                style: GoogleFonts.cairo(fontSize: 13.5.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
+                                style: AppTypography.font(fontSize: 13.5.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
                               ),
                               Text(
                                 isAr ? 'منسق عام وفد أورنج والخدمات اللوجستية' : 'Delegation lead & travel logistics',
-                                style: GoogleFonts.cairo(fontSize: 11.sp, color: OrangeColors.secondaryText),
+                                style: AppTypography.font(fontSize: 11.sp, color: OrangeColors.secondaryText),
                               ),
                             ],
                           ),
@@ -1545,7 +1544,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                       children: [
                         Text(
                           isAr ? 'ضابط العمليات' : 'Operations Officer',
-                          style: GoogleFonts.cairo(color: OrangeColors.secondaryText, fontSize: 12.sp, fontWeight: FontWeight.w500),
+                          style: AppTypography.font(color: OrangeColors.secondaryText, fontSize: 12.sp, fontWeight: FontWeight.w500),
                         ),
                         InkWell(
                           onTap: () => launchPhoneCall('+962 7 7111 2233'),
@@ -1563,7 +1562,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                                 SizedBox(width: 6.w),
                                 Text(
                                   '+962 7 7111 2233',
-                                  style: GoogleFonts.cairo(color: OrangeColors.primaryOrange, fontSize: 12.5.sp, fontWeight: FontWeight.w700),
+                                  style: AppTypography.font(color: OrangeColors.primaryOrange, fontSize: 12.5.sp, fontWeight: FontWeight.w700),
                                 ),
                               ],
                             ),
@@ -1604,7 +1603,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
         shape: RoundedRectangleBorder(borderRadius: AppRadius.dialogRadius),
         title: Text(
           isAr ? 'تغيير كلمة المرور' : 'Change Password',
-          style: GoogleFonts.cairo(fontSize: 16.sp, fontWeight: FontWeight.w700),
+          style: AppTypography.font(fontSize: 16.sp, fontWeight: FontWeight.w700),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -1614,7 +1613,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
               obscureText: true,
               decoration: InputDecoration(
                 labelText: isAr ? 'كلمة المرور الحالية' : 'Current Password',
-                labelStyle: GoogleFonts.cairo(fontSize: 12.sp),
+                labelStyle: AppTypography.font(fontSize: 12.sp),
               ),
             ),
             SizedBox(height: 12.h),
@@ -1623,7 +1622,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
               obscureText: true,
               decoration: InputDecoration(
                 labelText: isAr ? 'كلمة المرور الجديدة' : 'New Password',
-                labelStyle: GoogleFonts.cairo(fontSize: 12.sp),
+                labelStyle: AppTypography.font(fontSize: 12.sp),
               ),
             ),
             SizedBox(height: 12.h),
@@ -1632,7 +1631,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
               obscureText: true,
               decoration: InputDecoration(
                 labelText: isAr ? 'تأكيد كلمة المرور' : 'Confirm Password',
-                labelStyle: GoogleFonts.cairo(fontSize: 12.sp),
+                labelStyle: AppTypography.font(fontSize: 12.sp),
               ),
             ),
           ],
@@ -1640,7 +1639,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text(isAr ? 'إلغاء' : 'Cancel', style: GoogleFonts.cairo(color: OrangeColors.secondaryText, fontWeight: FontWeight.w600)),
+            child: Text(isAr ? 'إلغاء' : 'Cancel', style: AppTypography.font(color: OrangeColors.secondaryText, fontWeight: FontWeight.w600)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -1653,7 +1652,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
                 SnackBar(
                   content: Text(
                     isAr ? 'تم تحديث كلمة المرور بنجاح' : 'Password updated successfully',
-                    style: GoogleFonts.cairo(fontWeight: FontWeight.w600, color: OrangeColors.white),
+                    style: AppTypography.font(fontWeight: FontWeight.w600, color: OrangeColors.white),
                   ),
                   backgroundColor: OrangeColors.success,
                   behavior: SnackBarBehavior.floating,
@@ -1663,7 +1662,7 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
             },
             child: Text(
               isAr ? 'تحديث' : 'Update',
-              style: GoogleFonts.cairo(color: OrangeColors.white, fontWeight: FontWeight.w700),
+              style: AppTypography.font(color: OrangeColors.white, fontWeight: FontWeight.w700),
             ),
           ),
         ],

@@ -50,7 +50,7 @@ class OrangeTripApp extends StatelessWidget {
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,
             locale: context.locale,
-            theme: OrangeTheme.lightTheme,
+            theme: OrangeTheme.getLightTheme(context.locale),
             home: const AuthGate(),
           ),
         );

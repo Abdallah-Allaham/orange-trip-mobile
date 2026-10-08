@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import '../../../../core/theme/app_design_system.dart';
 import '../../../../core/constants/colors.dart';
 
 enum BadgeType { bus, group }
@@ -51,7 +51,7 @@ class BusGroupBadge extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: GoogleFonts.cairo(
+                style: AppTypography.font(
                   color: OrangeColors.secondaryText,
                   fontSize: 10.sp,
                   fontWeight: FontWeight.w600,
@@ -60,7 +60,7 @@ class BusGroupBadge extends StatelessWidget {
               ),
               Text(
                 value.isNotEmpty ? value : (isBus ? 'Bus 1' : 'Group Alpha'),
-                style: GoogleFonts.cairo(
+                style: AppTypography.font(
                   color: accentColor,
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w700,

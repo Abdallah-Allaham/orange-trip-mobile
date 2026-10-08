@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../constants/colors.dart';
+import 'app_typography.dart';
 
 class OrangeTheme {
   static const double cardBorderRadius = 24.0;
@@ -8,7 +8,13 @@ class OrangeTheme {
   static const double inputBorderRadius = 20.0;
   static const double dialogBorderRadius = 28.0;
 
-  static ThemeData get lightTheme {
+  /// Default light theme getter
+  static ThemeData get lightTheme => getLightTheme();
+
+  /// Locale-aware light theme (automatically chooses font for iOS, Android, and Web)
+  static ThemeData getLightTheme([Locale? locale]) {
+    final bool? isArabic = locale != null ? locale.languageCode == 'ar' : null;
+
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
@@ -28,10 +34,11 @@ class OrangeTheme {
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
-        titleTextStyle: GoogleFonts.cairo(
+        titleTextStyle: AppFont.getStyle(
           fontSize: 18,
           fontWeight: FontWeight.w700,
           color: OrangeColors.black,
+          isArabic: isArabic,
         ),
       ),
       cardTheme: CardThemeData(
@@ -53,9 +60,10 @@ class OrangeTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(buttonBorderRadius),
           ),
-          textStyle: GoogleFonts.cairo(
+          textStyle: AppFont.getStyle(
             fontSize: 16,
             fontWeight: FontWeight.w700,
+            isArabic: isArabic,
           ),
         ),
       ),
@@ -69,9 +77,10 @@ class OrangeTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(buttonBorderRadius),
           ),
-          textStyle: GoogleFonts.cairo(
+          textStyle: AppFont.getStyle(
             fontSize: 16,
             fontWeight: FontWeight.w700,
+            isArabic: isArabic,
           ),
         ),
       ),
@@ -99,14 +108,16 @@ class OrangeTheme {
           borderRadius: BorderRadius.circular(inputBorderRadius),
           borderSide: const BorderSide(color: OrangeColors.error, width: 2.0),
         ),
-        labelStyle: GoogleFonts.cairo(
+        labelStyle: AppFont.getStyle(
           fontSize: 14,
           fontWeight: FontWeight.w600,
           color: OrangeColors.darkSecondaryText,
+          isArabic: isArabic,
         ),
-        hintStyle: GoogleFonts.cairo(
+        hintStyle: AppFont.getStyle(
           fontSize: 14,
           color: OrangeColors.secondaryText,
+          isArabic: isArabic,
         ),
       ),
       dialogTheme: DialogThemeData(
@@ -139,40 +150,46 @@ class OrangeTheme {
         trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
       ),
       textTheme: TextTheme(
-        displayLarge: GoogleFonts.cairo(
+        displayLarge: AppFont.getStyle(
           fontSize: 30,
           fontWeight: FontWeight.w700,
           color: OrangeColors.black,
           height: 1.2,
+          isArabic: isArabic,
         ),
-        titleLarge: GoogleFonts.cairo(
+        titleLarge: AppFont.getStyle(
           fontSize: 22,
           fontWeight: FontWeight.w700,
           color: OrangeColors.black,
           height: 1.25,
+          isArabic: isArabic,
         ),
-        titleMedium: GoogleFonts.cairo(
+        titleMedium: AppFont.getStyle(
           fontSize: 18,
           fontWeight: FontWeight.w700,
           color: OrangeColors.black,
           height: 1.3,
+          isArabic: isArabic,
         ),
-        bodyLarge: GoogleFonts.cairo(
+        bodyLarge: AppFont.getStyle(
           fontSize: 16,
           fontWeight: FontWeight.w400,
           color: OrangeColors.black,
           height: 1.45,
+          isArabic: isArabic,
         ),
-        bodyMedium: GoogleFonts.cairo(
+        bodyMedium: AppFont.getStyle(
           fontSize: 14,
           fontWeight: FontWeight.w400,
           color: OrangeColors.darkSecondaryText,
           height: 1.4,
+          isArabic: isArabic,
         ),
-        labelSmall: GoogleFonts.cairo(
+        labelSmall: AppFont.getStyle(
           fontSize: 12,
           fontWeight: FontWeight.w500,
           color: OrangeColors.secondaryText,
+          isArabic: isArabic,
         ),
       ),
     );

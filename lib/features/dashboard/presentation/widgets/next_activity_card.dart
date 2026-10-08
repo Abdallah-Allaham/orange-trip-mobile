@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/theme/app_design_system.dart';
 import '../../domain/entities/itinerary_summary_entity.dart';
@@ -51,7 +50,7 @@ class NextActivityCard extends StatelessWidget {
                           SizedBox(width: 5.w),
                           Text(
                             isArabic ? 'النشاط القادم' : 'Upcoming Activity',
-                            style: GoogleFonts.cairo(
+                            style: AppTypography.font(
                               fontSize: 11.sp,
                               fontWeight: FontWeight.w700,
                               color: OrangeColors.primaryOrange,
@@ -70,7 +69,7 @@ class NextActivityCard extends StatelessWidget {
           // Activity Title
           Text(
             activityTitle,
-            style: GoogleFonts.cairo(
+            style: AppTypography.font(
               fontSize: 15.sp,
               fontWeight: FontWeight.w700,
               color: OrangeColors.black,
@@ -94,7 +93,7 @@ class NextActivityCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         '${isArabic ? "نقطة التجمع:" : "Gathering:"} $gatheringPoint',
-                        style: GoogleFonts.cairo(
+                        style: AppTypography.font(
                           fontSize: 11.5.sp,
                           fontWeight: FontWeight.w600,
                           color: OrangeColors.darkSecondaryText,
@@ -112,7 +111,7 @@ class NextActivityCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           '${isArabic ? "الزي المطلوب:" : "Dress Code:"} $dressCode',
-                          style: GoogleFonts.cairo(
+                          style: AppTypography.font(
                             fontSize: 11.5.sp,
                             fontWeight: FontWeight.w500,
                             color: OrangeColors.secondaryText,
@@ -140,7 +139,7 @@ class NextActivityCard extends StatelessWidget {
                     children: [
                       Text(
                         isArabic ? 'عرض تفاصيل الفعالية' : 'View Full Agenda',
-                        style: GoogleFonts.cairo(
+                        style: AppTypography.font(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w700,
                           color: OrangeColors.primaryOrange,

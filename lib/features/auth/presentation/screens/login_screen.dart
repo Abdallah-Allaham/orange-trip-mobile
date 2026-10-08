@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/theme/app_design_system.dart';
 import '../../../../core/widgets/app_brand_logo.dart';
@@ -72,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   isArabic
                       ? 'تنبيه: تم إغلاق أو إعادة ضبط جلسة المشترك من قِبل إدارة الرحلة. يرجى تسجيل الدخول مجدداً أو استخدام رابط الدعوة.'
                       : 'Notice: Your attendee session was reset by the trip administrator. Please sign in again or use your invitation link.',
-                  style: GoogleFonts.cairo(fontWeight: FontWeight.w700, color: OrangeColors.white),
+                  style: AppTypography.font(fontWeight: FontWeight.w700, color: OrangeColors.white),
                 ),
               ),
             );
@@ -84,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 behavior: SnackBarBehavior.floating,
                 content: Text(
                   state.message,
-                  style: GoogleFonts.cairo(fontWeight: FontWeight.w700, color: OrangeColors.white),
+                  style: AppTypography.font(fontWeight: FontWeight.w700, color: OrangeColors.white),
                 ),
               ),
             );
@@ -125,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 label: Text(
                                   isArabic ? 'English' : 'العربية',
-                                  style: GoogleFonts.cairo(
+                                  style: AppTypography.font(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 12.sp,
                                     color: OrangeColors.black,
@@ -148,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           // Typography Hierarchy
                           Text(
                             'brand_orange'.tr(),
-                            style: GoogleFonts.cairo(
+                            style: AppTypography.font(
                               color: OrangeColors.primaryOrange,
                               fontSize: 28.sp,
                               fontWeight: FontWeight.w800,
@@ -157,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           Text(
                             'app_title'.tr(),
-                            style: GoogleFonts.cairo(
+                            style: AppTypography.font(
                               color: OrangeColors.black,
                               fontSize: 20.sp,
                               fontWeight: FontWeight.w700,
@@ -218,7 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               Expanded(
                                 child: Text(
                                   'quick_sign_in'.tr(),
-                                  style: GoogleFonts.cairo(
+                                  style: AppTypography.font(
                                     fontSize: 13.sp,
                                     fontWeight: FontWeight.w600,
                                     color: OrangeColors.darkSecondaryText,
@@ -266,7 +265,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       Expanded(
                                         child: Text(
                                           isArabic ? 'تفعيل الحساب وكلمة المرور' : 'Account Activation & Password',
-                                          style: GoogleFonts.cairo(
+                                          style: AppTypography.font(
                                             fontWeight: FontWeight.w800,
                                             fontSize: 15.sp,
                                           ),
@@ -278,7 +277,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     isArabic
                                         ? 'لإعداد كلمة المرور الخاصة بك أو إعادة تعيينها، يرجى فتح رابط الدعوة المرسل إلى بريدك الإلكتروني من قبل إدارة الرحلة، أو التواصل مباشرة مع مسؤول الرحلة:\n\nadmin@orange.jo'
                                         : 'To set or reset your password, please open the invitation link sent to your email by the trip committee, or contact the trip administrator:\n\nadmin@orange.jo',
-                                    style: GoogleFonts.cairo(
+                                    style: AppTypography.font(
                                       fontSize: 13.sp,
                                       height: 1.5,
                                       color: OrangeColors.darkSecondaryText,
@@ -289,7 +288,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       onPressed: () => Navigator.of(ctx).pop(),
                                       child: Text(
                                         isArabic ? 'حسناً' : 'OK',
-                                        style: GoogleFonts.cairo(
+                                        style: AppTypography.font(
                                           fontWeight: FontWeight.w700,
                                           color: OrangeColors.primaryOrange,
                                           fontSize: 14.sp,
@@ -303,7 +302,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Text(
                               isArabic ? 'نسيت كلمة المرور؟ أو تفعيل الحساب' : 'Forgot Password or First-Time Login?',
                               textAlign: TextAlign.center,
-                              style: GoogleFonts.cairo(
+                              style: AppTypography.font(
                                 color: OrangeColors.primaryOrange,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 13.sp,

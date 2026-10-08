@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../constants/colors.dart';
+import 'app_typography.dart';
+export 'app_typography.dart';
 
 /// Centralized Design System for Orange Trip Mobile
 /// Easy to adjust, extend, or revert.
@@ -74,51 +75,110 @@ class AppCards {
 }
 
 class AppTypography {
-  static TextStyle largeTitle({Color color = OrangeColors.black}) => GoogleFonts.cairo(
+  /// Direct access to the centralized platform & language font resolver.
+  static TextStyle font({
+    BuildContext? context,
+    double? fontSize,
+    FontWeight? fontWeight,
+    Color? color,
+    double? height,
+    double? letterSpacing,
+    double? wordSpacing,
+    FontStyle? fontStyle,
+    TextBaseline? textBaseline,
+    Color? backgroundColor,
+    TextDecoration? decoration,
+    Color? decorationColor,
+    TextDecorationStyle? decorationStyle,
+    double? decorationThickness,
+    List<Shadow>? shadows,
+    bool? isArabic,
+  }) =>
+      AppFont.getStyle(
+        context: context,
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        color: color,
+        height: height,
+        letterSpacing: letterSpacing,
+        wordSpacing: wordSpacing,
+        fontStyle: fontStyle,
+        textBaseline: textBaseline,
+        backgroundColor: backgroundColor,
+        decoration: decoration,
+        decorationColor: decorationColor,
+        decorationStyle: decorationStyle,
+        decorationThickness: decorationThickness,
+        shadows: shadows,
+        isArabic: isArabic,
+      );
+
+  static TextStyle largeTitle({BuildContext? context, Color color = OrangeColors.black, bool? isArabic}) =>
+      font(
+        context: context,
         fontSize: 28.sp,
         fontWeight: FontWeight.w700,
         color: color,
         height: 1.2,
+        isArabic: isArabic,
       );
 
-  static TextStyle sectionTitle({Color color = OrangeColors.black}) => GoogleFonts.cairo(
+  static TextStyle sectionTitle({BuildContext? context, Color color = OrangeColors.black, bool? isArabic}) =>
+      font(
+        context: context,
         fontSize: 20.sp,
         fontWeight: FontWeight.w700,
         color: color,
         height: 1.25,
+        isArabic: isArabic,
       );
 
-  static TextStyle cardTitle({Color color = OrangeColors.black}) => GoogleFonts.cairo(
+  static TextStyle cardTitle({BuildContext? context, Color color = OrangeColors.black, bool? isArabic}) =>
+      font(
+        context: context,
         fontSize: 18.sp,
         fontWeight: FontWeight.w700,
         color: color,
         height: 1.3,
+        isArabic: isArabic,
       );
 
-  static TextStyle body({Color color = OrangeColors.black}) => GoogleFonts.cairo(
+  static TextStyle body({BuildContext? context, Color color = OrangeColors.black, bool? isArabic}) =>
+      font(
+        context: context,
         fontSize: 15.sp,
         fontWeight: FontWeight.w400,
         color: color,
         height: 1.45,
+        isArabic: isArabic,
       );
 
-  static TextStyle secondary({Color color = OrangeColors.secondaryText}) => GoogleFonts.cairo(
+  static TextStyle secondary({BuildContext? context, Color color = OrangeColors.secondaryText, bool? isArabic}) =>
+      font(
+        context: context,
         fontSize: 13.sp,
         fontWeight: FontWeight.w400,
         color: color,
         height: 1.4,
+        isArabic: isArabic,
       );
 
-  static TextStyle button({Color color = OrangeColors.white}) => GoogleFonts.cairo(
+  static TextStyle button({BuildContext? context, Color color = OrangeColors.white, bool? isArabic}) =>
+      font(
+        context: context,
         fontSize: 16.sp,
         fontWeight: FontWeight.w700,
         color: color,
+        isArabic: isArabic,
       );
 
-  static TextStyle smallLabel({Color color = OrangeColors.secondaryText}) => GoogleFonts.cairo(
+  static TextStyle smallLabel({BuildContext? context, Color color = OrangeColors.secondaryText, bool? isArabic}) =>
+      font(
+        context: context,
         fontSize: 12.sp,
         fontWeight: FontWeight.w500,
         color: color,
+        isArabic: isArabic,
       );
 }
 
@@ -127,6 +187,7 @@ class AppBadges {
     required String text,
     Color? backgroundColor,
     Color? textColor,
+    BuildContext? context,
   }) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
@@ -136,7 +197,8 @@ class AppBadges {
       ),
       child: Text(
         text,
-        style: GoogleFonts.cairo(
+        style: AppTypography.font(
+          context: context,
           fontSize: 11.sp,
           fontWeight: FontWeight.w600,
           color: textColor ?? OrangeColors.primaryOrange,

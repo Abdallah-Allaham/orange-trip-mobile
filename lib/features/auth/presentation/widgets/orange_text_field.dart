@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/theme/app_design_system.dart';
 
@@ -46,7 +45,7 @@ class _OrangeTextFieldState extends State<OrangeTextField> {
       children: [
         Text(
           widget.label,
-          style: GoogleFonts.cairo(
+          style: AppTypography.font(
             color: OrangeColors.darkSecondaryText,
             fontWeight: FontWeight.w700,
             fontSize: 13.sp,
@@ -59,14 +58,14 @@ class _OrangeTextFieldState extends State<OrangeTextField> {
           keyboardType: widget.keyboardType,
           enabled: widget.enabled,
           validator: widget.validator,
-          style: GoogleFonts.cairo(
+          style: AppTypography.font(
             color: OrangeColors.black,
             fontSize: 15.sp,
             fontWeight: FontWeight.w500,
           ),
           decoration: InputDecoration(
             hintText: widget.hint,
-            hintStyle: GoogleFonts.cairo(
+            hintStyle: AppTypography.font(
               color: OrangeColors.secondaryText,
               fontSize: 14.sp,
             ),

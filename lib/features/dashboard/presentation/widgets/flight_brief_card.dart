@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/theme/app_design_system.dart';
@@ -154,7 +153,7 @@ class FlightBriefCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         '${flight.airline} · $displayFlightNum',
-                        style: GoogleFonts.cairo(
+                        style: AppTypography.font(
                           fontSize: 13.5.sp,
                           fontWeight: FontWeight.w700,
                           color: OrangeColors.black,
@@ -168,7 +167,7 @@ class FlightBriefCard extends StatelessWidget {
               if (depDate.isNotEmpty && depDate != 'TBD')
                 Text(
                   depDate,
-                  style: GoogleFonts.cairo(
+                  style: AppTypography.font(
                     fontSize: 11.5.sp,
                     color: OrangeColors.secondaryText,
                     fontWeight: FontWeight.w600,
@@ -194,7 +193,7 @@ class FlightBriefCard extends StatelessWidget {
                   children: [
                     Text(
                       routeInfo['originCode']!,
-                      style: GoogleFonts.cairo(
+                      style: AppTypography.font(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w800,
                         color: OrangeColors.black,
@@ -204,7 +203,7 @@ class FlightBriefCard extends StatelessWidget {
                     SizedBox(height: 2.h),
                     Text(
                       depTime,
-                      style: GoogleFonts.cairo(
+                      style: AppTypography.font(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w700,
                         color: OrangeColors.primaryOrange,
@@ -212,7 +211,7 @@ class FlightBriefCard extends StatelessWidget {
                     ),
                     Text(
                       routeInfo['originCity']!,
-                      style: GoogleFonts.cairo(
+                      style: AppTypography.font(
                         fontSize: 11.sp,
                         color: OrangeColors.secondaryText,
                         fontWeight: FontWeight.w500,
@@ -232,7 +231,7 @@ class FlightBriefCard extends StatelessWidget {
                     SizedBox(height: 2.h),
                     Text(
                       duration,
-                      style: GoogleFonts.cairo(
+                      style: AppTypography.font(
                         fontSize: 10.sp,
                         color: OrangeColors.secondaryText,
                         fontWeight: FontWeight.w600,
@@ -247,7 +246,7 @@ class FlightBriefCard extends StatelessWidget {
                   children: [
                     Text(
                       routeInfo['destCode']!,
-                      style: GoogleFonts.cairo(
+                      style: AppTypography.font(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w800,
                         color: OrangeColors.black,
@@ -257,7 +256,7 @@ class FlightBriefCard extends StatelessWidget {
                     SizedBox(height: 2.h),
                     Text(
                       arrTime,
-                      style: GoogleFonts.cairo(
+                      style: AppTypography.font(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w700,
                         color: OrangeColors.primaryOrange,
@@ -265,7 +264,7 @@ class FlightBriefCard extends StatelessWidget {
                     ),
                     Text(
                       routeInfo['destCity']!,
-                      style: GoogleFonts.cairo(
+                      style: AppTypography.font(
                         fontSize: 11.sp,
                         color: OrangeColors.secondaryText,
                         fontWeight: FontWeight.w500,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/theme/app_design_system.dart';
 
@@ -23,7 +22,7 @@ class ExecutiveServicesGrid extends StatelessWidget {
       children: [
         Text(
           isArabic ? 'الخدمات اللوجستية السريعة' : 'Executive Quick Logistics',
-          style: GoogleFonts.cairo(
+          style: AppTypography.font(
             fontSize: 13.sp,
             fontWeight: FontWeight.w700,
             color: OrangeColors.darkSecondaryText,
@@ -98,7 +97,7 @@ class ExecutiveServicesGrid extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.cairo(
+                    style: AppTypography.font(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w700,
                       color: OrangeColors.black,
@@ -108,7 +107,7 @@ class ExecutiveServicesGrid extends StatelessWidget {
                   ),
                   Text(
                     subtitle,
-                    style: GoogleFonts.cairo(
+                    style: AppTypography.font(
                       fontSize: 10.sp,
                       color: OrangeColors.secondaryText,
                       fontWeight: FontWeight.w500,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/theme/app_design_system.dart';
 import '../../domain/entities/hotel_entity.dart';
@@ -64,7 +63,7 @@ class HotelBriefCard extends StatelessWidget {
       SnackBar(
         content: Text(
           isArabic ? 'تم نسخ كلمة مرور الواي فاي ($pass)' : 'Wi-Fi password copied ($pass)',
-          style: GoogleFonts.cairo(fontWeight: FontWeight.w600, color: OrangeColors.white),
+          style: AppTypography.font(fontWeight: FontWeight.w600, color: OrangeColors.white),
         ),
         backgroundColor: OrangeColors.black,
         behavior: SnackBarBehavior.floating,
@@ -106,7 +105,7 @@ class HotelBriefCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         displayHotelName,
-                        style: GoogleFonts.cairo(
+                        style: AppTypography.font(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w700,
                           color: OrangeColors.black,
@@ -126,7 +125,7 @@ class HotelBriefCard extends StatelessWidget {
                 ),
                 child: Text(
                   cityBadge,
-                  style: GoogleFonts.cairo(
+                  style: AppTypography.font(
                     fontSize: 11.sp,
                     fontWeight: FontWeight.w600,
                     color: OrangeColors.darkSecondaryText,
@@ -153,12 +152,12 @@ class HotelBriefCard extends StatelessWidget {
                     children: [
                       Text(
                         isArabic ? 'تسجيل الوصول' : 'Check-In',
-                        style: GoogleFonts.cairo(fontSize: 11.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
+                        style: AppTypography.font(fontSize: 11.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
                       ),
                       SizedBox(height: 2.h),
                       Text(
                         checkIn,
-                        style: GoogleFonts.cairo(fontSize: 12.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
+                        style: AppTypography.font(fontSize: 12.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
@@ -171,12 +170,12 @@ class HotelBriefCard extends StatelessWidget {
                     children: [
                       Text(
                         isArabic ? 'تسجيل المغادرة' : 'Check-Out',
-                        style: GoogleFonts.cairo(fontSize: 11.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
+                        style: AppTypography.font(fontSize: 11.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
                       ),
                       SizedBox(height: 2.h),
                       Text(
                         checkOut,
-                        style: GoogleFonts.cairo(fontSize: 12.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
+                        style: AppTypography.font(fontSize: 12.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
@@ -204,12 +203,12 @@ class HotelBriefCard extends StatelessWidget {
                       SizedBox(width: 8.w),
                       Text(
                         isArabic ? 'الواي فاي: ' : 'Wi-Fi: ',
-                        style: GoogleFonts.cairo(fontSize: 12.sp, color: OrangeColors.darkSecondaryText, fontWeight: FontWeight.w600),
+                        style: AppTypography.font(fontSize: 12.sp, color: OrangeColors.darkSecondaryText, fontWeight: FontWeight.w600),
                       ),
                       Flexible(
                         child: Text(
                           wifiPass,
-                          style: GoogleFonts.cairo(
+                          style: AppTypography.font(
                             fontSize: 13.sp,
                             fontWeight: FontWeight.w800,
                             color: OrangeColors.primaryOrange,
@@ -230,7 +229,7 @@ class HotelBriefCard extends StatelessWidget {
                       children: [
                         Text(
                           isArabic ? 'نسخ' : 'Copy',
-                          style: GoogleFonts.cairo(
+                          style: AppTypography.font(
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w700,
                             color: OrangeColors.primaryOrange,

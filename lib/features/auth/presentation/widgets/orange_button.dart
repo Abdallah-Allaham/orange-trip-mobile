@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/theme/app_design_system.dart';
 
@@ -87,7 +86,7 @@ class OrangeButton extends StatelessWidget {
 
     final textWidget = Text(
       text,
-      style: GoogleFonts.cairo(
+      style: AppTypography.font(
         fontSize: 15.sp,
         fontWeight: FontWeight.w700,
         color: textColor,

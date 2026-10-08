@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/theme/app_design_system.dart';
 import '../../domain/entities/announcement_entity.dart';
@@ -47,7 +46,7 @@ class AnnouncementCard extends StatelessWidget {
                     SizedBox(width: 5.w),
                     Text(
                       isArabic ? 'تنبيه إداري' : 'Official Notice',
-                      style: GoogleFonts.cairo(
+                      style: AppTypography.font(
                         fontSize: 10.5.sp,
                         fontWeight: FontWeight.w700,
                         color: OrangeColors.primaryOrange,
@@ -63,7 +62,7 @@ class AnnouncementCard extends StatelessWidget {
           // Title
           Text(
             title,
-            style: GoogleFonts.cairo(
+            style: AppTypography.font(
               fontSize: 14.sp,
               fontWeight: FontWeight.w700,
               color: OrangeColors.black,
@@ -74,7 +73,7 @@ class AnnouncementCard extends StatelessWidget {
           // Description
           Text(
             content,
-            style: GoogleFonts.cairo(
+            style: AppTypography.font(
               fontSize: 12.sp,
               color: OrangeColors.darkSecondaryText,
               height: 1.4,
@@ -101,7 +100,7 @@ class AnnouncementCard extends StatelessWidget {
                       SizedBox(width: 4.w),
                       Text(
                         isArabic ? '✓ تم الاطلاع' : '✓ Acknowledged',
-                        style: GoogleFonts.cairo(
+                        style: AppTypography.font(
                           fontSize: 11.sp,
                           fontWeight: FontWeight.w700,
                           color: const Color(0xFF16A34A),
@@ -127,7 +126,7 @@ class AnnouncementCard extends StatelessWidget {
                         SizedBox(width: 5.w),
                         Text(
                           isArabic ? 'تم الاطلاع' : 'Got it',
-                          style: GoogleFonts.cairo(
+                          style: AppTypography.font(
                             fontSize: 11.5.sp,
                             fontWeight: FontWeight.w700,
                             color: OrangeColors.white,

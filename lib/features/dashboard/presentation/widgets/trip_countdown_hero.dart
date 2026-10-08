@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/theme/app_design_system.dart';
 import '../../../../core/utils/name_formatter.dart';
@@ -63,7 +62,7 @@ class TripCountdownHero extends StatelessWidget {
                   SizedBox(width: 8.w),
                   Text(
                     isArabic ? 'مرحباً،' : 'Welcome,',
-                    style: GoogleFonts.cairo(
+                    style: AppTypography.font(
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
                       color: OrangeColors.secondaryText,
@@ -82,7 +81,7 @@ class TripCountdownHero extends StatelessWidget {
                   ),
                   child: Text(
                     isArabic ? 'عضو الوفد الرسمي' : 'Official Delegation Member',
-                    style: GoogleFonts.cairo(
+                    style: AppTypography.font(
                       fontSize: 10.5.sp,
                       fontWeight: FontWeight.w700,
                       color: OrangeColors.primaryOrange,
@@ -99,7 +98,7 @@ class TripCountdownHero extends StatelessWidget {
           // Dedicated Full-Width Participant Name
           Text(
             NameFormatter.formatWithTitle(fullName, isArabic: isArabic),
-            style: GoogleFonts.cairo(
+            style: AppTypography.font(
               fontSize: 18.5.sp,
               fontWeight: FontWeight.w700,
               color: OrangeColors.black,
@@ -128,7 +127,7 @@ class TripCountdownHero extends StatelessWidget {
                         (destination != null && destination!.isNotEmpty)
                             ? destination!
                             : (isArabic ? 'وجهة الرحلة الرسمية' : 'Official Destination'),
-                        style: GoogleFonts.cairo(
+                        style: AppTypography.font(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w700,
                           color: OrangeColors.black,
@@ -156,7 +155,7 @@ class TripCountdownHero extends StatelessWidget {
                           SizedBox(width: 4.w),
                           Text(
                             weatherTemp!,
-                            style: GoogleFonts.cairo(
+                            style: AppTypography.font(
                               fontSize: 11.5.sp,
                               fontWeight: FontWeight.w700,
                               color: OrangeColors.primaryOrange,
@@ -170,7 +169,7 @@ class TripCountdownHero extends StatelessWidget {
                   if (tripDates != null && tripDates!.isNotEmpty)
                     Text(
                       tripDates!,
-                      style: GoogleFonts.cairo(
+                      style: AppTypography.font(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w600,
                         color: OrangeColors.secondaryText,
@@ -215,7 +214,7 @@ class TripCountdownHero extends StatelessWidget {
           children: [
             Text(
               value,
-              style: GoogleFonts.cairo(
+              style: AppTypography.font(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w800,
                 color: isAccent ? OrangeColors.primaryOrange : OrangeColors.black,
@@ -225,7 +224,7 @@ class TripCountdownHero extends StatelessWidget {
             SizedBox(height: 2.h),
             Text(
               label,
-              style: GoogleFonts.cairo(
+              style: AppTypography.font(
                 fontSize: 10.sp,
                 fontWeight: FontWeight.w600,
                 color: isAccent ? OrangeColors.primaryOrange : OrangeColors.secondaryText,
