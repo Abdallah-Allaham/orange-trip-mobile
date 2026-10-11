@@ -4,8 +4,6 @@ class HotelModel extends HotelEntity {
   const HotelModel({
     super.id,
     super.hotelName,
-    super.hotelAddressEn,
-    super.hotelAddressAr,
     super.hotelPhone,
     super.hotelReceptionContact,
     super.emergencyContact,
@@ -30,8 +28,6 @@ class HotelModel extends HotelEntity {
     return HotelModel(
       id: json['id'] ?? json['Id'] ?? 0,
       hotelName: json['hotelName'] ?? json['HotelName'] ?? 'The St. Regis Cairo',
-      hotelAddressEn: json['hotelAddressEn'] ?? json['HotelAddressEn'] ?? 'Corniche El Nile, Cairo, Egypt',
-      hotelAddressAr: json['hotelAddressAr'] ?? json['HotelAddressAr'] ?? 'كورنيش النيل، القاهرة، مصر',
       hotelPhone: json['hotelPhone'] ?? json['HotelPhone'] ?? '+20 2 2597 9000',
       hotelReceptionContact: json['hotelReceptionContact'] ?? json['HotelReceptionContact'] ?? 'Dial 0 from room',
       emergencyContact: json['emergencyContact'] ?? json['EmergencyContact'] ?? '+20 100 000 9999',
@@ -54,8 +50,6 @@ class HotelModel extends HotelEntity {
     return {
       'id': id,
       'hotelName': hotelName,
-      'hotelAddressEn': hotelAddressEn,
-      'hotelAddressAr': hotelAddressAr,
       'hotelPhone': hotelPhone,
       'hotelReceptionContact': hotelReceptionContact,
       'emergencyContact': emergencyContact,

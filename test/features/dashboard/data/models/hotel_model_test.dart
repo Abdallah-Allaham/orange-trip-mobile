@@ -6,8 +6,6 @@ void main() {
   const tHotelModel = HotelModel(
     id: 1,
     hotelName: 'The St. Regis Cairo',
-    hotelAddressEn: 'Corniche El Nile, Cairo, Egypt',
-    hotelAddressAr: 'كورنيش النيل، القاهرة، مصر',
     hotelPhone: '+20 2 2597 9000',
     hotelReceptionContact: 'Dial 0 from room',
     emergencyContact: '+20 100 000 9999',
@@ -28,7 +26,6 @@ void main() {
     final Map<String, dynamic> jsonMap = {
       'id': 1,
       'hotelName': 'The St. Regis Cairo',
-      'hotelAddressEn': 'Corniche El Nile, Cairo, Egypt',
       'roomNumber': 'Assigned upon arrival',
       'roomCategory': 'Deluxe Nile View',
       'wifiInstructions': 'Network: StRegis_Guest | Pass: OrangeCairo2026',

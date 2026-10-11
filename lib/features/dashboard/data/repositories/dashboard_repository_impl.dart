@@ -87,8 +87,6 @@ class DashboardRepositoryImpl implements DashboardRepository {
       }
       return const HotelModel(
         hotelName: '',
-        hotelAddressEn: '',
-        hotelAddressAr: '',
         hotelPhone: '',
         hotelReceptionContact: '',
         emergencyContact: '',

@@ -65,14 +65,6 @@ class HotelBriefCard extends StatelessWidget {
     if (destinationCity != null && destinationCity!.trim().isNotEmpty) {
       return destinationCity!.trim();
     }
-    final addr = isArabic ? hotel.hotelAddressAr : hotel.hotelAddressEn;
-    if (addr.isNotEmpty) {
-      final parts = addr.split(',');
-      if (parts.length >= 2) {
-        return parts[parts.length - 2].trim();
-      }
-      return parts.last.trim();
-    }
     return isArabic ? 'مقر الإقامة' : 'Stay';
   }
 
