@@ -94,10 +94,14 @@ class _LoginScreenState extends State<LoginScreen> {
           final canUseBiometrics = state is Unauthenticated && state.canUseBiometrics;
 
           return SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
-                child: ConstrainedBox(
+            child: GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              behavior: HitTestBehavior.translucent,
+              child: Center(
+                child: SingleChildScrollView(
+                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                  padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+                  child: ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: 420.w),
                   child: Container(
                     padding: EdgeInsets.all(24.w),
@@ -315,6 +319,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
+              ),
               ),
             ),
           );

@@ -22,7 +22,6 @@ class NextActivityCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final activityTitle = isArabic ? summary.nextActivityAr : summary.nextActivity;
     final gatheringPoint = isArabic ? summary.gatheringPointAr : summary.gatheringPoint;
-    final dressCode = isArabic ? summary.dressCodeAr : summary.dressCode;
 
     return Container(
       padding: AppSpacing.cardPaddingCompact,
@@ -102,25 +101,6 @@ class NextActivityCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                if (dressCode.isNotEmpty) ...[
-                  SizedBox(height: 6.h),
-                  Row(
-                    children: [
-                      Icon(Icons.checkroom_outlined, size: 15.sp, color: OrangeColors.secondaryText),
-                      SizedBox(width: 6.w),
-                      Expanded(
-                        child: Text(
-                          '${isArabic ? "الزي المطلوب:" : "Dress Code:"} $dressCode',
-                          style: AppTypography.font(
-                            fontSize: 11.5.sp,
-                            fontWeight: FontWeight.w500,
-                            color: OrangeColors.secondaryText,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
               ],
             ),
           ),

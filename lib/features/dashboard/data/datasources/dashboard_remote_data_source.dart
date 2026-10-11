@@ -8,6 +8,7 @@ import '../models/hotel_model.dart';
 import '../models/itinerary_item_model.dart';
 import '../models/itinerary_summary_model.dart';
 import '../models/trip_settings_model.dart';
+import '../models/bus_model.dart';
 
 abstract class DashboardRemoteDataSource {
   Future<TripSettingsModel> getActiveTrip();
@@ -18,6 +19,7 @@ abstract class DashboardRemoteDataSource {
   Future<List<AnnouncementModel>> getAnnouncements();
   Future<bool> acknowledgeAnnouncement(int id);
   Future<Map<String, dynamic>?> getProfile();
+  Future<List<BusModel>> getBuses();
 }
 
 class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
@@ -32,9 +34,17 @@ class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
       if (response.statusCode == 200 && response.data != null) {
         return TripSettingsModel.fromJson(response.data as Map<String, dynamic>);
       }
-      return TripSettingsModel.defaultSettings;
-    } catch (_) {
-      return TripSettingsModel.defaultSettings;
+      throw ServerException(
+        message: 'Failed to retrieve active trip settings.',
+        statusCode: response.statusCode,
+      );
+    } on DioException catch (e) {
+      throw ServerException(
+        message: e.response?.data is Map && e.response?.data['message'] != null
+            ? e.response!.data['message']
+            : 'Unable to connect to trip settings service.',
+        statusCode: e.response?.statusCode,
+      );
     }
   }
 
@@ -156,6 +166,21 @@ class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
       return null;
     } catch (_) {
       return null;
+    }
+  }
+
+  @override
+  Future<List<BusModel>> getBuses() async {
+    try {
+      final response = await apiClient.dio.get(ApiConstants.buses);
+      if (response.statusCode == 200 && response.data is List) {
+        return (response.data as List)
+            .map((item) => BusModel.fromJson(item as Map<String, dynamic>))
+            .toList();
+      }
+      return [];
+    } catch (_) {
+      return [];
     }
   }
 }

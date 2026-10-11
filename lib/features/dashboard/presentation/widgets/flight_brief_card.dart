@@ -47,16 +47,25 @@ class FlightBriefCard extends StatelessWidget {
 
   String _extractTime(String dtStr, String fallback) {
     if (dtStr.isEmpty) return fallback;
+    String raw = fallback;
     try {
       final dt = DateTime.parse(dtStr.replaceAll(' ', 'T'));
-      return DateFormat('hh:mm a').format(dt);
+      raw = DateFormat('hh:mm a', 'en_US').format(dt);
     } catch (_) {
       if (dtStr.contains('·') || dtStr.contains('•')) {
-        return dtStr.split(RegExp(r'[·•]')).last.trim();
+        raw = dtStr.split(RegExp(r'[·•]')).last.trim();
+      } else if (dtStr.contains(' ')) {
+        raw = dtStr.split(' ').last.trim();
+      } else {
+        raw = dtStr;
       }
-      if (dtStr.contains(' ')) return dtStr.split(' ').last.trim();
-      return dtStr;
     }
+    const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    const englishDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    for (int i = 0; i < 10; i++) {
+      raw = raw.replaceAll(arabicDigits[i], englishDigits[i]);
+    }
+    return raw.replaceAll('ص', 'AM').replaceAll('م', 'PM');
   }
 
   Map<String, String> _parseRoute(String route) {

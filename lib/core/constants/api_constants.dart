@@ -26,6 +26,7 @@ class ApiConstants {
   static const String activeTrip = '/Trip/active';
   static const String flight = '/Travel/flight';
   static const String hotel = '/Travel/hotel';
+  static const String buses = '/Travel/buses';
 
   // Itinerary & Timeline
   static const String itinerary = '/Itinerary';

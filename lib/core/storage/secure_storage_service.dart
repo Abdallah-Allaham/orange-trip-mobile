@@ -112,6 +112,23 @@ class SecureStorageService {
     return await _storage.read(key: _keyCustomApiUrl);
   }
 
+  // Generic Offline Data Caching
+  Future<void> saveCachedJson(String key, dynamic data) async {
+    try {
+      await _storage.write(key: 'orange_cache_$key', value: jsonEncode(data));
+    } catch (_) {}
+  }
+
+  Future<dynamic> getCachedJson(String key) async {
+    try {
+      final str = await _storage.read(key: 'orange_cache_$key');
+      if (str == null) return null;
+      return jsonDecode(str);
+    } catch (_) {
+      return null;
+    }
+  }
+
   // Clear Session
   Future<void> clearSession() async {
     await deleteToken();
