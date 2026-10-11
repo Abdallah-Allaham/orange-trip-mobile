@@ -6,6 +6,9 @@ import '../../../../core/constants/colors.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/localization/app_strings.dart';
 import '../../../../core/theme/app_design_system.dart';
+import '../../../../core/widgets/app_brand_logo.dart';
+import '../../../../core/utils/name_formatter.dart';
+import '../../../auth/presentation/cubit/auth_cubit.dart';
 import '../../../auth/domain/entities/user_entity.dart';
 import '../../../home/presentation/screens/home_tab_screen.dart';
 import '../../../itinerary/presentation/screens/itinerary_screen.dart';
@@ -61,55 +64,41 @@ class _DashboardShellViewState extends State<_DashboardShellView> {
           backgroundColor: OrangeColors.white,
           elevation: 0,
           scrolledUnderElevation: 0,
-          leading: Padding(
-            padding: EdgeInsetsDirectional.only(start: 16.w),
-            child: Center(
-              child: Container(
-                width: 32.w,
-                height: 32.w,
-                decoration: BoxDecoration(
-                  color: OrangeColors.primaryOrange,
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
-                child: Center(
-                  child: Text(
-                    '🍊',
-                    style: TextStyle(fontSize: 18.sp),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          title: Text(
-            isArabic ? 'وفد أورنج الأردن' : 'Orange Jordan Delegation',
-            style: AppTypography.font(
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w700,
-              color: OrangeColors.black,
-            ),
-          ),
-          centerTitle: false,
-          actions: [
-            Padding(
-              padding: EdgeInsetsDirectional.only(end: 16.w),
-              child: Center(
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-                  decoration: BoxDecoration(
-                    color: OrangeColors.warmCream,
-                    borderRadius: BorderRadius.circular(12.r),
-                    border: Border.all(color: OrangeColors.lightBorder),
-                  ),
-                  child: Text(
-                    isArabic ? 'القاهرة 2026' : 'Cairo 2026',
+          title: Row(
+            children: [
+              AppBrandLogo(size: 30.w),
+              SizedBox(width: 12.w),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'O-Trip',
                     style: AppTypography.font(
-                      fontSize: 11.sp,
+                      fontSize: 15.sp,
                       fontWeight: FontWeight.w700,
-                      color: OrangeColors.primaryOrange,
+                      color: OrangeColors.black,
+                      height: 1.2,
                     ),
                   ),
-                ),
+                  Text(
+                    NameFormatter.formatWithTitle(widget.user.fullName, isArabic: isArabic),
+                    style: AppTypography.font(
+                      fontSize: 12.sp,
+                      color: OrangeColors.secondaryText,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
+            ],
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.logout, color: OrangeColors.black, size: 20.sp),
+              tooltip: strings.logout,
+              onPressed: () {
+                context.read<AuthCubit>().logout();
+              },
             ),
           ],
         ),

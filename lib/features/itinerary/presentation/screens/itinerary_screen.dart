@@ -59,8 +59,8 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
         final dayFilters = <Map<String, String>>[
           {
             'key': 'all',
-            'label': isAr ? 'كافة الأيام' : 'All Days',
-            'sub': '${allItems.length} ${isAr ? "فعاليات" : "events"}',
+            'label': 'all_days'.tr(),
+            'sub': '${allItems.length} ${'events'.tr()}',
           },
           ...distinctDates.asMap().entries.map((entry) {
             final index = entry.key + 1;
@@ -72,7 +72,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
             } catch (_) {}
             return {
               'key': dateStr,
-              'label': isAr ? 'اليوم $index' : 'Day $index',
+              'label': '${'day'.tr()} $index',
               'sub': sub,
             };
           }),
@@ -83,7 +83,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
           children: [
             Text(
-              isAr ? 'برنامج الرحلة والفعاليات الرسمية' : 'Official Trip Agenda & Timeline',
+              'official_agenda_timeline'.tr(),
               style: AppTypography.font(fontSize: 18.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
             ),
             SizedBox(height: 14.h),
@@ -152,7 +152,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                       Icon(Icons.event_busy, size: 40.sp, color: OrangeColors.secondaryText),
                       SizedBox(height: 12.h),
                       Text(
-                        isAr ? 'لا توجد أنشطة مجدولة لهذا اليوم' : 'No scheduled activities for this day',
+                        'no_events_today'.tr(),
                         style: AppTypography.font(color: OrangeColors.secondaryText, fontSize: 13.sp),
                       ),
                     ],

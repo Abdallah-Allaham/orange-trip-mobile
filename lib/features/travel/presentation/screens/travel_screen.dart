@@ -62,7 +62,7 @@ class _TravelScreenState extends State<TravelScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                isAr ? 'ترتيبات السفر والتنقلات والإقامة' : 'Executive Travel & Ground Logistics',
+                'travel_and_logistics'.tr(),
                 style: AppTypography.font(fontSize: 18.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
               ),
               SizedBox(height: 14.h),
@@ -79,15 +79,15 @@ class _TravelScreenState extends State<TravelScreen> {
                   children: [
                     _buildSubTabButton(
                       index: 0,
-                      label: isAr ? 'تذاكر الطيران' : 'Flight Tickets',
+                      label: 'flight_tickets'.tr(),
                     ),
                     _buildSubTabButton(
                       index: 1,
-                      label: isAr ? 'حافلات النقل' : 'VIP Buses',
+                      label: 'vip_buses'.tr(),
                     ),
                     _buildSubTabButton(
                       index: 2,
-                      label: isAr ? 'الفندق والواي فاي' : 'Hotel & Wi-Fi',
+                      label: 'hotel_wifi'.tr(),
                     ),
                   ],
                 ),

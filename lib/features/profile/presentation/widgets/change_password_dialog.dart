@@ -1,10 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/theme/app_design_system.dart';
 
-void showChangePasswordDialog(BuildContext context, bool isArabic) {
-  final isAr = isArabic;
+void showChangePasswordDialog(BuildContext context, [bool? isArabic]) {
   final currentPwController = TextEditingController();
   final newPwController = TextEditingController();
   final confirmPwController = TextEditingController();
@@ -14,7 +14,7 @@ void showChangePasswordDialog(BuildContext context, bool isArabic) {
     builder: (ctx) => AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: AppRadius.dialogRadius),
       title: Text(
-        isAr ? 'تغيير كلمة المرور' : 'Change Password',
+        'change_password'.tr(),
         style: AppTypography.font(fontSize: 16.sp, fontWeight: FontWeight.w700),
       ),
       content: SingleChildScrollView(
@@ -26,7 +26,7 @@ void showChangePasswordDialog(BuildContext context, bool isArabic) {
               controller: currentPwController,
               obscureText: true,
               decoration: InputDecoration(
-                labelText: isAr ? 'كلمة المرور الحالية' : 'Current Password',
+                labelText: 'current_password'.tr(),
                 labelStyle: AppTypography.font(fontSize: 12.sp),
               ),
             ),
@@ -35,7 +35,7 @@ void showChangePasswordDialog(BuildContext context, bool isArabic) {
               controller: newPwController,
               obscureText: true,
               decoration: InputDecoration(
-                labelText: isAr ? 'كلمة المرور الجديدة' : 'New Password',
+                labelText: 'new_password'.tr(),
                 labelStyle: AppTypography.font(fontSize: 12.sp),
               ),
             ),
@@ -44,7 +44,7 @@ void showChangePasswordDialog(BuildContext context, bool isArabic) {
               controller: confirmPwController,
               obscureText: true,
               decoration: InputDecoration(
-                labelText: isAr ? 'تأكيد كلمة المرور' : 'Confirm Password',
+                labelText: 'confirm_password'.tr(),
                 labelStyle: AppTypography.font(fontSize: 12.sp),
               ),
             ),
@@ -55,7 +55,7 @@ void showChangePasswordDialog(BuildContext context, bool isArabic) {
         TextButton(
           onPressed: () => Navigator.pop(ctx),
           child: Text(
-            isAr ? 'إلغاء' : 'Cancel',
+            'cancel'.tr(),
             style: AppTypography.font(color: OrangeColors.secondaryText, fontWeight: FontWeight.w600),
           ),
         ),
@@ -69,7 +69,7 @@ void showChangePasswordDialog(BuildContext context, bool isArabic) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  isAr ? 'تم تحديث كلمة المرور بنجاح' : 'Password updated successfully',
+                  'password_updated_success'.tr(),
                   style: AppTypography.font(fontWeight: FontWeight.w600, color: OrangeColors.white),
                 ),
                 backgroundColor: OrangeColors.success,
@@ -79,7 +79,7 @@ void showChangePasswordDialog(BuildContext context, bool isArabic) {
             );
           },
           child: Text(
-            isAr ? 'تحديث' : 'Update',
+            'update'.tr(),
             style: AppTypography.font(color: OrangeColors.white, fontWeight: FontWeight.w700),
           ),
         ),

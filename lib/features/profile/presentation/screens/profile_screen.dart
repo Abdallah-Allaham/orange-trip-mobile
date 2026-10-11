@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/di/injection_container.dart';
-import '../../../../core/localization/app_strings.dart';
 import '../../../../core/storage/secure_storage_service.dart';
 import '../../../../core/theme/app_design_system.dart';
 import '../../../../core/utils/name_formatter.dart';
@@ -24,7 +23,6 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isAr = context.locale.languageCode == 'ar';
-    final strings = AppStrings(context.locale.languageCode);
 
     return BlocBuilder<DashboardCubit, DashboardState>(
       builder: (context, state) {
@@ -96,7 +94,7 @@ class ProfileScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      isAr ? 'لغة التطبيق' : 'Application Language',
+                      'app_language'.tr(),
                       style: AppTypography.font(fontSize: 13.sp, fontWeight: FontWeight.w700, color: OrangeColors.darkSecondaryText),
                     ),
                     SizedBox(height: 12.h),
@@ -172,11 +170,11 @@ class ProfileScreen extends StatelessWidget {
                 child: SwitchListTile(
                   value: isBiometricsEnabled,
                   title: Text(
-                    isAr ? 'تسجيل الدخول بالبصمة أو Face ID' : 'Biometric Quick Unlock',
+                    'biometric_unlock_title'.tr(),
                     style: AppTypography.font(fontSize: 13.sp, fontWeight: FontWeight.w700),
                   ),
                   subtitle: Text(
-                    isAr ? 'الدخول السريع والآمن دون الحاجة لكتابة كلمة المرور' : 'Unlock instantly using fingerprint or Face ID',
+                    'biometric_unlock_subtitle'.tr(),
                     style: AppTypography.font(fontSize: 11.sp, color: OrangeColors.secondaryText),
                   ),
                   secondary: Container(
@@ -192,9 +190,7 @@ class ProfileScreen extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                          enabled
-                              ? (isAr ? 'تم تفعيل البصمة لتسجيل الدخول السريع' : 'Biometrics enabled')
-                              : (isAr ? 'تم إلغاء تفعيل البصمة' : 'Biometrics disabled'),
+                          enabled ? 'biometrics_enabled'.tr() : 'biometrics_disabled'.tr(),
                           style: AppTypography.font(fontWeight: FontWeight.w600, color: OrangeColors.white),
                         ),
                         backgroundColor: OrangeColors.black,
@@ -216,13 +212,13 @@ class ProfileScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      isAr ? 'كلمة المرور والأمان' : 'Password & Security',
+                      'password_security'.tr(),
                       style: AppTypography.font(fontSize: 13.sp, fontWeight: FontWeight.w700, color: OrangeColors.darkSecondaryText),
                     ),
                     TextButton(
-                      onPressed: () => showChangePasswordDialog(context, isAr),
+                      onPressed: () => showChangePasswordDialog(context),
                       child: Text(
-                        isAr ? 'تغيير كلمة المرور' : 'Change Password',
+                        'change_password'.tr(),
                         style: AppTypography.font(fontSize: 12.5.sp, fontWeight: FontWeight.w700, color: OrangeColors.primaryOrange),
                       ),
                     ),
@@ -254,11 +250,11 @@ class ProfileScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                isAr ? 'طوارئ السلامة والصحة 24/7' : '24/7 Medical & Safety Emergency',
+                                'medical_emergency_title'.tr(),
                                 style: AppTypography.font(fontSize: 13.5.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
                               ),
                               Text(
-                                isAr ? 'الإسعاف والرعاية الطبية الفورية' : 'Immediate medical & safety response',
+                                'medical_emergency_sub'.tr(),
                                 style: AppTypography.font(fontSize: 11.sp, color: OrangeColors.secondaryText),
                               ),
                             ],
@@ -271,7 +267,7 @@ class ProfileScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          isAr ? 'خط الطوارئ المباشر' : 'Emergency Hotline',
+                          'emergency_hotline'.tr(),
                           style: AppTypography.font(color: OrangeColors.secondaryText, fontSize: 12.sp, fontWeight: FontWeight.w500),
                         ),
                         InkWell(
@@ -328,11 +324,11 @@ class ProfileScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                isAr ? 'مكتب العمليات وإدارة الرحلة 24/7' : '24/7 Trip Operations & Logistics',
+                                'operations_desk_title'.tr(),
                                 style: AppTypography.font(fontSize: 13.5.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
                               ),
                               Text(
-                                isAr ? 'منسق عام وفد أورنج والخدمات اللوجستية' : 'Delegation lead & travel logistics',
+                                'operations_desk_sub'.tr(),
                                 style: AppTypography.font(fontSize: 11.sp, color: OrangeColors.secondaryText),
                               ),
                             ],
@@ -345,7 +341,7 @@ class ProfileScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          isAr ? 'ضابط العمليات' : 'Operations Officer',
+                          'operations_officer'.tr(),
                           style: AppTypography.font(color: OrangeColors.secondaryText, fontSize: 12.sp, fontWeight: FontWeight.w500),
                         ),
                         InkWell(
@@ -379,7 +375,7 @@ class ProfileScreen extends StatelessWidget {
 
               // 6. Sign Out Button
               OrangeButton(
-                text: strings.logout,
+                text: 'logout_button'.tr(),
                 isOutlined: true,
                 icon: Icons.logout,
                 onPressed: () {

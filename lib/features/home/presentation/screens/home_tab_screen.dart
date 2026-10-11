@@ -80,7 +80,7 @@ class HomeTabScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 14.h),
                 Text(
-                  isAr ? 'جاري تحميل لوحة القيادة اللوجستية...' : 'Loading Executive Dashboard...',
+                  'loading_dashboard'.tr(),
                   style: AppTypography.font(
                     fontSize: 13.sp,
                     color: OrangeColors.darkSecondaryText,
@@ -102,7 +102,7 @@ class HomeTabScreen extends StatelessWidget {
                   Icon(Icons.cloud_off, size: 48.sp, color: OrangeColors.primaryOrange),
                   SizedBox(height: 14.h),
                   Text(
-                    isAr ? 'تعذر جلب بيانات السفر والجدول الزمني' : 'Failed to load trip logistics',
+                    'failed_load_logistics'.tr(),
                     style: AppTypography.font(fontSize: 15.sp, fontWeight: FontWeight.w700),
                   ),
                   SizedBox(height: 6.h),
@@ -113,7 +113,7 @@ class HomeTabScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 20.h),
                   OrangeButton(
-                    text: isAr ? 'إعادة المحاولة' : 'Retry',
+                    text: 'retry'.tr(),
                     height: 48.h,
                     onPressed: () => context.read<DashboardCubit>().loadDashboard(),
                   ),
@@ -164,7 +164,7 @@ class HomeTabScreen extends StatelessWidget {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                isAr ? 'تم تأكيد الاطلاع على التنبيه الإداري' : 'Announcement acknowledged successfully',
+                                'announcement_ack_success'.tr(),
                                 style: AppTypography.font(fontWeight: FontWeight.w600, color: OrangeColors.white),
                               ),
                               backgroundColor: OrangeColors.success,

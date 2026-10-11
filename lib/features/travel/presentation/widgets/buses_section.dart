@@ -1,10 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/theme/app_design_system.dart';
 import '../../../../core/utils/phone_launcher.dart';
-import '../../../dashboard/domain/entities/bus_entity.dart';
 import '../../../../core/utils/time_formatter.dart';
+import '../../../dashboard/domain/entities/bus_entity.dart';
 
 class BusesSection extends StatelessWidget {
   final List<BusEntity> buses;
@@ -31,7 +32,7 @@ class BusesSection extends StatelessWidget {
               Icon(Icons.directions_bus_outlined, size: 40.sp, color: OrangeColors.secondaryText),
               SizedBox(height: 12.h),
               Text(
-                isAr ? 'لا توجد حافلات مسجلة حالياً' : 'No buses currently registered',
+                'no_buses_registered'.tr(),
                 style: AppTypography.font(color: OrangeColors.secondaryText, fontSize: 13.sp),
               ),
             ],
@@ -46,6 +47,9 @@ class BusesSection extends StatelessWidget {
         final isMyBus = assignedBus.isNotEmpty && 
             (assignedBus.toLowerCase() == bus.busNumber.toLowerCase() || 
              assignedBus.toLowerCase() == bus.busNameEn.toLowerCase());
+
+        final busName = (isAr && bus.busNameAr.isNotEmpty) ? bus.busNameAr : bus.busNameEn;
+        final gatheringPoint = (isAr && bus.gatheringPointAr.isNotEmpty) ? bus.gatheringPointAr : bus.gatheringPointEn;
 
         return Container(
           margin: EdgeInsets.only(bottom: 14.h),
@@ -71,7 +75,7 @@ class BusesSection extends StatelessWidget {
                         ),
                         SizedBox(width: 8.w),
                         Text(
-                          isAr ? bus.busNameAr : bus.busNameEn,
+                          busName,
                           style: AppTypography.font(fontSize: 14.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
                         ),
                         if (isMyBus) ...[
@@ -83,7 +87,7 @@ class BusesSection extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10.r),
                             ),
                             child: Text(
-                              isAr ? 'حافلتي' : 'My Bus',
+                              'my_bus'.tr(),
                               style: AppTypography.font(fontSize: 10.sp, color: OrangeColors.white, fontWeight: FontWeight.w700),
                             ),
                           ),
@@ -105,12 +109,12 @@ class BusesSection extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          isAr ? 'نقطة التجمع: ' : 'Gathering Point: ',
+                          '${'gathering_point'.tr()}: ',
                           style: AppTypography.font(fontSize: 12.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
                         ),
                         Expanded(
                           child: Text(
-                            isAr ? bus.gatheringPointAr : bus.gatheringPointEn,
+                            gatheringPoint,
                             style: AppTypography.font(fontSize: 12.5.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
                           ),
                         ),
@@ -120,7 +124,7 @@ class BusesSection extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          isAr ? 'التجمع: ' : 'Gathering: ',
+                          '${'gathering_time'.tr()}: ',
                           style: AppTypography.font(fontSize: 12.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
                         ),
                         Text(
@@ -129,7 +133,7 @@ class BusesSection extends StatelessWidget {
                         ),
                         SizedBox(width: 16.w),
                         Text(
-                          isAr ? 'الانطلاق: ' : 'Departure: ',
+                          '${'departure_time'.tr()}: ',
                           style: AppTypography.font(fontSize: 12.sp, color: OrangeColors.secondaryText, fontWeight: FontWeight.w500),
                         ),
                         Text(
@@ -147,7 +151,7 @@ class BusesSection extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '${isAr ? "مشرف الحافلة:" : "Coordinator:"} ${bus.coordinatorName}',
+                                '${'coordinator'.tr()}: ${bus.coordinatorName}',
                                 style: AppTypography.font(fontSize: 11.5.sp, fontWeight: FontWeight.w700),
                               ),
                               SizedBox(height: 4.h),
@@ -174,7 +178,7 @@ class BusesSection extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
-                                '${isAr ? "السائق:" : "Driver:"} ${bus.driverName}',
+                                '${'driver'.tr()}: ${bus.driverName}',
                                 style: AppTypography.font(fontSize: 11.5.sp, color: OrangeColors.darkSecondaryText, fontWeight: FontWeight.w500),
                               ),
                               SizedBox(height: 4.h),

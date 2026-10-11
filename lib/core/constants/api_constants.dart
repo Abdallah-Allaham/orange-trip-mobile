@@ -37,7 +37,7 @@ class ApiConstants {
   static String acknowledgeAnnouncement(int id) => '/Communication/announcements/$id/acknowledge';
   static const String help = '/Communication/help';
 
-  // Timeouts
-  static const Duration connectTimeout = Duration(seconds: 15);
-  static const Duration receiveTimeout = Duration(seconds: 15);
+  // Timeouts (Render cloud cold start takes 30-40s when waking from idle)
+  static const Duration connectTimeout = Duration(seconds: 45);
+  static const Duration receiveTimeout = Duration(seconds: 45);
 }

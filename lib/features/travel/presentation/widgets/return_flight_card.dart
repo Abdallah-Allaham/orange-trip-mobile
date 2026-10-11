@@ -112,7 +112,7 @@ class ReturnFlightCard extends StatelessWidget {
       }
     }
 
-    String duration = isAr ? 'مباشر' : 'Direct';
+    String duration = 'direct'.tr();
     if (depRaw.isNotEmpty && arrRaw.isNotEmpty) {
       try {
         final dep = DateTime.parse(depRaw.replaceAll(' ', 'T'));
@@ -165,7 +165,7 @@ class ReturnFlightCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10.r),
                     ),
                     child: Text(
-                      isAr ? 'رحلة العودة' : 'RETURN',
+                      'return_flight'.tr(),
                       style: AppTypography.font(
                         fontSize: 10.sp,
                         fontWeight: FontWeight.w700,

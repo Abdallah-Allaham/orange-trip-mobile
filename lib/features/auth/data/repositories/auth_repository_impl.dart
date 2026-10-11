@@ -15,63 +15,14 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<UserEntity> login(String emailOrEmployeeId, String password) async {
-    try {
-      final user = await remoteDataSource.login(emailOrEmployeeId, password);
-      await localDataSource.cacheUser(user);
-      return user;
-    } catch (e) {
-      // Offline / Demo fallback for pre-seeded test directors
-      final cleanEmail = emailOrEmployeeId.trim().toLowerCase();
-      if ((cleanEmail.contains('rana') || cleanEmail.contains('dababne')) &&
-          (password == 'Orange2026!' || password == 'Orange2026')) {
-        const fallbackRana = UserModel(
-          userId: 3,
-          fullName: 'Eng. Rana Dababneh',
-          email: 'rana.dababneh@orange.jo',
-          employeeId: 'DIR-006',
-          role: 'Executive Director',
-          assignedGroup: 'Group A',
-          assignedBus: 'Bus 1',
-          completionScore: 100,
-          token: 'mock-enterprise-jwt-token-rana-2026',
-        );
-        await localDataSource.cacheUser(fallbackRana);
-        return fallbackRana;
-      }
-      if (cleanEmail == 'ahmad.director@orange.jo' && password == 'Orange2026!') {
-        const fallbackUser = UserModel(
-          userId: 1,
-          fullName: 'Ahmad Al-Mansoor',
-          email: 'ahmad.director@orange.jo',
-          employeeId: 'DIR-7701',
-          role: 'Director of Digital Transformation',
-          assignedGroup: 'Group Alpha (VIP)',
-          assignedBus: 'Bus 1 (Executive VIP)',
-          completionScore: 65,
-          token: 'mock-enterprise-jwt-token-orange-2026',
-        );
-        await localDataSource.cacheUser(fallbackUser);
-        return fallbackUser;
-      }
-      rethrow;
-    }
+    final user = await remoteDataSource.login(emailOrEmployeeId, password);
+    await localDataSource.cacheUser(user);
+    return user;
   }
 
   @override
   Future<EligibilityEntity> checkEligibility(String email) async {
-    try {
-      return await remoteDataSource.checkEligibility(email);
-    } catch (e) {
-      if (email.trim().toLowerCase().endsWith('@orange.jo')) {
-        return const EligibilityModel(
-          eligible: true,
-          fullName: 'Ahmad Al-Momani',
-          email: 'ahmad.director@orange.jo',
-          hasPassword: true,
-        );
-      }
-      rethrow;
-    }
+    return await remoteDataSource.checkEligibility(email);
   }
 
   @override
