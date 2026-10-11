@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_auth/local_auth.dart';
+import '../../../../core/errors/exceptions.dart';
+import '../../../../core/errors/failures.dart';
 import '../../../../core/network/session_event_notifier.dart';
 import '../../data/models/user_model.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -74,6 +76,15 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  String _cleanErrorMessage(dynamic e) {
+    if (e is ServerException) return e.message;
+    if (e is Failure) return e.message;
+    return e
+        .toString()
+        .replaceAll(RegExp(r'^(ServerException|Exception|ServerFailure|Failure):\s*'), '')
+        .replaceAll(RegExp(r'\s*\(code:\s*\d+\)$'), '');
+  }
+
   Future<void> login(String emailOrEmployeeId, String password, {bool enableBiometrics = false}) async {
     emit(AuthLoading());
     try {
@@ -84,7 +95,7 @@ class AuthCubit extends Cubit<AuthState> {
       await authRepository.cacheUser(user);
       emit(Authenticated(user));
     } catch (e) {
-      emit(AuthError(e.toString().replaceAll('Exception: ', '').replaceAll('ServerException: ', '')));
+      emit(AuthError(_cleanErrorMessage(e)));
     }
   }
 
@@ -94,7 +105,7 @@ class AuthCubit extends Cubit<AuthState> {
       final result = await checkEligibilityUseCase(email);
       emit(EligibilityCheckedState(result));
     } catch (e) {
-      emit(AuthError(e.toString().replaceAll('Exception: ', '').replaceAll('ServerException: ', '')));
+      emit(AuthError(_cleanErrorMessage(e)));
     }
   }
 
@@ -104,7 +115,7 @@ class AuthCubit extends Cubit<AuthState> {
       final user = await setPasswordUseCase(email, password, token);
       emit(PasswordSetSuccessState(user, 'تم تعيين كلمة المرور بنجاح!'));
     } catch (e) {
-      emit(AuthError(e.toString().replaceAll('Exception: ', '').replaceAll('ServerException: ', '')));
+      emit(AuthError(_cleanErrorMessage(e)));
     }
   }
 
