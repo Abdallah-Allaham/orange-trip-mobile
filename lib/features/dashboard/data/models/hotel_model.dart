@@ -18,12 +18,14 @@ class HotelModel extends HotelEntity {
     super.wifiPassword = 'OrangeCairo2026',
     super.wifiInstructions = 'Network: StRegis_Guest | Pass: OrangeCairo2026',
     super.operationalNotes = 'Keycards available at Orange Welcome Desk in lobby.',
+    super.mapUrl = 'https://maps.google.com/?q=The+St.+Regis+Cairo',
   });
 
   factory HotelModel.fromJson(Map<String, dynamic> json) {
     final wifiNet = json['wifiNetwork'] ?? json['WifiNetwork'] ?? 'StRegis_Guest';
     final wifiPass = json['wifiPassword'] ?? json['WifiPassword'] ?? 'OrangeCairo2026';
     final rawInstructions = json['wifiInstructions'] ?? json['WifiInstructions'];
+    final mapUrl = json['mapUrl'] ?? json['MapUrl'] ?? '';
 
     return HotelModel(
       id: json['id'] ?? json['Id'] ?? 0,
@@ -44,6 +46,7 @@ class HotelModel extends HotelEntity {
           ? rawInstructions.toString()
           : 'Network: $wifiNet | Pass: $wifiPass',
       operationalNotes: json['operationalNotes'] ?? json['OperationalNotes'] ?? 'Keycards available at Orange Welcome Desk in lobby.',
+      mapUrl: mapUrl.toString(),
     );
   }
 
@@ -65,6 +68,7 @@ class HotelModel extends HotelEntity {
       'wifiPassword': wifiPassword,
       'wifiInstructions': wifiInstructions,
       'operationalNotes': operationalNotes,
+      'mapUrl': mapUrl,
     };
   }
 }

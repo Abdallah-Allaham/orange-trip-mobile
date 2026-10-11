@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/theme/app_design_system.dart';
 import '../../domain/entities/hotel_entity.dart';
@@ -89,6 +90,32 @@ class HotelBriefCard extends StatelessWidget {
         duration: const Duration(seconds: 2),
       ),
     );
+  }
+
+  Future<void> _openMap(BuildContext context, String url) async {
+    final clean = url.trim();
+    if (clean.isEmpty) return;
+    try {
+      final uri = Uri.parse(clean);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        await launchUrl(uri);
+      }
+    } catch (_) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              isArabic ? 'تعذر فتح الرابط' : 'Could not open map link',
+              style: AppTypography.font(fontWeight: FontWeight.w600, color: OrangeColors.white),
+            ),
+            backgroundColor: OrangeColors.error,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -320,6 +347,40 @@ class HotelBriefCard extends StatelessWidget {
               ],
             ),
           ),
+
+          // Google Maps Action Button (Conditional: only shown when mapUrl is provided by admin)
+          if (hotel.mapUrl.trim().isNotEmpty) ...[
+            SizedBox(height: 10.h),
+            InkWell(
+              onTap: () => _openMap(context, hotel.mapUrl),
+              borderRadius: BorderRadius.circular(16.r),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
+                decoration: BoxDecoration(
+                  color: OrangeColors.white,
+                  borderRadius: BorderRadius.circular(16.r),
+                  border: Border.all(color: OrangeColors.lightBorder, width: 1.2),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.location_on, size: 16.sp, color: OrangeColors.primaryOrange),
+                    SizedBox(width: 8.w),
+                    Text(
+                      isArabic ? 'فتح موقع الفندق على الخريطة' : 'Open Hotel Location in Maps',
+                      style: AppTypography.font(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w700,
+                        color: OrangeColors.black,
+                      ),
+                    ),
+                    SizedBox(width: 6.w),
+                    Icon(Icons.open_in_new, size: 13.sp, color: OrangeColors.secondaryText),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );

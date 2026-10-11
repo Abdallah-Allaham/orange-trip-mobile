@@ -17,6 +17,7 @@ class HotelEntity extends Equatable {
   final String wifiPassword;
   final String wifiInstructions;
   final String operationalNotes;
+  final String mapUrl;
 
   const HotelEntity({
     this.id = 0,
@@ -35,6 +36,7 @@ class HotelEntity extends Equatable {
     this.wifiPassword = 'OrangeCairo2026',
     this.wifiInstructions = 'Network: StRegis_Guest | Pass: OrangeCairo2026',
     this.operationalNotes = 'Keycards available at Orange Welcome Desk in lobby.',
+    this.mapUrl = 'https://maps.google.com/?q=The+St.+Regis+Cairo',
   });
 
   @override
@@ -55,5 +57,6 @@ class HotelEntity extends Equatable {
         wifiPassword,
         wifiInstructions,
         operationalNotes,
+        mapUrl,
       ];
 }
