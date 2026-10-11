@@ -24,8 +24,11 @@ class HotelBriefCard extends StatelessWidget {
     if (tripSettings != null && tripSettings!.wifiPassword.isNotEmpty) {
       return tripSettings!.wifiPassword;
     }
+    if (hotel.wifiPassword.isNotEmpty) {
+      return hotel.wifiPassword;
+    }
     final instructions = hotel.wifiInstructions.trim();
-    if (instructions.isEmpty) return 'Available in Lobby';
+    if (instructions.isEmpty) return 'OrangeCairo2026';
     if (instructions.contains('Pass:')) {
       final part = instructions.split('Pass:').last.trim();
       return part.split(' ').first;
@@ -35,6 +38,21 @@ class HotelBriefCard extends StatelessWidget {
       return part.split(' ').first;
     }
     return instructions;
+  }
+
+  String _extractWifiNetwork() {
+    if (tripSettings != null && tripSettings!.wifiNetwork.isNotEmpty) {
+      return tripSettings!.wifiNetwork;
+    }
+    if (hotel.wifiNetwork.isNotEmpty) {
+      return hotel.wifiNetwork;
+    }
+    final instructions = hotel.wifiInstructions.trim();
+    if (instructions.contains('Network:')) {
+      final part = instructions.split('Network:').last.split('|').first.trim();
+      if (part.isNotEmpty) return part;
+    }
+    return 'StRegis_Guest';
   }
 
   String _extractCity() {
@@ -57,12 +75,12 @@ class HotelBriefCard extends StatelessWidget {
     return isArabic ? 'مقر الإقامة' : 'Stay';
   }
 
-  void _copyWifi(BuildContext context, String pass) {
-    Clipboard.setData(ClipboardData(text: pass));
+  void _copyWifi(BuildContext context, String val, String label) {
+    Clipboard.setData(ClipboardData(text: val));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          isArabic ? 'تم نسخ كلمة مرور الواي فاي ($pass)' : 'Wi-Fi password copied ($pass)',
+          isArabic ? 'تم نسخ $label ($val)' : '$label copied ($val)',
           style: AppTypography.font(fontWeight: FontWeight.w600, color: OrangeColors.white),
         ),
         backgroundColor: OrangeColors.black,
@@ -75,6 +93,7 @@ class HotelBriefCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final wifiNetwork = _extractWifiNetwork();
     final wifiPass = _extractWifiPassword();
     final cityBadge = _extractCity();
     final displayHotelName = (tripSettings != null && tripSettings!.hotelName.isNotEmpty)
@@ -186,60 +205,117 @@ class HotelBriefCard extends StatelessWidget {
           ),
           SizedBox(height: 12.h),
 
-          // Wi-Fi Password Box (Warm Cream)
+          // Wi-Fi Box (Network & Password)
           Container(
             padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
             decoration: BoxDecoration(
               color: OrangeColors.warmCream,
               borderRadius: BorderRadius.circular(18.r),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Column(
               children: [
-                Expanded(
-                  child: Row(
-                    children: [
-                      Icon(Icons.wifi, size: 16.sp, color: OrangeColors.primaryOrange),
-                      SizedBox(width: 8.w),
-                      Text(
-                        isArabic ? 'الواي فاي: ' : 'Wi-Fi: ',
-                        style: AppTypography.font(fontSize: 12.sp, color: OrangeColors.darkSecondaryText, fontWeight: FontWeight.w600),
-                      ),
-                      Flexible(
-                        child: Text(
-                          wifiPass,
-                          style: AppTypography.font(
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.w800,
-                            color: OrangeColors.primaryOrange,
+                // Wi-Fi Network Name (SSID)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Icon(Icons.wifi, size: 16.sp, color: OrangeColors.primaryOrange),
+                          SizedBox(width: 8.w),
+                          Text(
+                            isArabic ? 'الشبكة: ' : 'Network: ',
+                            style: AppTypography.font(fontSize: 12.sp, color: OrangeColors.darkSecondaryText, fontWeight: FontWeight.w600),
                           ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                InkWell(
-                  onTap: () => _copyWifi(context, wifiPass),
-                  borderRadius: BorderRadius.circular(12.r),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          isArabic ? 'نسخ' : 'Copy',
-                          style: AppTypography.font(
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w700,
-                            color: OrangeColors.primaryOrange,
+                          Flexible(
+                            child: Text(
+                              wifiNetwork,
+                              style: AppTypography.font(
+                                fontSize: 13.sp,
+                                fontWeight: FontWeight.w800,
+                                color: OrangeColors.black,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 4.w),
-                        Icon(Icons.copy, size: 13.sp, color: OrangeColors.primaryOrange),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
+                    InkWell(
+                      onTap: () => _copyWifi(context, wifiNetwork, isArabic ? 'اسم الشبكة' : 'Wi-Fi Network'),
+                      borderRadius: BorderRadius.circular(12.r),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              isArabic ? 'نسخ' : 'Copy',
+                              style: AppTypography.font(
+                                fontSize: 11.sp,
+                                fontWeight: FontWeight.w700,
+                                color: OrangeColors.primaryOrange,
+                              ),
+                            ),
+                            SizedBox(width: 4.w),
+                            Icon(Icons.copy, size: 12.sp, color: OrangeColors.primaryOrange),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Divider(height: 14.h, thickness: 0.8, color: OrangeColors.lightBorder),
+                // Wi-Fi Password
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Icon(Icons.lock_outline, size: 16.sp, color: OrangeColors.primaryOrange),
+                          SizedBox(width: 8.w),
+                          Text(
+                            isArabic ? 'كلمة السر: ' : 'Password: ',
+                            style: AppTypography.font(fontSize: 12.sp, color: OrangeColors.darkSecondaryText, fontWeight: FontWeight.w600),
+                          ),
+                          Flexible(
+                            child: Text(
+                              wifiPass,
+                              style: AppTypography.font(
+                                fontSize: 13.sp,
+                                fontWeight: FontWeight.w800,
+                                color: OrangeColors.primaryOrange,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () => _copyWifi(context, wifiPass, isArabic ? 'كلمة المرور' : 'Wi-Fi Password'),
+                      borderRadius: BorderRadius.circular(12.r),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              isArabic ? 'نسخ' : 'Copy',
+                              style: AppTypography.font(
+                                fontSize: 11.sp,
+                                fontWeight: FontWeight.w700,
+                                color: OrangeColors.primaryOrange,
+                              ),
+                            ),
+                            SizedBox(width: 4.w),
+                            Icon(Icons.copy, size: 12.sp, color: OrangeColors.primaryOrange),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

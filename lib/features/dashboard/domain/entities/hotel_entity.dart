@@ -13,6 +13,8 @@ class HotelEntity extends Equatable {
   final String roomNumber;
   final String roomCategory;
   final String confirmationReference;
+  final String wifiNetwork;
+  final String wifiPassword;
   final String wifiInstructions;
   final String operationalNotes;
 
@@ -29,6 +31,8 @@ class HotelEntity extends Equatable {
     this.roomNumber = 'Assigned upon arrival',
     this.roomCategory = 'Deluxe Nile View',
     this.confirmationReference = 'HTL-ORG-7788',
+    this.wifiNetwork = 'StRegis_Guest',
+    this.wifiPassword = 'OrangeCairo2026',
     this.wifiInstructions = 'Network: StRegis_Guest | Pass: OrangeCairo2026',
     this.operationalNotes = 'Keycards available at Orange Welcome Desk in lobby.',
   });
@@ -47,6 +51,8 @@ class HotelEntity extends Equatable {
         roomNumber,
         roomCategory,
         confirmationReference,
+        wifiNetwork,
+        wifiPassword,
         wifiInstructions,
         operationalNotes,
       ];

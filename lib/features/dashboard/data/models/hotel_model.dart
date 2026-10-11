@@ -14,11 +14,17 @@ class HotelModel extends HotelEntity {
     super.roomNumber,
     super.roomCategory,
     super.confirmationReference,
-    super.wifiInstructions,
-    super.operationalNotes,
+    super.wifiNetwork = 'StRegis_Guest',
+    super.wifiPassword = 'OrangeCairo2026',
+    super.wifiInstructions = 'Network: StRegis_Guest | Pass: OrangeCairo2026',
+    super.operationalNotes = 'Keycards available at Orange Welcome Desk in lobby.',
   });
 
   factory HotelModel.fromJson(Map<String, dynamic> json) {
+    final wifiNet = json['wifiNetwork'] ?? json['WifiNetwork'] ?? 'StRegis_Guest';
+    final wifiPass = json['wifiPassword'] ?? json['WifiPassword'] ?? 'OrangeCairo2026';
+    final rawInstructions = json['wifiInstructions'] ?? json['WifiInstructions'];
+
     return HotelModel(
       id: json['id'] ?? json['Id'] ?? 0,
       hotelName: json['hotelName'] ?? json['HotelName'] ?? 'The St. Regis Cairo',
@@ -32,7 +38,11 @@ class HotelModel extends HotelEntity {
       roomNumber: json['roomNumber'] ?? json['RoomNumber'] ?? 'Assigned upon arrival',
       roomCategory: json['roomCategory'] ?? json['RoomCategory'] ?? 'Deluxe Nile View',
       confirmationReference: json['confirmationReference'] ?? json['ConfirmationReference'] ?? 'HTL-ORG-7788',
-      wifiInstructions: json['wifiInstructions'] ?? json['WifiInstructions'] ?? 'Network: StRegis_Guest | Pass: OrangeCairo2026',
+      wifiNetwork: wifiNet.toString(),
+      wifiPassword: wifiPass.toString(),
+      wifiInstructions: rawInstructions != null && rawInstructions.toString().isNotEmpty
+          ? rawInstructions.toString()
+          : 'Network: $wifiNet | Pass: $wifiPass',
       operationalNotes: json['operationalNotes'] ?? json['OperationalNotes'] ?? 'Keycards available at Orange Welcome Desk in lobby.',
     );
   }
@@ -51,6 +61,8 @@ class HotelModel extends HotelEntity {
       'roomNumber': roomNumber,
       'roomCategory': roomCategory,
       'confirmationReference': confirmationReference,
+      'wifiNetwork': wifiNetwork,
+      'wifiPassword': wifiPassword,
       'wifiInstructions': wifiInstructions,
       'operationalNotes': operationalNotes,
     };

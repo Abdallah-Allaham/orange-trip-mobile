@@ -14,6 +14,7 @@ class TripSettingsEntity extends Equatable {
   final String endDate;
   final String hotelName;
   final String hotelPhone;
+  final String wifiNetwork;
   final String wifiPassword;
   final String flightCode;
   final String weatherTemp;
@@ -36,6 +37,7 @@ class TripSettingsEntity extends Equatable {
     required this.endDate,
     required this.hotelName,
     required this.hotelPhone,
+    this.wifiNetwork = 'StRegis_Guest',
     required this.wifiPassword,
     required this.flightCode,
     required this.weatherTemp,
@@ -60,6 +62,7 @@ class TripSettingsEntity extends Equatable {
         endDate,
         hotelName,
         hotelPhone,
+        wifiNetwork,
         wifiPassword,
         flightCode,
         weatherTemp,
