@@ -1,17 +1,53 @@
-# orange_trip_mobile
+# Orange Jordan — O-Trip Mobile Application
 
-A new Flutter project.
+تطبيق الموبايل الرسمي لرحلة مدراء أورنج الأردن إلى القاهرة 2026، مبني باستخدام **Flutter** متوافق مع نظامي **Android** و **iOS**.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 📱 مميزات التطبيق (Features)
 
-A few resources to get you started if this is your first Flutter project:
+* **واجهة مستخدم متوافقة مع هوية أورنج (Orange Design System):**
+  * دعم اللغتين العربية (RTL) والإنجليزية (LTR).
+  * عد تنازلي تفاعلي للرحلة (Trip Countdown).
+* **إدارة الرحلة للمشاركين:**
+  * تفاصيل تذاكر الطيران (الذهاب والعودة) ومعلومات الفندق والحافلة المخصصة.
+  * البرنامج اليومي للرحلة (Itinerary) مع تنبيهات الفعاليات القادمة.
+  * بطاقة الصعود الرقمية ودليل أرقام الطوارئ السريعة (SOS).
+* **الأمان والمصادقة:**
+  * تسجيل الدخول المشفر وحفظ الجلسات محلياً بأمان عبر `flutter_secure_storage`.
+  * حماية وتشفير الاتصال مع خادم API.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🛠️ متطلبات التشغيل (Prerequisites)
+
+* **Flutter SDK:** الإصدار 3.24+ أو أحدث
+* **Dart SDK:** الإصدار 3.5+
+* **Android Studio** أو **VS Code** مع إضافات Flutter/Dart
+* **Android SDK:** API 21 كحد أدنى
+
+---
+
+## 🚀 التشغيل السريع (Getting Started)
+
+1. **تثبيت الحزم والمكتبات:**
+   ```bash
+   flutter pub get
+   ```
+
+2. **تشغيل الفحوصات والاختبارات (Tests):**
+   ```bash
+   flutter test
+   ```
+
+3. **تشغيل التطبيق على المحاكي أو جهاز حقيقي:**
+   ```bash
+   flutter run
+   ```
+
+4. **بناء نسخة APK نهائية (Release APK):**
+   ```bash
+   flutter build apk --release
+   ```
+   النسخة الجاهزة ستكون في المسار:
+   `build/app/outputs/flutter-apk/app-release.apk`
