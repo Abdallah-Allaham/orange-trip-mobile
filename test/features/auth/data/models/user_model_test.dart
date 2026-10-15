@@ -8,11 +8,14 @@ void main() {
     fullName: 'Ahmad Al-Mansoor',
     email: 'ahmad.director@orange.jo',
     employeeId: 'EMP-001',
+    phoneNumber: '+962770000000',
     role: 'Participant',
     assignedGroup: 'Group A',
     assignedBus: 'Bus 1',
     completionScore: 80,
     token: 'jwt_mock_token',
+    dataNoticeAccepted: true,
+    mediaConsentGranted: false,
   );
 
   test('UserModel should be a subclass of UserEntity', () {
@@ -25,11 +28,14 @@ void main() {
       'fullName': 'Ahmad Al-Mansoor',
       'email': 'ahmad.director@orange.jo',
       'employeeId': 'EMP-001',
+      'phoneNumber': '+962770000000',
       'role': 'Participant',
       'assignedGroup': 'Group A',
       'assignedBus': 'Bus 1',
       'completionScore': 80,
       'token': 'jwt_mock_token',
+      'dataNoticeAccepted': true,
+      'mediaConsentGranted': false,
     };
 
     final result = UserModel.fromJson(jsonMap);
@@ -43,11 +49,14 @@ void main() {
       'fullName': 'Ahmad Al-Mansoor',
       'email': 'ahmad.director@orange.jo',
       'employeeId': 'EMP-001',
+      'phoneNumber': '+962770000000',
       'role': 'Participant',
       'assignedGroup': 'Group A',
       'assignedBus': 'Bus 1',
       'completionScore': 80,
       'token': 'jwt_mock_token',
+      'dataNoticeAccepted': true,
+      'mediaConsentGranted': false,
     };
     expect(result, expectedMap);
   });

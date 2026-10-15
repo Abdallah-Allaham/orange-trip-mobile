@@ -19,14 +19,16 @@ class ApiConstants {
 
   // Profile Endpoints
   static const String profile = '/Profile';
-  static const String emergencyContact = '/Profile/emergency-contact';
-  static const String health = '/Profile/health';
+  static const String consent = '/Profile/consent';
 
   // Travel & Logistics
   static const String activeTrip = '/Trip/active';
   static const String flight = '/Travel/flight';
   static const String hotel = '/Travel/hotel';
   static const String buses = '/Travel/buses';
+
+  // Emergency & Operations
+  static const String emergencyContacts = '/Admin/phase1/emergency-contacts';
 
   // Itinerary & Timeline
   static const String itinerary = '/Itinerary';
@@ -35,7 +37,6 @@ class ApiConstants {
   // Communication & Alerts
   static const String announcements = '/Communication/announcements';
   static String acknowledgeAnnouncement(int id) => '/Communication/announcements/$id/acknowledge';
-  static const String help = '/Communication/help';
 
   // Timeouts (Render cloud cold start takes 30-40s when waking from idle)
   static const Duration connectTimeout = Duration(seconds: 45);

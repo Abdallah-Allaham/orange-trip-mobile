@@ -1,6 +1,7 @@
 import '../entities/announcement_entity.dart';
 import '../entities/bus_entity.dart';
 import '../entities/dashboard_data_entity.dart';
+import '../entities/emergency_contact_entity.dart';
 import '../entities/flight_entity.dart';
 import '../entities/hotel_entity.dart';
 import '../entities/itinerary_item_entity.dart';
@@ -15,6 +16,8 @@ abstract class DashboardRepository {
   Future<List<ItineraryItemEntity>> getItineraryItems();
   Future<List<AnnouncementEntity>> getAnnouncements();
   Future<List<BusEntity>> getBuses();
+  Future<List<EmergencyContactEntity>> getEmergencyContacts();
+  Future<bool> updateConsent({required bool dataNoticeAccepted, required bool mediaConsentGranted});
   Future<bool> acknowledgeAnnouncement(int id);
   Future<void> setBiometricsEnabled(bool enabled);
   Future<bool> isBiometricsEnabled();

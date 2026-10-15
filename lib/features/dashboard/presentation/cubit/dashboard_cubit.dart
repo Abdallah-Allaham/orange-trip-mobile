@@ -62,6 +62,25 @@ class DashboardCubit extends Cubit<DashboardState> {
     }
   }
 
+  Future<bool> updateConsent({required bool dataNoticeAccepted, required bool mediaConsentGranted}) async {
+    if (state is DashboardLoaded) {
+      final current = state as DashboardLoaded;
+      emit(current.copyWith(
+        data: current.data.copyWith(
+          dataNoticeAccepted: dataNoticeAccepted,
+          mediaConsentGranted: mediaConsentGranted,
+        ),
+      ));
+
+      final success = await repository.updateConsent(
+        dataNoticeAccepted: dataNoticeAccepted,
+        mediaConsentGranted: mediaConsentGranted,
+      );
+      return success;
+    }
+    return false;
+  }
+
   Future<void> refreshDashboard() async {
     try {
       final data = await getDashboardDataUseCase();

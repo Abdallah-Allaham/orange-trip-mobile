@@ -3,17 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/colors.dart';
-import '../../../../core/di/injection_container.dart';
-import '../../../../core/storage/secure_storage_service.dart';
 import '../../../../core/theme/app_design_system.dart';
-import '../../../../core/utils/name_formatter.dart';
-import '../../../../core/utils/phone_launcher.dart';
 import '../../../auth/domain/entities/user_entity.dart';
 import '../../../auth/presentation/cubit/auth_cubit.dart';
 import '../../../auth/presentation/widgets/orange_button.dart';
 import '../../../dashboard/presentation/cubit/dashboard_cubit.dart';
 import '../../../dashboard/presentation/cubit/dashboard_state.dart';
-import '../widgets/change_password_dialog.dart';
+import '../widgets/biometrics_card.dart';
+import '../widgets/emergency_hotlines_card.dart';
+import '../widgets/language_selector_card.dart';
+import '../widgets/participant_identity_card.dart';
+import '../widgets/password_security_card.dart';
+import '../widgets/privacy_consent_card.dart';
+import '../widgets/profile_header_card.dart';
 
 class ProfileScreen extends StatelessWidget {
   final UserEntity user;
@@ -29,6 +31,17 @@ class ProfileScreen extends StatelessWidget {
         final data = state is DashboardLoaded ? state.data : null;
         final fullName = (data?.fullName.isNotEmpty == true) ? data!.fullName : user.fullName;
         final isBiometricsEnabled = data?.isBiometricsEnabled ?? false;
+        final dataNoticeAccepted = data?.dataNoticeAccepted ?? user.dataNoticeAccepted;
+        final mediaConsentGranted = data?.mediaConsentGranted ?? user.mediaConsentGranted;
+        final employeeId = user.employeeId.isNotEmpty ? user.employeeId : 'DIR-001';
+        final phoneNumber = user.phoneNumber.isNotEmpty ? user.phoneNumber : '+962 7 7000 0000';
+        final tripSettings = data?.tripSettings;
+        final medicalPhone = tripSettings?.emergencyMedicalPhone.isNotEmpty == true
+            ? tripSettings!.emergencyMedicalPhone
+            : '+20 100 000 9999';
+        final operationsPhone = tripSettings?.operationsDeskPhone.isNotEmpty == true
+            ? tripSettings!.operationsDeskPhone
+            : '+962 7 7700 0001';
 
         return SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -37,343 +50,94 @@ class ProfileScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // 1. Profile Header Card
-              Container(
-                padding: EdgeInsets.all(22.w),
-                decoration: AppCards.primary(
-                  borderRadius: AppRadius.cardRadius,
-                ),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 28.r,
-                      backgroundColor: OrangeColors.primaryOrange,
-                      child: Text(
-                        NameFormatter.getInitial(fullName),
-                        style: AppTypography.font(
-                          color: OrangeColors.white,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 22.sp,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 16.w),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            NameFormatter.formatWithTitle(fullName, isArabic: isAr),
-                            style: AppTypography.font(
-                              fontSize: 17.sp,
-                              fontWeight: FontWeight.w700,
-                              color: OrangeColors.black,
-                            ),
-                          ),
-                          SizedBox(height: 2.h),
-                          Text(
-                            user.email,
-                            style: AppTypography.font(
-                              fontSize: 12.5.sp,
-                              color: OrangeColors.secondaryText,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+              ProfileHeaderCard(
+                fullName: fullName,
+                email: user.email,
+                isArabic: isAr,
               ),
               SizedBox(height: 16.h),
 
-              // 2. Language Selection Card (English / العربية)
-              Container(
-                padding: EdgeInsets.all(18.w),
-                decoration: AppCards.secondary(borderRadius: BorderRadius.circular(20.r)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'app_language'.tr(),
-                      style: AppTypography.font(fontSize: 13.sp, fontWeight: FontWeight.w700, color: OrangeColors.darkSecondaryText),
-                    ),
-                    SizedBox(height: 12.h),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () async {
-                              if (context.locale.languageCode != 'en') {
-                                await context.setLocale(const Locale('en'));
-                                await sl<SecureStorageService>().setLanguage('en');
-                              }
-                            },
-                            borderRadius: BorderRadius.circular(16.r),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 10.h),
-                              decoration: BoxDecoration(
-                                color: !isAr ? OrangeColors.primaryOrange : OrangeColors.lightGray,
-                                borderRadius: BorderRadius.circular(16.r),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'English',
-                                  style: AppTypography.font(
-                                    fontSize: 12.sp,
-                                    fontWeight: !isAr ? FontWeight.w700 : FontWeight.w500,
-                                    color: !isAr ? OrangeColors.white : OrangeColors.darkSecondaryText,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 12.w),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () async {
-                              if (context.locale.languageCode != 'ar') {
-                                await context.setLocale(const Locale('ar'));
-                                await sl<SecureStorageService>().setLanguage('ar');
-                              }
-                            },
-                            borderRadius: BorderRadius.circular(16.r),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 10.h),
-                              decoration: BoxDecoration(
-                                color: isAr ? OrangeColors.primaryOrange : OrangeColors.lightGray,
-                                borderRadius: BorderRadius.circular(16.r),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'العربية',
-                                  style: AppTypography.font(
-                                    fontSize: 12.sp,
-                                    fontWeight: isAr ? FontWeight.w700 : FontWeight.w500,
-                                    color: isAr ? OrangeColors.white : OrangeColors.darkSecondaryText,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+              // 2. Official Participant Identity Card (Clean DB Schema)
+              ParticipantIdentityCard(
+                employeeId: employeeId,
+                fullName: fullName,
+                email: user.email,
+                phoneNumber: phoneNumber,
+                isArabic: isAr,
               ),
               SizedBox(height: 14.h),
 
-              // 3. Biometrics Authentication Switch Card
-              Container(
-                decoration: AppCards.secondary(borderRadius: BorderRadius.circular(20.r)),
-                child: SwitchListTile(
-                  value: isBiometricsEnabled,
-                  title: Text(
-                    'biometric_unlock_title'.tr(),
-                    style: AppTypography.font(fontSize: 13.sp, fontWeight: FontWeight.w700),
-                  ),
-                  subtitle: Text(
-                    'biometric_unlock_subtitle'.tr(),
-                    style: AppTypography.font(fontSize: 11.sp, color: OrangeColors.secondaryText),
-                  ),
-                  secondary: Container(
-                    padding: EdgeInsets.all(8.w),
-                    decoration: BoxDecoration(
-                      color: OrangeColors.warmCream,
-                      borderRadius: BorderRadius.circular(14.r),
-                    ),
-                    child: Icon(Icons.fingerprint, color: OrangeColors.primaryOrange, size: 22.sp),
-                  ),
-                  onChanged: (enabled) {
-                    context.read<DashboardCubit>().toggleBiometrics(enabled);
+              // 3. Privacy Notice & Media Coverage Consent Card
+              PrivacyConsentCard(
+                dataNoticeAccepted: dataNoticeAccepted,
+                mediaConsentGranted: mediaConsentGranted,
+                isArabic: isAr,
+                onMediaConsentChanged: (newVal) async {
+                  final cubit = context.read<DashboardCubit>();
+                  final success = await cubit.updateConsent(
+                    dataNoticeAccepted: true,
+                    mediaConsentGranted: newVal,
+                  );
+                  if (context.mounted && success) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                          enabled ? 'biometrics_enabled'.tr() : 'biometrics_disabled'.tr(),
-                          style: AppTypography.font(fontWeight: FontWeight.w600, color: OrangeColors.white),
+                          isAr
+                              ? 'تم تحديث خيارات التغطية الإعلامية بنجاح'
+                              : 'Media consent preferences updated',
+                          style: AppTypography.font(
+                            fontWeight: FontWeight.w600,
+                            color: OrangeColors.white,
+                          ),
                         ),
                         backgroundColor: OrangeColors.black,
                         behavior: SnackBarBehavior.floating,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
                         duration: const Duration(seconds: 2),
                       ),
                     );
-                  },
-                ),
+                  }
+                },
               ),
               SizedBox(height: 14.h),
 
-              // 4. Change Password Card
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 12.h),
-                decoration: AppCards.secondary(borderRadius: BorderRadius.circular(20.r)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'password_security'.tr(),
-                      style: AppTypography.font(fontSize: 13.sp, fontWeight: FontWeight.w700, color: OrangeColors.darkSecondaryText),
-                    ),
-                    TextButton(
-                      onPressed: () => showChangePasswordDialog(context),
-                      child: Text(
-                        'change_password'.tr(),
-                        style: AppTypography.font(fontSize: 12.5.sp, fontWeight: FontWeight.w700, color: OrangeColors.primaryOrange),
+              // 4. Central 24/7 Emergency & Operations Hotlines
+              EmergencyHotlinesCard(
+                medicalPhone: medicalPhone,
+                operationsPhone: operationsPhone,
+                isArabic: isAr,
+              ),
+              SizedBox(height: 14.h),
+
+              // 5. Language Selection Card
+              LanguageSelectorCard(isArabic: isAr),
+              SizedBox(height: 14.h),
+
+              // 6. Biometrics Authentication Switch Card
+              BiometricsCard(
+                isBiometricsEnabled: isBiometricsEnabled,
+                onToggle: (enabled) {
+                  context.read<DashboardCubit>().toggleBiometrics(enabled);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        enabled ? 'biometrics_enabled'.tr() : 'biometrics_disabled'.tr(),
+                        style: AppTypography.font(fontWeight: FontWeight.w600, color: OrangeColors.white),
                       ),
+                      backgroundColor: OrangeColors.black,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+                      duration: const Duration(seconds: 2),
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
               SizedBox(height: 14.h),
 
-              // 5. Card A: 24/7 Medical & Safety Emergency
-              Container(
-                padding: EdgeInsets.all(18.w),
-                decoration: AppCards.secondary(borderRadius: BorderRadius.circular(20.r)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(7.w),
-                          decoration: BoxDecoration(
-                            color: Colors.red.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(10.r),
-                          ),
-                          child: Icon(Icons.emergency_outlined, color: Colors.red, size: 20.sp),
-                        ),
-                        SizedBox(width: 10.w),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'medical_emergency_title'.tr(),
-                                style: AppTypography.font(fontSize: 13.5.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
-                              ),
-                              Text(
-                                'medical_emergency_sub'.tr(),
-                                style: AppTypography.font(fontSize: 11.sp, color: OrangeColors.secondaryText),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Divider(height: 20.h, color: OrangeColors.lightBorder),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'emergency_hotline'.tr(),
-                          style: AppTypography.font(color: OrangeColors.secondaryText, fontSize: 12.sp, fontWeight: FontWeight.w500),
-                        ),
-                        InkWell(
-                          onTap: () => launchPhoneCall(data?.hotel.emergencyContact ?? '+20 100 000 9999'),
-                          borderRadius: BorderRadius.circular(10.r),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                            decoration: BoxDecoration(
-                              color: Colors.red.withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(12.r),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.phone_in_talk, size: 14.sp, color: Colors.red),
-                                SizedBox(width: 6.w),
-                                Text(
-                                  (data != null && data.hotel.emergencyContact.isNotEmpty)
-                                      ? data.hotel.emergencyContact
-                                      : '+20 100 000 9999',
-                                  style: AppTypography.font(color: Colors.red, fontSize: 12.5.sp, fontWeight: FontWeight.w700),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 14.h),
-
-              // 5. Card B: 24/7 Operations & Logistics Desk
-              Container(
-                padding: EdgeInsets.all(18.w),
-                decoration: AppCards.secondary(borderRadius: BorderRadius.circular(20.r)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(7.w),
-                          decoration: BoxDecoration(
-                            color: OrangeColors.warmCream,
-                            borderRadius: BorderRadius.circular(10.r),
-                          ),
-                          child: Icon(Icons.support_agent_outlined, color: OrangeColors.primaryOrange, size: 20.sp),
-                        ),
-                        SizedBox(width: 10.w),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'operations_desk_title'.tr(),
-                                style: AppTypography.font(fontSize: 13.5.sp, fontWeight: FontWeight.w700, color: OrangeColors.black),
-                              ),
-                              Text(
-                                'operations_desk_sub'.tr(),
-                                style: AppTypography.font(fontSize: 11.sp, color: OrangeColors.secondaryText),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Divider(height: 20.h, color: OrangeColors.lightBorder),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'operations_officer'.tr(),
-                          style: AppTypography.font(color: OrangeColors.secondaryText, fontSize: 12.sp, fontWeight: FontWeight.w500),
-                        ),
-                        InkWell(
-                          onTap: () => launchPhoneCall('+962 7 7111 2233'),
-                          borderRadius: BorderRadius.circular(10.r),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                            decoration: BoxDecoration(
-                              color: OrangeColors.warmCream,
-                              borderRadius: BorderRadius.circular(12.r),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.phone_in_talk, size: 14.sp, color: OrangeColors.primaryOrange),
-                                SizedBox(width: 6.w),
-                                Text(
-                                  '+962 7 7111 2233',
-                                  style: AppTypography.font(color: OrangeColors.primaryOrange, fontSize: 12.5.sp, fontWeight: FontWeight.w700),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              // 7. Password Security Card
+              const PasswordSecurityCard(),
               SizedBox(height: 20.h),
 
-              // 6. Sign Out Button
+              // 8. Sign Out Button
               OrangeButton(
                 text: 'logout_button'.tr(),
                 isOutlined: true,

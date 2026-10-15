@@ -9,6 +9,7 @@ import '../models/itinerary_item_model.dart';
 import '../models/itinerary_summary_model.dart';
 import '../models/trip_settings_model.dart';
 import '../models/bus_model.dart';
+import '../models/emergency_contact_model.dart';
 
 abstract class DashboardRemoteDataSource {
   Future<TripSettingsModel> getActiveTrip();
@@ -20,6 +21,8 @@ abstract class DashboardRemoteDataSource {
   Future<bool> acknowledgeAnnouncement(int id);
   Future<Map<String, dynamic>?> getProfile();
   Future<List<BusModel>> getBuses();
+  Future<List<EmergencyContactModel>> getEmergencyContacts();
+  Future<bool> updateConsent({required bool dataNoticeAccepted, required bool mediaConsentGranted});
 }
 
 class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
@@ -274,6 +277,37 @@ class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
       return [];
     } catch (_) {
       return [];
+    }
+  }
+
+  @override
+  Future<List<EmergencyContactModel>> getEmergencyContacts() async {
+    try {
+      final response = await apiClient.dio.get(ApiConstants.emergencyContacts);
+      if (response.statusCode == 200 && response.data is List) {
+        return (response.data as List)
+            .map((item) => EmergencyContactModel.fromJson(item as Map<String, dynamic>))
+            .toList();
+      }
+      return [];
+    } catch (_) {
+      return [];
+    }
+  }
+
+  @override
+  Future<bool> updateConsent({required bool dataNoticeAccepted, required bool mediaConsentGranted}) async {
+    try {
+      final response = await apiClient.dio.put(
+        ApiConstants.consent,
+        data: {
+          'dataNoticeAccepted': dataNoticeAccepted,
+          'mediaConsentGranted': mediaConsentGranted,
+        },
+      );
+      return response.statusCode == 200;
+    } catch (_) {
+      return false;
     }
   }
 }

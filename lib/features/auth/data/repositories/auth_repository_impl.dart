@@ -27,28 +27,9 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<UserEntity> setPassword(String email, String password, String? token) async {
-    try {
-      final user = await remoteDataSource.setPassword(email, password, token);
-      await localDataSource.cacheUser(user);
-      return user;
-    } catch (e) {
-      if (email.trim().toLowerCase().endsWith('@orange.jo') && password.length >= 6) {
-        final activatedUser = UserModel(
-          userId: 2,
-          fullName: 'Reem Haddad',
-          email: email.trim().toLowerCase(),
-          employeeId: 'DIR-8802',
-          role: 'Director of Enterprise Solutions',
-          assignedGroup: 'Group Bravo',
-          assignedBus: 'Bus 2 (VIP)',
-          completionScore: 40,
-          token: 'mock-activated-jwt-token-orange-2026',
-        );
-        await localDataSource.cacheUser(activatedUser);
-        return activatedUser;
-      }
-      rethrow;
-    }
+    final user = await remoteDataSource.setPassword(email, password, token);
+    await localDataSource.cacheUser(user);
+    return user;
   }
 
   @override
@@ -89,11 +70,14 @@ class AuthRepositoryImpl implements AuthRepository {
       fullName: user.fullName,
       email: user.email,
       employeeId: user.employeeId,
+      phoneNumber: user.phoneNumber,
       role: user.role,
       assignedGroup: user.assignedGroup,
       assignedBus: user.assignedBus,
       completionScore: user.completionScore,
       token: user.token,
+      dataNoticeAccepted: user.dataNoticeAccepted,
+      mediaConsentGranted: user.mediaConsentGranted,
     );
     await localDataSource.cacheUser(model);
     final hasBiometrics = await localDataSource.isBiometricsEnabled();

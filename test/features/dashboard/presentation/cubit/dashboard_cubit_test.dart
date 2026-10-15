@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:orange_trip_mobile/features/dashboard/domain/entities/announcement_entity.dart';
 import 'package:orange_trip_mobile/features/dashboard/domain/entities/bus_entity.dart';
 import 'package:orange_trip_mobile/features/dashboard/domain/entities/dashboard_data_entity.dart';
+import 'package:orange_trip_mobile/features/dashboard/domain/entities/emergency_contact_entity.dart';
 import 'package:orange_trip_mobile/features/dashboard/domain/entities/flight_entity.dart';
 import 'package:orange_trip_mobile/features/dashboard/domain/entities/hotel_entity.dart';
 import 'package:orange_trip_mobile/features/dashboard/domain/entities/itinerary_item_entity.dart';
@@ -75,6 +76,12 @@ class MockDashboardRepository implements DashboardRepository {
 
   @override
   Future<List<BusEntity>> getBuses() async => [];
+
+  @override
+  Future<List<EmergencyContactEntity>> getEmergencyContacts() async => [];
+
+  @override
+  Future<bool> updateConsent({required bool dataNoticeAccepted, required bool mediaConsentGranted}) async => true;
 
   @override
   Future<bool> acknowledgeAnnouncement(int id) async => true;

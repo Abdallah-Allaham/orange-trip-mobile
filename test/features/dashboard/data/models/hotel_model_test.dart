@@ -13,7 +13,6 @@ void main() {
     checkOutDate: '5 Nov 2026, 12:00',
     roomNumber: 'Assigned upon arrival',
     roomCategory: 'Deluxe Nile View',
-    confirmationReference: 'HTL-ORG-7788',
     wifiInstructions: 'Network: StRegis_Guest | Pass: OrangeCairo2026',
     operationalNotes: 'Keycards available at Orange Welcome Desk in lobby.',
   );

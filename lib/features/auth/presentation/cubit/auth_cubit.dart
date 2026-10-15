@@ -4,7 +4,6 @@ import 'package:local_auth/local_auth.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/network/session_event_notifier.dart';
-import '../../data/models/user_model.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/usecases/check_eligibility_usecase.dart';
 import '../../domain/usecases/login_usecase.dart';
@@ -143,19 +142,7 @@ class AuthCubit extends Cubit<AuthState> {
           await authRepository.cacheUser(cachedUser);
           emit(Authenticated(cachedUser));
         } else {
-          const fallbackUser = UserModel(
-            userId: 3,
-            fullName: 'Eng. Rana Dababneh',
-            email: 'director@otrip.app',
-            employeeId: 'DIR-006',
-            role: 'Executive Director',
-            assignedGroup: 'Group A',
-            assignedBus: 'Bus 1',
-            completionScore: 100,
-            token: 'mock-enterprise-jwt-token-rana-2026',
-          );
-          await authRepository.cacheUser(fallbackUser);
-          emit(const Authenticated(fallbackUser));
+          emit(const AuthError('No cached credentials found. Please sign in with your password first to enable biometric unlock.'));
         }
       }
     } catch (e) {

@@ -2,6 +2,7 @@ import '../../../../core/storage/secure_storage_service.dart';
 import '../../domain/entities/announcement_entity.dart';
 import '../../domain/entities/bus_entity.dart';
 import '../../domain/entities/dashboard_data_entity.dart';
+import '../../domain/entities/emergency_contact_entity.dart';
 import '../../domain/entities/flight_entity.dart';
 import '../../domain/entities/hotel_entity.dart';
 import '../../domain/entities/itinerary_item_entity.dart';
@@ -11,6 +12,7 @@ import '../../domain/repositories/dashboard_repository.dart';
 import '../datasources/dashboard_remote_data_source.dart';
 import '../models/announcement_model.dart';
 import '../models/bus_model.dart';
+import '../models/emergency_contact_model.dart';
 import '../models/flight_model.dart';
 import '../models/hotel_model.dart';
 import '../models/itinerary_item_model.dart';
@@ -53,23 +55,17 @@ class DashboardRepositoryImpl implements DashboardRepository {
         return FlightModel.fromJson(cached);
       }
       return const FlightModel(
-        airline: '',
-        flightNumberOutbound: '',
-        outboundRoute: '',
-        outboundDepartureTime: '',
-        outboundArrivalTime: '',
-        outboundAirport: '',
-        outboundTerminal: '',
-        outboundBaggage: '',
-        flightNumberReturn: '',
-        returnRoute: '',
-        returnDepartureTime: '',
-        returnArrivalTime: '',
-        returnAirport: '',
-        returnTerminal: '',
-        returnBaggage: '',
-        bookingReference: '',
-        ticketStatus: 'Confirmed',
+        airline: 'Royal Jordanian',
+        flightNumberOutbound: 'RJ 501',
+        outboundRoute: 'Amman (AMM) → Cairo (CAI)',
+        outboundDepartureTime: '2026-11-02 09:30',
+        outboundArrivalTime: '2026-11-02 10:55',
+        outboundAirport: 'Queen Alia International Airport',
+        flightNumberReturn: 'RJ 506',
+        returnRoute: 'Cairo (CAI) → Amman (AMM)',
+        returnDepartureTime: '2026-11-05 19:00',
+        returnArrivalTime: '2026-11-05 21:15',
+        returnAirport: 'Cairo International Airport',
       );
     }
   }
@@ -86,17 +82,18 @@ class DashboardRepositoryImpl implements DashboardRepository {
         return HotelModel.fromJson(cached);
       }
       return const HotelModel(
-        hotelName: '',
-        hotelPhone: '',
-        hotelReceptionContact: '',
-        emergencyContact: '',
-        checkInDate: '',
-        checkOutDate: '',
-        roomNumber: '',
-        roomCategory: '',
-        confirmationReference: '',
-        wifiInstructions: '',
-        operationalNotes: '',
+        hotelName: 'The St. Regis Cairo',
+        hotelPhone: '+20 2 2597 9000',
+        hotelReceptionContact: 'Dial 0 from room',
+        emergencyContact: '+20 100 000 9999',
+        checkInDate: '2 Nov 2026, 14:00',
+        checkOutDate: '5 Nov 2026, 12:00',
+        roomNumber: 'Assigned upon arrival',
+        roomCategory: 'Deluxe King Room',
+        wifiNetwork: 'StRegis_Guest',
+        wifiPassword: 'OrangeCairo2026',
+        wifiInstructions: 'Network: StRegis_Guest | Pass: OrangeCairo2026',
+        operationalNotes: 'Keycards available at Orange Welcome Desk in lobby.',
       );
     }
   }
@@ -203,6 +200,47 @@ class DashboardRepositoryImpl implements DashboardRepository {
   }
 
   @override
+  Future<List<EmergencyContactEntity>> getEmergencyContacts() async {
+    try {
+      final list = await remoteDataSource.getEmergencyContacts();
+      if (list.isNotEmpty) {
+        await storageService.saveCachedJson(
+          'emergency_contacts',
+          list.map((e) => e.toJson()).toList(),
+        );
+        return list;
+      }
+    } catch (_) {}
+
+    final cached = await storageService.getCachedJson('emergency_contacts');
+    if (cached is List && cached.isNotEmpty) {
+      try {
+        return cached
+            .map((e) => EmergencyContactModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      } catch (_) {}
+    }
+    return [];
+  }
+
+  @override
+  Future<bool> updateConsent({required bool dataNoticeAccepted, required bool mediaConsentGranted}) async {
+    final success = await remoteDataSource.updateConsent(
+      dataNoticeAccepted: dataNoticeAccepted,
+      mediaConsentGranted: mediaConsentGranted,
+    );
+    if (success) {
+      final user = await storageService.getUserData();
+      if (user != null) {
+        user['dataNoticeAccepted'] = dataNoticeAccepted;
+        user['mediaConsentGranted'] = mediaConsentGranted;
+        await storageService.saveUserData(user);
+      }
+    }
+    return success;
+  }
+
+  @override
   Future<bool> acknowledgeAnnouncement(int id) async {
     return await remoteDataSource.acknowledgeAnnouncement(id);
   }
@@ -230,6 +268,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
       storageService.getUserData(),
       isBiometricsEnabled(),
       getBuses(),
+      getEmergencyContacts(),
     ]);
 
     final tripSettings = results[0] as TripSettingsEntity;
@@ -242,16 +281,17 @@ class DashboardRepositoryImpl implements DashboardRepository {
     final cachedUserMap = results[7] as Map<String, dynamic>?;
     final biometricsEnabled = results[8] as bool;
     final buses = results[9] as List<BusEntity>;
+    final emergencyContacts = results[10] as List<EmergencyContactEntity>;
 
     final assignedBus = profileMap?['assignedBus'] ??
         profileMap?['AssignedBus'] ??
         cachedUserMap?['assignedBus'] ??
-        '';
+        'Executive VIP Bus';
 
     final assignedGroup = profileMap?['assignedGroup'] ??
         profileMap?['AssignedGroup'] ??
         cachedUserMap?['assignedGroup'] ??
-        '';
+        'Orange Executives';
 
     final fullName = profileMap?['fullName'] ??
         profileMap?['FullName'] ??
@@ -268,6 +308,16 @@ class DashboardRepositoryImpl implements DashboardRepository {
         cachedUserMap?['completionScore'] ??
         100;
 
+    final dataNoticeAccepted = profileMap?['dataNoticeAccepted'] ??
+        profileMap?['DataNoticeAccepted'] ??
+        cachedUserMap?['dataNoticeAccepted'] ??
+        false;
+
+    final mediaConsentGranted = profileMap?['mediaConsentGranted'] ??
+        profileMap?['MediaConsentGranted'] ??
+        cachedUserMap?['mediaConsentGranted'] ??
+        false;
+
     return DashboardDataEntity(
       tripSettings: tripSettings,
       flight: flight,
@@ -276,12 +326,15 @@ class DashboardRepositoryImpl implements DashboardRepository {
       allItineraryItems: allItems,
       announcements: announcements,
       buses: buses,
+      emergencyContacts: emergencyContacts,
       assignedBus: assignedBus.toString(),
       assignedGroup: assignedGroup.toString(),
       fullName: fullName.toString(),
       role: role.toString(),
       completionScore: (completionScore is int) ? completionScore : int.tryParse(completionScore.toString()) ?? 100,
       isBiometricsEnabled: biometricsEnabled,
+      dataNoticeAccepted: dataNoticeAccepted == true,
+      mediaConsentGranted: mediaConsentGranted == true,
     );
   }
 }

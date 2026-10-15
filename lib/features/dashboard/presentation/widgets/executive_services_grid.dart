@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/theme/app_design_system.dart';
+import '../../../emergency/presentation/screens/emergency_contacts_screen.dart';
 
 class ExecutiveServicesGrid extends StatelessWidget {
   final bool isArabic;
@@ -54,6 +55,18 @@ class ExecutiveServicesGrid extends StatelessWidget {
               title: isArabic ? 'حافلات النقل' : 'VIP Buses',
               subtitle: isArabic ? 'مواعيد الرحلات' : 'Buses & Shuttles',
               onTap: () => onTabSelect(1), // Tab 1 = Travel
+            ),
+            _buildServiceItem(
+              icon: Icons.support_agent_outlined,
+              title: isArabic ? 'الطوارئ والدعم' : 'Emergency & Ops',
+              subtitle: isArabic ? 'أرقام المنسقين 24/7' : '24/7 Contacts',
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const EmergencyContactsScreen(),
+                  ),
+                );
+              },
             ),
             _buildServiceItem(
               icon: Icons.person_outline,

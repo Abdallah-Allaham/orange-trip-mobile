@@ -10,7 +10,6 @@ class HotelEntity extends Equatable {
   final String checkOutDate;
   final String roomNumber;
   final String roomCategory;
-  final String confirmationReference;
   final String wifiNetwork;
   final String wifiPassword;
   final String wifiInstructions;
@@ -27,7 +26,6 @@ class HotelEntity extends Equatable {
     this.checkOutDate = '5 Nov 2026, 12:00',
     this.roomNumber = 'Assigned upon arrival',
     this.roomCategory = 'Deluxe Nile View',
-    this.confirmationReference = 'HTL-ORG-7788',
     this.wifiNetwork = 'StRegis_Guest',
     this.wifiPassword = 'OrangeCairo2026',
     this.wifiInstructions = 'Network: StRegis_Guest | Pass: OrangeCairo2026',
@@ -46,7 +44,6 @@ class HotelEntity extends Equatable {
         checkOutDate,
         roomNumber,
         roomCategory,
-        confirmationReference,
         wifiNetwork,
         wifiPassword,
         wifiInstructions,

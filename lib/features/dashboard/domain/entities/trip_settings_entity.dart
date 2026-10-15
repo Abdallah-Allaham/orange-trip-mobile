@@ -17,6 +17,8 @@ class TripSettingsEntity extends Equatable {
   final String wifiNetwork;
   final String wifiPassword;
   final String flightCode;
+  final String emergencyMedicalPhone;
+  final String operationsDeskPhone;
   final String weatherTemp;
   final String weatherConditionEn;
   final String weatherConditionAr;
@@ -40,6 +42,8 @@ class TripSettingsEntity extends Equatable {
     this.wifiNetwork = 'StRegis_Guest',
     required this.wifiPassword,
     required this.flightCode,
+    this.emergencyMedicalPhone = '+20 100 000 9999',
+    this.operationsDeskPhone = '+962 7 7700 0001',
     required this.weatherTemp,
     required this.weatherConditionEn,
     required this.weatherConditionAr,
@@ -65,6 +69,8 @@ class TripSettingsEntity extends Equatable {
         wifiNetwork,
         wifiPassword,
         flightCode,
+        emergencyMedicalPhone,
+        operationsDeskPhone,
         weatherTemp,
         weatherConditionEn,
         weatherConditionAr,
