@@ -51,14 +51,14 @@ class HomeTabScreen extends StatelessWidget {
         final sDt = DateTime.parse(tripSettings.startDate.toString().trim());
         if (tripSettings.endDate != null && tripSettings.endDate.toString().isNotEmpty) {
           final eDt = DateTime.parse(tripSettings.endDate.toString().trim());
-          final sStr = DateFormat('d MMM', isAr ? 'ar' : 'en').format(sDt);
-          final eStr = DateFormat('d MMM yyyy', isAr ? 'ar' : 'en').format(eDt);
+          final sStr = DateFormat('d MMM', 'en_US').format(sDt);
+          final eStr = DateFormat('d MMM yyyy', 'en_US').format(eDt);
           return '$sStr – $eStr';
         }
-        return DateFormat('d MMM yyyy', isAr ? 'ar' : 'en').format(sDt);
+        return DateFormat('d MMM yyyy', 'en_US').format(sDt);
       } catch (_) {}
     }
-    return isAr ? 'نوفمبر 2026' : 'November 2026';
+    return 'Nov 2026';
   }
 
   @override

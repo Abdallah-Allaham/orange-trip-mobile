@@ -23,7 +23,7 @@ class FlightBriefCard extends StatelessWidget {
       if (tripSettings != null && tripSettings!.startDate.isNotEmpty) {
         try {
           final dt = DateTime.parse(tripSettings!.startDate);
-          return DateFormat('d MMM', isArabic ? 'ar' : 'en').format(dt);
+          return DateFormat('d MMM', 'en_US').format(dt);
         } catch (_) {
           return tripSettings!.startDate;
         }
@@ -32,7 +32,7 @@ class FlightBriefCard extends StatelessWidget {
     }
     try {
       final dt = DateTime.parse(dtStr.replaceAll(' ', 'T'));
-      return DateFormat('d MMM', isArabic ? 'ar' : 'en').format(dt);
+      return DateFormat('d MMM', 'en_US').format(dt);
     } catch (_) {
       if (dtStr.contains('·') || dtStr.contains('•')) {
         return dtStr.split(RegExp(r'[·•]')).first.trim();

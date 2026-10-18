@@ -71,7 +71,7 @@ class ReturnFlightCard extends StatelessWidget {
     if (depRaw.isNotEmpty) {
       try {
         final dt = DateTime.parse(depRaw.replaceAll(' ', 'T'));
-        returnDate = DateFormat('d MMM', isAr ? 'ar' : 'en').format(dt);
+        returnDate = DateFormat('d MMM', 'en_US').format(dt);
         depTime = forceEnglishTime(DateFormat('hh:mm a', 'en_US').format(dt));
       } catch (_) {
         if (depRaw.contains('·') || depRaw.contains('•')) {
@@ -91,7 +91,7 @@ class ReturnFlightCard extends StatelessWidget {
     } else if (tripSettings != null && tripSettings!.endDate.isNotEmpty) {
       try {
         final dt = DateTime.parse(tripSettings!.endDate);
-        returnDate = DateFormat('d MMM', isAr ? 'ar' : 'en').format(dt);
+        returnDate = DateFormat('d MMM', 'en_US').format(dt);
       } catch (_) {
         returnDate = tripSettings!.endDate;
       }

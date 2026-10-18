@@ -87,7 +87,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
             String sub = dateStr;
             try {
               final parsed = DateTime.parse(dateStr);
-              sub = forceEnglishTime(DateFormat('d MMM', isAr ? 'ar' : 'en').format(parsed));
+              sub = forceEnglishTime(DateFormat('d MMM', 'en_US').format(parsed));
             } catch (_) {}
             return {
               'key': dateStr,
