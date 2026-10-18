@@ -22,17 +22,32 @@ class ApiClient {
     _loadCustomUrl();
   }
 
+  bool _isSecureOrLocalUrl(String url) {
+    final trimmed = url.trim().toLowerCase();
+    if (trimmed.startsWith('https://')) return true;
+    if (trimmed.startsWith('http://localhost') ||
+        trimmed.startsWith('http://127.0.0.1') ||
+        trimmed.startsWith('http://10.0.2.2')) {
+      return true;
+    }
+    return false;
+  }
+
   Future<void> _loadCustomUrl() async {
     final customUrl = await storageService.getCustomBaseUrl();
-    if (customUrl != null && customUrl.isNotEmpty) {
+    if (customUrl != null && customUrl.isNotEmpty && _isSecureOrLocalUrl(customUrl)) {
       dio.options.baseUrl = customUrl;
       ApiConstants.activeBaseUrl = customUrl;
     }
   }
 
   void updateBaseUrl(String newUrl) {
-    dio.options.baseUrl = newUrl;
-    ApiConstants.activeBaseUrl = newUrl;
-    storageService.setCustomBaseUrl(newUrl);
+    final normalized = newUrl.trim();
+    if (!_isSecureOrLocalUrl(normalized)) {
+      throw ArgumentError('Insecure HTTP URLs are not permitted for remote servers. Use HTTPS.');
+    }
+    dio.options.baseUrl = normalized;
+    ApiConstants.activeBaseUrl = normalized;
+    storageService.setCustomBaseUrl(normalized);
   }
 }

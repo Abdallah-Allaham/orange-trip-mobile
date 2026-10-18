@@ -13,6 +13,7 @@ class ApiConstants {
   static const String login = '/Auth/login';
   static const String checkEligibility = '/Auth/check-eligibility';
   static const String setPassword = '/Auth/set-password';
+  static const String changePassword = '/Auth/change-password';
   static const String forgotPassword = '/Auth/forgot-password';
   static const String resetPassword = '/Auth/reset-password';
   static const String me = '/Auth/me';

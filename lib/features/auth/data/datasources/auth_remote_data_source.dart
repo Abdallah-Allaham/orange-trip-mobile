@@ -35,8 +35,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
     } on DioException catch (e) {
+      if (e.response?.statusCode == 429) {
+        final rateMsg = e.response?.data is Map && e.response?.data['message'] != null
+            ? e.response!.data['message'].toString()
+            : 'Too many login attempts. Please wait 1 minute and try again. / محاولات كثيرة جداً، يرجى الانتظار دقيقة والمحاولة مجدداً.';
+        throw ServerException(message: rateMsg, statusCode: 429);
+      }
       final msg = e.response?.data is Map && e.response?.data['message'] != null
-          ? e.response!.data['message']
+          ? e.response!.data['message'].toString()
           : e.message ?? 'Server error during login.';
       throw ServerException(
         message: msg,

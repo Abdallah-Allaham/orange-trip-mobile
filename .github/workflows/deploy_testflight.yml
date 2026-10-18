@@ -52,7 +52,7 @@ jobs:
           echo "${{ secrets.APP_STORE_PRIVATE_KEY }}" > ~/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
           chmod 600 ~/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
 
-      # 8. إنشاء Keychain مؤقت للتوقيع (نفس طريقة dabbirly)
+      # 8. إنشاء Keychain مؤقت للتوقيع
       - name: Setup temporary keychain
         run: |
           security create-keychain -p "temp_build_pass" build.keychain
