@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/theme/app_design_system.dart';
+import '../../../../core/utils/time_formatter.dart';
 import '../../../dashboard/presentation/cubit/dashboard_cubit.dart';
 import '../../../dashboard/presentation/cubit/dashboard_state.dart';
 import '../widgets/itinerary_card.dart';
@@ -28,24 +29,42 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
         final allItems = data?.allItineraryItems ?? [];
         final tripSettings = data?.tripSettings;
 
-        // Generate all trip days from tripSettings.startDate to tripSettings.endDate
+        String normalizeDateStr(String raw) {
+          return forceEnglishTime(raw.trim()).split('T').first.trim();
+        }
+
+        // Generate official trip days from tripSettings.startDate to tripSettings.endDate using ASCII digits
         final tripDates = <String>[];
         if (tripSettings != null && tripSettings.startDate.isNotEmpty && tripSettings.endDate.isNotEmpty) {
           try {
-            final start = DateTime.parse(tripSettings.startDate);
-            final end = DateTime.parse(tripSettings.endDate);
+            final start = DateTime.parse(normalizeDateStr(tripSettings.startDate));
+            final end = DateTime.parse(normalizeDateStr(tripSettings.endDate));
             if (!end.isBefore(start)) {
-              for (var d = start; !d.isAfter(end); d = d.add(const Duration(days: 1))) {
-                tripDates.add(DateFormat('yyyy-MM-dd').format(d));
+              for (var d = DateTime(start.year, start.month, start.day);
+                  !d.isAfter(DateTime(end.year, end.month, end.day));
+                  d = d.add(const Duration(days: 1))) {
+                final yyyy = d.year.toString().padLeft(4, '0');
+                final mm = d.month.toString().padLeft(2, '0');
+                final dd = d.day.toString().padLeft(2, '0');
+                tripDates.add('$yyyy-$mm-$dd');
               }
             }
           } catch (_) {}
         }
 
-        final distinctDates = <String>{
-          ...tripDates,
-          ...allItems.map((i) => i.date.trim()).where((d) => d.isNotEmpty)
-        }.toList()..sort();
+        // Use official tripDates when available (matching Web behavior); fallback to item dates only if tripDates is empty
+        final distinctDates = tripDates.isNotEmpty
+            ? tripDates
+            : (allItems
+                .map((i) => normalizeDateStr(i.date))
+                .where((d) => d.isNotEmpty)
+                .toSet()
+                .toList()
+              ..sort());
+
+        final validItems = tripDates.isNotEmpty
+            ? allItems.where((i) => distinctDates.contains(normalizeDateStr(i.date))).toList()
+            : allItems;
 
         final effectiveSelectedDay = (distinctDates.contains(_selectedItineraryDay) || _selectedItineraryDay == 'all')
             ? _selectedItineraryDay
@@ -53,14 +72,14 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
 
         // Filter items by selected day
         final filteredItems = effectiveSelectedDay == 'all'
-            ? allItems
-            : allItems.where((i) => i.date.trim() == effectiveSelectedDay).toList();
+            ? validItems
+            : validItems.where((i) => normalizeDateStr(i.date) == effectiveSelectedDay).toList();
 
         final dayFilters = <Map<String, String>>[
           {
             'key': 'all',
             'label': 'all_days'.tr(),
-            'sub': '${allItems.length} ${'events'.tr()}',
+            'sub': '${validItems.length} ${'events'.tr()}',
           },
           ...distinctDates.asMap().entries.map((entry) {
             final index = entry.key + 1;
@@ -68,7 +87,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
             String sub = dateStr;
             try {
               final parsed = DateTime.parse(dateStr);
-              sub = DateFormat('d MMM', isAr ? 'ar' : 'en').format(parsed);
+              sub = forceEnglishTime(DateFormat('d MMM', isAr ? 'ar' : 'en').format(parsed));
             } catch (_) {}
             return {
               'key': dateStr,

@@ -12,15 +12,15 @@ class HotelModel extends HotelEntity {
     super.roomNumber,
     super.roomCategory,
     super.wifiNetwork = 'StRegis_Guest',
-    super.wifiPassword = 'OrangeCairo2026',
-    super.wifiInstructions = 'Network: StRegis_Guest | Pass: OrangeCairo2026',
+    super.wifiPassword = '',
+    super.wifiInstructions = 'Network: StRegis_Guest',
     super.operationalNotes = 'Keycards available at Orange Welcome Desk in lobby.',
     super.mapUrl = 'https://maps.google.com/?q=The+St.+Regis+Cairo',
   });
 
   factory HotelModel.fromJson(Map<String, dynamic> json) {
     final wifiNet = json['wifiNetwork'] ?? json['WifiNetwork'] ?? 'StRegis_Guest';
-    final wifiPass = json['wifiPassword'] ?? json['WifiPassword'] ?? 'OrangeCairo2026';
+    final wifiPass = json['wifiPassword'] ?? json['WifiPassword'] ?? '';
     final rawInstructions = json['wifiInstructions'] ?? json['WifiInstructions'];
     final mapUrl = json['mapUrl'] ?? json['MapUrl'] ?? '';
 

@@ -91,8 +91,8 @@ class DashboardRepositoryImpl implements DashboardRepository {
         roomNumber: 'Assigned upon arrival',
         roomCategory: 'Deluxe King Room',
         wifiNetwork: 'StRegis_Guest',
-        wifiPassword: 'OrangeCairo2026',
-        wifiInstructions: 'Network: StRegis_Guest | Pass: OrangeCairo2026',
+        wifiPassword: '',
+        wifiInstructions: 'Network: StRegis_Guest',
         operationalNotes: 'Keycards available at Orange Welcome Desk in lobby.',
       );
     }

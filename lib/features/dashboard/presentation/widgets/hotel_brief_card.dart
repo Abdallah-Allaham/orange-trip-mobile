@@ -29,7 +29,7 @@ class HotelBriefCard extends StatelessWidget {
       return hotel.wifiPassword;
     }
     final instructions = hotel.wifiInstructions.trim();
-    if (instructions.isEmpty) return 'OrangeCairo2026';
+    if (instructions.isEmpty) return '—';
     if (instructions.contains('Pass:')) {
       final part = instructions.split('Pass:').last.trim();
       return part.split(' ').first;
