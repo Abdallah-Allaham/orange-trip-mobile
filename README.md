@@ -4,6 +4,19 @@
 
 ---
 
+## 📥 Download & Clone (طريقة التنزيل)
+
+### Option 1: Git Clone (Recommended)
+```bash
+git clone https://github.com/Abdallah-Allaham/orange-trip-mobile.git
+cd orange-trip-mobile
+```
+
+### Option 2: Download ZIP
+Click the green **`<> Code`** button on GitHub and select **`Download ZIP`**, then extract the files.
+
+---
+
 ## 📱 مميزات التطبيق (Features)
 
 * **واجهة مستخدم متوافقة مع هوية أورنج (Orange Design System):**
