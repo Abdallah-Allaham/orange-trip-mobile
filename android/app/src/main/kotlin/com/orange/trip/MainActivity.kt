@@ -1,4 +1,4 @@
-package com.abood.orangetrip.cairo
+package com.orange.trip
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 
