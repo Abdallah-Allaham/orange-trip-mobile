@@ -59,7 +59,7 @@ class BusGroupBadge extends StatelessWidget {
                 ),
               ),
               Text(
-                value.isNotEmpty ? value : (isBus ? 'Bus 1' : 'Group Alpha'),
+                value.isNotEmpty ? value : (isArabic ? (isBus ? 'لم يتم التعيين' : 'غير محدد') : (isBus ? 'Unassigned' : 'Pending')),
                 style: AppTypography.font(
                   color: accentColor,
                   fontSize: 13.sp,
