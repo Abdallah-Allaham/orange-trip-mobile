@@ -17,7 +17,7 @@ class FlightEntity extends Equatable {
   const FlightEntity({
     this.id = 0,
     this.airline = 'Royal Jordanian',
-    this.flightNumberOutbound = 'RJ 501',
+    this.flightNumberOutbound = '',
     this.outboundRoute = 'Amman (AMM) → Cairo (CAI)',
     this.outboundDepartureTime = '2026-11-02 09:30',
     this.outboundArrivalTime = '2026-11-02 10:55',

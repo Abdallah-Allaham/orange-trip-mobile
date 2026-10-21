@@ -2,7 +2,7 @@ class ApiConstants {
   // Configurable base URL:
   // If tested remotely, will hit the hosted cloud API URL.
   // Can be overridden at runtime via SecureStorage or in-app developer toggle.
-  static const String defaultRemoteUrl = 'https://orange-cairo-trip.onrender.com/api'; 
+  static const String defaultRemoteUrl = 'https://trip.orange.jo/api'; 
   static const String defaultLocalAndroid = 'http://10.0.2.2:5000/api';
   static const String defaultLocalIos = 'http://localhost:5000/api';
 

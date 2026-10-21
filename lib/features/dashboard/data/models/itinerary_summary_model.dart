@@ -19,12 +19,12 @@ class ItinerarySummaryModel extends ItinerarySummaryEntity {
 
   factory ItinerarySummaryModel.fromJson(Map<String, dynamic> json) {
     return ItinerarySummaryModel(
-      nextActivity: json['nextActivity'] ?? json['NextActivity'] ?? 'Welcome Dinner',
-      nextActivityAr: json['nextActivityAr'] ?? json['NextActivityAr'] ?? 'عشاء الترحيب الافتتاحي',
-      nextActivityTime: json['nextActivityTime'] ?? json['NextActivityTime'] ?? '8:00 PM',
-      gatheringPoint: json['gatheringPoint'] ?? json['GatheringPoint'] ?? 'Hotel Lobby',
-      gatheringPointAr: json['gatheringPointAr'] ?? json['GatheringPointAr'] ?? 'بهو الفندق (اللوبي)',
-      gatheringTime: json['gatheringTime'] ?? json['GatheringTime'] ?? '7:30 PM',
+      nextActivity: json['nextActivity'] ?? json['NextActivity'] ?? '',
+      nextActivityAr: json['nextActivityAr'] ?? json['NextActivityAr'] ?? '',
+      nextActivityTime: json['nextActivityTime'] ?? json['NextActivityTime'] ?? '',
+      gatheringPoint: json['gatheringPoint'] ?? json['GatheringPoint'] ?? '',
+      gatheringPointAr: json['gatheringPointAr'] ?? json['GatheringPointAr'] ?? '',
+      gatheringTime: json['gatheringTime'] ?? json['GatheringTime'] ?? '',
       dressCode: json['dressCode'] ?? json['DressCode'] ?? 'Smart Casual',
       dressCodeAr: json['dressCodeAr'] ?? json['DressCodeAr'] ?? 'رسمي أنيق',
       weatherCity: json['weatherCity'] ?? json['WeatherCity'] ?? 'Cairo',

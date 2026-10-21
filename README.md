@@ -1,66 +1,71 @@
-# Orange Jordan — O-Trip Mobile Application
+# Orange Jordan - O-Trip Mobile Application
 
-تطبيق الموبايل الرسمي لرحلة مدراء أورنج الأردن إلى القاهرة 2026، مبني باستخدام **Flutter** متوافق مع نظامي **Android** و **iOS**.
+Official cross-platform mobile application for the Orange Jordan Executive Trip, built using Flutter for Android and iOS.
 
 ---
 
-## 📥 Download & Clone (طريقة التنزيل)
+## 1. Overview & Architecture
 
-### Option 1: Git Clone (Recommended)
+- **Framework:** Flutter 3.24+ (Dart 3.5+)
+- **Platforms:** Android (minSdkVersion 21) & iOS (iOS 12.0+)
+- **Design System:** Orange Brand Design System (RTL Arabic & LTR English)
+- **Local Storage:** `flutter_secure_storage` for encrypted token and session caching
+- **Networking:** Secure REST HTTP client connecting to OrangeTrip.API backend
+
+---
+
+## 2. Prerequisites
+
+- Flutter SDK (version 3.24 or higher)
+- Android SDK / Xcode for platform builds
+- Active backend API endpoint
+
+---
+
+## 3. Environment & API Configuration
+
+Configure the backend API base URL in `lib/core/constants/api_constants.dart` or via compile-time environment variables:
+
 ```bash
-git clone https://github.com/Abdallah-Allaham/orange-trip-mobile.git
-cd orange-trip-mobile
+flutter run --dart-define=API_BASE_URL=http://<BACKEND_HOST>:5000/api
 ```
 
-### Option 2: Download ZIP
-Click the green **`<> Code`** button on GitHub and select **`Download ZIP`**, then extract the files.
+---
+
+## 4. Setup and Run
+
+### 1. Install Dependencies
+```bash
+flutter pub get
+```
+
+### 2. Run Test Suite
+```bash
+flutter test
+```
+
+### 3. Launch Application (Development)
+```bash
+flutter run
+```
 
 ---
 
-## 📱 مميزات التطبيق (Features)
+## 5. Production Builds
 
-* **واجهة مستخدم متوافقة مع هوية أورنج (Orange Design System):**
-  * دعم اللغتين العربية (RTL) والإنجليزية (LTR).
-  * عد تنازلي تفاعلي للرحلة (Trip Countdown).
-* **إدارة الرحلة للمشاركين:**
-  * تفاصيل تذاكر الطيران (الذهاب والعودة) ومعلومات الفندق والحافلة المخصصة.
-  * البرنامج اليومي للرحلة (Itinerary) مع تنبيهات الفعاليات القادمة.
-  * بطاقة الصعود الرقمية ودليل أرقام الطوارئ السريعة (SOS).
-* **الأمان والمصادقة:**
-  * تسجيل الدخول المشفر وحفظ الجلسات محلياً بأمان عبر `flutter_secure_storage`.
-  * حماية وتشفير الاتصال مع خادم API.
+### Android Release APK:
+```bash
+flutter build apk --release
+```
+Output path:
+`build/app/outputs/flutter-apk/app-release.apk`
 
----
+### Android App Bundle (for Play Store):
+```bash
+flutter build appbundle --release
+```
 
-## 🛠️ متطلبات التشغيل (Prerequisites)
-
-* **Flutter SDK:** الإصدار 3.24+ أو أحدث
-* **Dart SDK:** الإصدار 3.5+
-* **Android Studio** أو **VS Code** مع إضافات Flutter/Dart
-* **Android SDK:** API 21 كحد أدنى
-
----
-
-## 🚀 التشغيل السريع (Getting Started)
-
-1. **تثبيت الحزم والمكتبات:**
-   ```bash
-   flutter pub get
-   ```
-
-2. **تشغيل الفحوصات والاختبارات (Tests):**
-   ```bash
-   flutter test
-   ```
-
-3. **تشغيل التطبيق على المحاكي أو جهاز حقيقي:**
-   ```bash
-   flutter run
-   ```
-
-4. **بناء نسخة APK نهائية (Release APK):**
-   ```bash
-   flutter build apk --release
-   ```
-   النسخة الجاهزة ستكون في المسار:
-   `build/app/outputs/flutter-apk/app-release.apk`
+### iOS Release Build:
+```bash
+flutter build ipa --release
+```

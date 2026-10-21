@@ -16,11 +16,11 @@ class ItinerarySummaryEntity extends Equatable {
   final int countdownDays;
 
   const ItinerarySummaryEntity({
-    this.nextActivity = 'Official Welcome Dinner — Nile Cruise',
+    this.nextActivity = '',
     this.nextActivityAr = 'عشاء الترحيب الرسمي بنيل القاهرة',
     this.nextActivityTime = '07:30 PM',
-    this.gatheringPoint = 'St. Regis Lobby',
-    this.gatheringPointAr = 'بهو فندق The St. Regis',
+    this.gatheringPoint = '',
+    this.gatheringPointAr = '',
     this.gatheringTime = '07:00 PM',
     this.dressCode = 'Smart Casual',
     this.dressCodeAr = 'رسمي أنيق',

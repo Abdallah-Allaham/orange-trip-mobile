@@ -56,7 +56,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
       }
       return const FlightModel(
         airline: 'Royal Jordanian',
-        flightNumberOutbound: 'RJ 501',
+        flightNumberOutbound: '',
         outboundRoute: 'Amman (AMM) → Cairo (CAI)',
         outboundDepartureTime: '2026-11-02 09:30',
         outboundArrivalTime: '2026-11-02 10:55',
@@ -82,7 +82,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
         return HotelModel.fromJson(cached);
       }
       return const HotelModel(
-        hotelName: 'The St. Regis Cairo',
+        hotelName: '',
         hotelPhone: '+20 2 2597 9000',
         hotelReceptionContact: 'Dial 0 from room',
         emergencyContact: '+20 100 000 9999',

@@ -18,7 +18,7 @@ class HotelEntity extends Equatable {
 
   const HotelEntity({
     this.id = 0,
-    this.hotelName = 'The St. Regis Cairo',
+    this.hotelName = '',
     this.hotelPhone = '+20 2 2597 9000',
     this.hotelReceptionContact = 'Dial 0 from room',
     this.emergencyContact = '+20 100 000 9999',

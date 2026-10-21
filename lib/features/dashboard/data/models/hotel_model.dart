@@ -11,7 +11,7 @@ class HotelModel extends HotelEntity {
     super.checkOutDate,
     super.roomNumber,
     super.roomCategory,
-    super.wifiNetwork = 'StRegis_Guest',
+    super.wifiNetwork = '',
     super.wifiPassword = '',
     super.wifiInstructions = 'Network: StRegis_Guest',
     super.operationalNotes = 'Keycards available at Orange Welcome Desk in lobby.',
@@ -19,21 +19,21 @@ class HotelModel extends HotelEntity {
   });
 
   factory HotelModel.fromJson(Map<String, dynamic> json) {
-    final wifiNet = json['wifiNetwork'] ?? json['WifiNetwork'] ?? 'StRegis_Guest';
+    final wifiNet = json['wifiNetwork'] ?? json['WifiNetwork'] ?? '';
     final wifiPass = json['wifiPassword'] ?? json['WifiPassword'] ?? '';
     final rawInstructions = json['wifiInstructions'] ?? json['WifiInstructions'];
     final mapUrl = json['mapUrl'] ?? json['MapUrl'] ?? '';
 
     return HotelModel(
       id: json['id'] ?? json['Id'] ?? 0,
-      hotelName: json['hotelName'] ?? json['HotelName'] ?? 'The St. Regis Cairo',
-      hotelPhone: json['hotelPhone'] ?? json['HotelPhone'] ?? '+20 2 2597 9000',
+      hotelName: json['hotelName'] ?? json['HotelName'] ?? '',
+      hotelPhone: json['hotelPhone'] ?? json['HotelPhone'] ?? '',
       hotelReceptionContact: json['hotelReceptionContact'] ?? json['HotelReceptionContact'] ?? 'Dial 0 from room',
-      emergencyContact: json['emergencyContact'] ?? json['EmergencyContact'] ?? '+20 100 000 9999',
-      checkInDate: json['checkInDate'] ?? json['CheckInDate'] ?? '2 Nov 2026, 14:00',
-      checkOutDate: json['checkOutDate'] ?? json['CheckOutDate'] ?? '5 Nov 2026, 12:00',
+      emergencyContact: json['emergencyContact'] ?? json['EmergencyContact'] ?? '',
+      checkInDate: json['checkInDate'] ?? json['CheckInDate'] ?? '',
+      checkOutDate: json['checkOutDate'] ?? json['CheckOutDate'] ?? '',
       roomNumber: json['roomNumber'] ?? json['RoomNumber'] ?? 'Assigned upon arrival',
-      roomCategory: json['roomCategory'] ?? json['RoomCategory'] ?? 'Deluxe King Room',
+      roomCategory: json['roomCategory'] ?? json['RoomCategory'] ?? '',
       wifiNetwork: wifiNet.toString(),
       wifiPassword: wifiPass.toString(),
       wifiInstructions: rawInstructions != null && rawInstructions.toString().isNotEmpty
